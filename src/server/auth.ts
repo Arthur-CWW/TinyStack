@@ -7,6 +7,7 @@ import {
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import DiscordProvider from "next-auth/providers/discord";
+import GoogleProvider from "next-auth/providers/google";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -46,6 +47,15 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
       },
     }),
+    signIn: async ({ account, profile }) => {
+      // if (account?.provider === "google") {
+      //   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      //   return (
+      //     profile?.email_verified && profile?.email.endsWith("@example.com")
+      //   );
+      // }
+      return true; // Do different verification for other providers that don't have `email_verified`
+    },
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
@@ -62,6 +72,18 @@ export const authOptions: NextAuthOptions = {
      *
      * @see https://next-auth.js.org/providers/github
      */
+    // setting up Google
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
+    }),
   ],
 };
 
