@@ -14,18 +14,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -54,14 +42,14 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String     @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?    @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
+    posts         BlogPost[]
 }
 
 model VerificationToken {
@@ -70,4 +58,44 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Tag {
+    id    Int        @id @default(autoincrement())
+    name  String     @unique
+    posts BlogPost[]
+}
+
+model Comment {
+    id        Int      @id @default(autoincrement())
+    content   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    post      BlogPost @relation(fields: [postId], references: [id])
+    postId    Int
+}
+
+model Category {
+    id    Int        @id @default(autoincrement())
+    name  String     @unique
+    posts BlogPost[]
+}
+
+// blog post model
+// store content as markdown with image links to s3
+model BlogPost {
+    id         Int       @id @default(autoincrement())
+    title      String
+    content    String
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+    published  Boolean   @default(false)
+    author     User      @relation(fields: [authorId], references: [id])
+    authorId   String
+    tags       Tag[]
+    categories Category  @relation(fields: [categoryId], references: [id])
+    Comment    Comment[]
+    categoryId Int
+
+    @@index([title])
 }
