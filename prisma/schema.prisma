@@ -42,14 +42,14 @@ model Session {
 }
 
 model User {
-    id            String     @id @default(cuid())
+    id            String    @id @default(cuid())
     name          String?
-    email         String?    @unique
+    email         String?   @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         BlogPost[]
+    posts         Post[]
 }
 
 model VerificationToken {
@@ -61,9 +61,9 @@ model VerificationToken {
 }
 
 model Tag {
-    id    Int        @id @default(autoincrement())
-    name  String     @unique
-    posts BlogPost[]
+    id    Int    @id @default(autoincrement())
+    name  String @unique
+    posts Post[]
 }
 
 model Comment {
@@ -71,19 +71,32 @@ model Comment {
     content   String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    post      BlogPost @relation(fields: [postId], references: [id])
+    post      Post     @relation(fields: [postId], references: [id])
     postId    Int
 }
 
-model Category {
-    id    Int        @id @default(autoincrement())
-    name  String     @unique
-    posts BlogPost[]
+enum Category {
+    Technology
+    HealthWellness
+    PersonalFinance
+    FoodCooking
+    Travel
+    FashionBeauty
+    Lifestyle
+    ParentingFamily
+    BusinessEntrepreneurship
+    DIYCrafts
+    EducationLearning
+    EntertainmentPopCulture
+    SportsFitness
+    PoliticsSocialIssues
+    Gaming
+    HomeGarden
 }
 
 // blog post model
 // store content as markdown with image links to s3
-model BlogPost {
+model Post {
     id         Int       @id @default(autoincrement())
     title      String
     content    String
@@ -93,9 +106,10 @@ model BlogPost {
     author     User      @relation(fields: [authorId], references: [id])
     authorId   String
     tags       Tag[]
-    categories Category  @relation(fields: [categoryId], references: [id])
+    categories Category
     Comment    Comment[]
     categoryId Int
 
     @@index([title])
+    @@map("BlogPost")
 }
