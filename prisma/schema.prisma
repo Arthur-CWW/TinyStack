@@ -50,6 +50,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    // maybe add saved post later
 }
 
 model VerificationToken {
@@ -97,19 +98,23 @@ enum Category {
 // blog post model
 // store content as markdown with image links to s3
 model Post {
-    id         Int       @id @default(autoincrement())
-    title      String
-    content    String
-    createdAt  DateTime  @default(now())
-    updatedAt  DateTime  @updatedAt
-    published  Boolean   @default(false)
-    author     User      @relation(fields: [authorId], references: [id])
-    authorId   String
-    tags       Tag[]
-    categories Category
-    Comment    Comment[]
-    categoryId Int
+    id        Int       @id @default(autoincrement())
+    title     String
+    content   String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    published Boolean   @default(false)
+    author    User      @relation(fields: [authorId], references: [id])
+    authorId  String
+    tags      Tag[]
+    category  Category
+    Comment   Comment[]
 
     @@index([title])
     @@map("BlogPost")
+}
+
+generator custom_generator {
+    provider = "prisma-generator-fake-data"
+    output   = "../src/utils/data.ts"
 }
