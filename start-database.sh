@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Use this script to start a docker container for a local development database
 
-# TO RUN ON WINDOWS: 
+# TO RUN ON WINDOWS:
 # 1. Install WSL (Windows Subsystem for Linux) - https://learn.microsoft.com/en-us/windows/wsl/install
 # 2. Install Docker Desktop for Windows - https://docs.docker.com/docker-for-windows/install/
 # 3. Open WSL - `wsl`
@@ -12,7 +12,7 @@
 DB_CONTAINER_NAME="medium-clone-mysql"
 
 if ! [ -x "$(command -v docker)" ]; then
-  echo "Docker is not installed. Please install docker and try again.\nDocker install guide: https://docs.docker.com/engine/install/"
+  printf "Docker is not installed. Please install docker and try again.\nDocker install guide: https://docs.docker.com/engine/install/"
   exit 1
 fi
 
@@ -26,7 +26,7 @@ fi
 set -a
 source .env
 
-DB_PASSWORD=$(echo $DATABASE_URL | awk -F':' '{print $3}' | awk -F'@' '{print $1}')
+DB_PASSWORD=$(echo "$DATABASE_URL" | awk -F':' '{print $3}' | awk -F'@' '{print $1}')
 
 if [ "$DB_PASSWORD" == "password" ]; then
   echo "You are using the default database password"
@@ -39,7 +39,7 @@ if [ "$DB_PASSWORD" == "password" ]; then
   sed -i -e "s#:password@#:$DB_PASSWORD@#" .env
 fi
 
-docker run --name $DB_CONTAINER_NAME -e MYSQL_ROOT_PASSWORD=$DB_PASSWORD -e MYSQL_DATABASE=medium-clone -d -p 3306:3306 docker.io/mysql
+docker run --name $DB_CONTAINER_NAME -e MYSQL_ROOT_PASSWORD="$DB_PASSWORD" -e MYSQL_DATABASE=medium-clone -d -p 3306:3306 docker.io/mysql
 
 echo "Database container was succesfuly created"
 
