@@ -41,8 +41,9 @@ export default function Home() {
         <>
           <Navbar />
           <main className="container p-3">
-          <h1>Secret Message</h1>
-          <p>{secretMessage}</p>
+            <TestPost />
+            <h1>Secret Message</h1>
+            <p>{secretMessage}</p>
           </main>
         </>
       ) : (
@@ -87,6 +88,59 @@ export default function Home() {
         </>
       )}
     </>
+  );
+}
+
+// import {Post} from "@prisma/client";
+function TestPost() {
+  const { data: sessionData } = useSession();
+  const [blogPost, setBlogPost] = useState<Post>({} as Post);
+  if (!sessionData || !sessionData?.user || !sessionData?.user?.name) {
+    return undefined;
+  }
+
+  const { user } = sessionData;
+  const { name, email, image, id } = user;
+  if (!name || !email || !image || !id) {
+    return undefined;
+  }
+
+  const userPosts = api.post.getUserPosts.useQuery({ author: name });
+  const { data, mutate: createNewPost } = api.post.createPost.useMutation();
+  console.log("user", user);
+  console.log("userPosts", userPosts);
+  console.log("data", data);
+  return (
+    <form
+      className="container flex flex-col gap-3 p-3"
+      onSubmit={async (e) => {
+        e.preventDefault();
+      }}
+    >
+      {/* {user.id}
+      <input
+        type="text"
+        placeholder="input"
+        className="border-none bg-transparent placeholder-slate-500 outline-none"
+      /> */}
+      <button
+        className="rounded-full  p-2 font-semibold"
+        onClick={async () => {
+          // const newPost = await api.post.createPost.useMutation({
+          // });
+          const newPost = createNewPost({
+            title: "This week glob",
+            category: "BusinessEntrepreneurship",
+            content: "tesfjdksjfkldsajfklt",
+            tags: ["test"],
+            published: true,
+          });
+          // console.log("newPost", newPost);
+        }}
+      >
+        send post
+      </button>
+    </form>
   );
 }
 
