@@ -7,7 +7,7 @@ import {
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import DiscordProvider from "next-auth/providers/discord";
-import GoogleProvider from "next-auth/providers/google";
+import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -48,12 +48,16 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     signIn: async ({ account, profile }) => {
-      // if (account?.provider === "google") {
-      //   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      //   return (
-      //     profile?.email_verified && profile?.email.endsWith("@example.com")
-      //   );
-      // }
+      if (account?.provider === "google") {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        if (profile) {
+          const prof = profile as GoogleProfile;
+          if (prof.email_verified && prof.email.endsWith("@gmail.com")) {
+            return true;
+          }
+          return false;
+        }
+      }
       return true; // Do different verification for other providers that don't have `email_verified`
     },
   },
