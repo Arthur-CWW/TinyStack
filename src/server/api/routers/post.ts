@@ -35,12 +35,13 @@ export const postRouter = createTRPCRouter({
           category: input.category,
           content: input.content,
           tags: {
-            create: input.tags.map((tag) => ({ name: tag })),
+            connectOrCreate: input.tags.map((tag) => ({
+              create: { name: tag },
+              where: { name: tag },
+            })),
           },
           published: input.published,
           authorId: ctx.session.user.id,
-          // comments: { create: [] },
-          // createdBy: { connect: { id: ctx.session.user.id } },
         },
       });
     }),
