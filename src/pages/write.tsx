@@ -55,33 +55,6 @@ export default function App() {
   );
 }
 
-// import React from 'react'
-// /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-// import { LeafDirective } from 'mdast-util-directive'
-// import {
-//   diffSourcePlugin,
-//   markdownShortcutPlugin,
-//   AdmonitionDirectiveDescriptor,
-//   DirectiveDescriptor,
-//   directivesPlugin,
-//   frontmatterPlugin,
-//   headingsPlugin,
-//   imagePlugin,
-//   linkDialogPlugin,
-//   linkPlugin,
-//   listsPlugin,
-//   quotePlugin,
-//   tablePlugin,
-//   thematicBreakPlugin,
-//   toolbarPlugin,
-//   SandpackConfig,
-//   codeBlockPlugin,
-//   codeMirrorPlugin,
-//   sandpackPlugin,
-//   KitchenSinkToolbar
-// } from '../'
-// import dataCode from './assets/dataCode.ts?raw'
-
 const defaultSnippetContent = `
 export default function App() {
   return (
@@ -104,46 +77,6 @@ export async function expressImageUploadHandler(image: File) {
   return json.url;
 }
 
-// interface YoutubeDirectiveNode extends LeafDirective {
-//   name: "youtube";
-//   attributes: { id: string };
-// }
-
-// export const YoutubeDirectiveDescriptor: DirectiveDescriptor<YoutubeDirectiveNode> = {
-//   name: 'youtube',
-//   type: 'leafDirective',
-//   testNode(node) {
-//     return node.name === 'youtube'
-//   },
-//   attributes: ['id'],
-//   hasChildren: false,
-//   Editor: ({ mdastNode, lexicalNode, parentEditor }) => {
-//     return (
-//       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-//         <button
-//           onClick={() => {
-//             parentEditor.update(() => {
-//               lexicalNode.selectNext()
-//               lexicalNode.remove()
-//             })
-//           }}
-//         >
-//           delete
-//         </button>
-//         <iframe
-//           width="560"
-//           height="315"
-//           src={`https://www.youtube.com/embed/${mdastNode.attributes?.id}`}
-//           title="YouTube video player"
-//           frameBorder="0"
-//           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-//         ></iframe>
-//       </div>
-//     )
-//   }
-// }
-
-// Only import this to the next file
 function MDEditor({
   editorRef,
   ...props
