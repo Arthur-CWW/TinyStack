@@ -79,4 +79,65 @@ export const postRouter = createTRPCRouter({
   checkSecret: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
+  prototype: publicProcedure.query(async ({ ctx }) => {
+    // get prisma top blogs and there authors
+    const posts = await ctx.db.post.findMany({
+      take: 10,
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        author: true,
+      },
+    });
+    return posts;
+
+    // return [
+    //   {
+    //     id: 1,
+    //     author: "Austin Starks in DataDrivenInvestor",
+    //     title:
+    //       "My ChatGPT-Generated Trading Strategies are DEMOLISHING the Market.",
+    //     description: "How to create multiple income streams",
+    //     category: "Investing",
+    //     date: new Date("Nov 16, 2023"),
+    //     profileImage: "https://picsum.photos/id/237/200/300",
+    //   },
+    //   {
+    //     id: 3,
+    //     author: "Kevin Nokia",
+    //     title: "Reading Books Is Useless: Here’s a Better Way to Read",
+    //     description: "How to create multiple income streams",
+    //     category: "Reading",
+    //     date: new Date("Jan 28, 2024"),
+    //     profileImage: "https://picsum.photos/id/237/200/300",
+    //   },
+    //   {
+    //     id: 9,
+    //     author: "Joseph Mavericks in Entrepreneurship Handbook",
+    //     title:
+    //       "This Entrepreneur Made $10M in 4 Years — With 10 Income Streams",
+    //     description: "How to create multiple income streams",
+    //     category: "Entrepreneurship",
+    //     date: new Date("Sep 15, 2023"),
+    //     profileImage: "https://picsum.photos/id/237/200/300",
+    //   },
+    //   {
+    //     id: 10,
+    //     author: "Natassha Selvaraj in Towards AI",
+    //     title: "How I’m Using ChatGPT and AI to Make Money Online",
+    //     description: "How to create multiple income streams",
+    //     category: "Member-only",
+    //     date: new Date("Nov 9, 2023"),
+    //     profileImage: "https://picsum.photos/id/237/200/300",
+    //   },
+    // ];
+  }),
+  getPost: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.post.findFirst({
+        where: { id: input.id },
+      });
+    }),
 });
