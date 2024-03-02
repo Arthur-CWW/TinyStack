@@ -24,6 +24,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { ProfilePic } from "~/components/ui/ProfilePic";
+import { User } from "next-auth";
 
 export function Navbar() {
   const { data: sessionData } = useSession();
@@ -57,22 +59,12 @@ export function Navbar() {
         {/* profile dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className=" h-8 w-8  gap-2 overflow-hidden rounded-full">
-              {sessionData?.user?.image ? (
-                <img src={sessionData.user?.image} className="w-full" />
+            <div className=" h-8 w-8  overflow-hidden rounded-full">
+              {sessionData ? (
+                <ProfilePic author={sessionData?.user} className="h-8 w-8" />
               ) : (
-                <div
-                  className="text-xl font-bold text-white"
-                  // random hue background
-                  style={{
-                    background: `hsl(${Math.floor(
-                      Math.random() * 360,
-                    )}, 100%, 50%)`,
-                  }}
-                >
-                  {/*Placeholder same as youtube  */}
-                  {sessionData?.user?.name?.[0] ?? ""}
-                </div>
+                // TODO need fix this all to look at this page
+                <ProfileIcon className="h-8 w-8" />
               )}
             </div>
           </DropdownMenuTrigger>

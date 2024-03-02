@@ -11,6 +11,7 @@ import { SplashBackground } from "../components/svgs/SplashBackground";
 import { Logo } from "../components/svgs/logo";
 import { Navbar } from "~/components/layout";
 import { Separator } from "@radix-ui/react-dropdown-menu";
+import { ProfilePic } from "../components/ui/ProfilePic";
 export default function Home() {
   const blogs = api.post.prototype.useQuery();
   const [blogPost, setBlogPost] = useState<Post[]>([]);
@@ -46,19 +47,12 @@ export default function Home() {
                   >
                     <div className="flex items-center gap-2  ">
                       {/* profile pic */}
+
                       <Link
                         href={`/user/${post.author.name}`}
                         className="flex gap-1"
                       >
-                        <img
-                          src={
-                            post.author.image ??
-                            "https://via.placeholder.com/150"
-                          }
-                          alt="profile picture"
-                          className="mr-2 h-6 w-6 rounded-full"
-                        />
-                        {post.author.name}
+                        <ProfilePic author={post.author} className="h-6 w-6" />
                       </Link>
                       <span className="pb-2">.</span>
                       <span className="text-gray-400">

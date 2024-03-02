@@ -24,7 +24,9 @@ export default function Page() {
       <p>Post: {router.query.post}</p>
       <pre>{JSON.stringify(data, null, 4)}</pre>
       <Navbar />
-      <h1>{data?.title}</h1>
+      <main>
+        <h1>{data?.title}</h1>
+      </main>
     </>
   );
 }
