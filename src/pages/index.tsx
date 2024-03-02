@@ -10,8 +10,9 @@ import { api } from "~/utils/api";
 import { SplashBackground } from "../components/svgs/SplashBackground";
 import { Logo } from "../components/svgs/logo";
 import { Navbar } from "~/components/layout";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 export default function Home() {
-  const hello = api.post.check.useQuery({ text: "from tRPC" });
+  const blogs = api.post.prototype.useQuery();
   const [blogPost, setBlogPost] = useState<Post[]>([]);
 
   const { data: sessionData } = useSession();
@@ -33,10 +34,83 @@ export default function Home() {
         <>
           <Navbar />
           <main className="container border-t-[1px] border-gray-200 ">
-            <div className="grid min-h-screen grid-cols-[1fr_368px]">
-              <main>
+            <div className="grid min-h-screen lg:grid-cols-[1fr_368px]">
+              <main className="px-14">
                 <TestPost />
                 <p>{secretMessage}</p>
+                {/* <Separator /> */}
+                {blogs.data?.map((post) => (
+                  <div
+                    key={post.id}
+                    className="   flex flex-col border-y-[1px] border-gray-100 pt-6"
+                  >
+                    <div className="flex items-center gap-2  ">
+                      {/* profile pic */}
+                      <Link
+                        href={`/user/${post.author.name}`}
+                        className="flex gap-1"
+                      >
+                        <img
+                          src={
+                            post.author.image ??
+                            "https://via.placeholder.com/150"
+                          }
+                          alt="profile picture"
+                          className="mr-2 h-6 w-6 rounded-full"
+                        />
+                        {post.author.name}
+                      </Link>
+                      <span className="pb-2">.</span>
+                      <span className="text-gray-400">
+                        {post.createdAt.toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </span>
+                    </div>
+
+                    <div className="flex h-[208px]">
+                      <Link
+                        href={`/${post.author.name}/${post.id}`}
+                        // TODO figure out whether I can use title and
+                        // whether it will automatically be slugified
+                        className=""
+                      >
+                        <h1 className="text-2xl font-semibold">{post.title}</h1>
+                        <div className="line-clamp-4 ">
+                          Did you know you can create a video with AI? It can
+                          speak, present, and more. I used all these so you
+                          don’t have to! This is a comprehensive review of the
+                          best AI video tools. Here are the top picks for you
+                          Did you know you can create a video with AI? It can
+                          Did you know you can create a video with AI? It can
+                          speak, present, and more. I used all these so you
+                          don’t have to! This is a comprehensive review of the
+                          best AI video tools. Here are the top picks for you
+                          speak, present, and more. I used all these so you
+                          don’t have to! This is a comprehensive review of the
+                          best AI video tools. Here are the top picks for you
+                        </div>
+                        <li className="flex py-8 ">
+                          {/* this extra flex container needed otherwise it grows full width of the card */}
+                          <Link
+                            href={`/category/${post.category}`}
+                            className=" flex-shrink-0 rounded-full bg-gray-100 px-2 py-1 text-sm"
+                          >
+                            {post.category.replace(/([a-z])([A-Z])/g, "$1 $2")}
+                          </Link>
+                        </li>
+                      </Link>
+                      {/* lorem picsum  110*110*/}
+                      <img
+                        src="https://picsum.photos/id/237/110/110"
+                        alt=""
+                        className="ml-16 h-28 w-28"
+                      />
+                    </div>
+                  </div>
+                ))}
               </main>
               <aside className="hidden border-l-[1px] border-gray-200 lg:flex">
                 {/* map categories into pill buttons a tags */}
@@ -47,9 +121,10 @@ export default function Home() {
                       <li key={category}>
                         <Link
                           href={`category/${category}`}
-                          className="rounded-full  bg-gray-100 p-3 text-lg"
+                          className="rounded-full  bg-gray-100 p-3 text-base"
                         >
-                          {category}
+                          {/* split camelcase TODO need to understand this regex */}
+                          {category.replace(/([a-z])([A-Z])/g, "$1 $2")}
                         </Link>
                       </li>
                     ))}
@@ -87,9 +162,6 @@ export default function Home() {
                 Stay curious
               </h1>
               <div className="flex flex-col items-center gap-2">
-                <p className="text-2xl text-black">
-                  {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-                </p>
                 <AuthShowcase />
               </div>
             </div>
