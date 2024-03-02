@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -41,18 +42,6 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    posts         Post[]
-    // maybe add saved post later
-}
-
 model VerificationToken {
     identifier String
     token      String   @unique
@@ -74,6 +63,23 @@ model Comment {
     updatedAt DateTime @updatedAt
     post      Post     @relation(fields: [postId], references: [id])
     postId    Int
+    author    User     @relation(fields: [authorId], references: [id])
+    authorId  String
+}
+
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+    posts         Post[]
+    comments      Comment[]
+
+    // maybe add saved post later
+    @@fulltext([name])
 }
 
 enum Category {
@@ -100,7 +106,7 @@ enum Category {
 model Post {
     id        Int       @id @default(autoincrement())
     title     String
-    content   String
+    content   String    @db.Text //64 KB limit
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     published Boolean   @default(false)
@@ -110,7 +116,8 @@ model Post {
     category  Category
     Comment   Comment[]
 
-    @@index([title])
+    // @@index([title])
+    @@fulltext([title, content])
     @@map("BlogPost")
 }
 
