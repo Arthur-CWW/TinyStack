@@ -1,4 +1,4 @@
-import { Post } from "@prisma/client";
+import { Category, Post } from "@prisma/client";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
@@ -7,15 +7,6 @@ import { IoMdNotifications as BellOpen } from "react-icons/io";
 import { useState } from "react";
 
 import { api } from "~/utils/api";
-import { Bell } from "lucide-react";
-import {
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-} from "~/components/ui/dropdown-menu";
 import { SplashBackground } from "../components/svgs/SplashBackground";
 import { Logo } from "../components/svgs/logo";
 import { Navbar } from "~/components/layout";
@@ -29,6 +20,7 @@ export default function Home() {
     undefined, // no input
     { enabled: sessionData?.user !== undefined },
   );
+  const categories = Object.values(Category);
   return (
     <>
       <Head>
@@ -40,26 +32,48 @@ export default function Home() {
       {sessionData ? (
         <>
           <Navbar />
-          <main className="container p-3">
-            <TestPost />
-            <h1>Secret Message</h1>
-            <p>{secretMessage}</p>
+          <main className="container border-t-[1px] border-gray-200 ">
+            <div className="grid min-h-screen grid-cols-[1fr_368px]">
+              <main>
+                <TestPost />
+                <p>{secretMessage}</p>
+              </main>
+              <aside className="hidden border-l-[1px] border-gray-200 lg:flex">
+                {/* map categories into pill buttons a tags */}
+                <div className="flex flex-col gap-5 p-4">
+                  <h3 className="text-2xl font-semibold">Reccomended topics</h3>
+                  <ul className="flex  flex-wrap gap-6">
+                    {categories.splice(0, 10).map((category) => (
+                      <li key={category}>
+                        <Link
+                          href={`category/${category}`}
+                          className="rounded-full  bg-gray-100 p-3 text-lg"
+                        >
+                          {category}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </aside>
+            </div>
           </main>
         </>
       ) : (
         <>
-          <header
-            className="flex w-full items-baseline justify-between bg-orange   p-4
-        "
-          >
+          <header className="flex w-full items-baseline justify-between bg-orange   p-4">
             <Link href="">
               <Logo />
             </Link>
             <div className="flex items-baseline gap-4 pt-1">
               <Link href="story">Our Story</Link>
-              <Link href="membership"> Membership</Link>
+              <Link onClick={() => signIn()} href="membership">
+                Membership
+              </Link>
               <Link href="write">Write</Link>
-              <Link href="auth">Sign in</Link>
+              <Link onClick={() => signIn()} href="auth">
+                Sign in
+              </Link>
               {/* pill button */}
               <button className="rounded-full bg-black p-2 font-semibold text-white">
                 {/* todo signup flow */}
