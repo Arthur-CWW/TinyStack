@@ -9,7 +9,7 @@ export function SplashBackground({ className }: { className?: string }) {
       style={{
         width: "100%",
         height: "100%",
-        contentVisibility: "visible",
+        // contentVisibility: "visible",
       }}
     >
       <defs>
@@ -20,6 +20,11 @@ export function SplashBackground({ className }: { className?: string }) {
       <g
         fontSize={22}
         fontFamily="S\x9Ahne"
+        // className="min-h-[400px]:"
+        style={{
+          minHeight: "400px",
+          flexShrink: 0,
+        }}
         aria-label="M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M"
         display="block"
         strokeLinejoin="round"

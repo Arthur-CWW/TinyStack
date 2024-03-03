@@ -150,15 +150,15 @@ export default function Home() {
                 Sign in
               </Link>
               {/* pill button */}
-              <button className="rounded-full bg-black p-2 font-semibold text-white">
+              <button className="rounded-full bg-black p-2  text-white">
                 {/* todo signup flow */}
                 <Link href="signup-flow">Get started</Link>
               </button>
             </div>
           </header>
           <main className="  flex justify-between border-y-[1px]  border-black bg-orange px-3">
-            <div className="mm:max-w-lg container right-0 flex w-full flex-col   items-start   justify-center  gap-8 py-24">
-              <h1 className=" mm:text-[5rem] font-serif text-8xl  tracking-tight  text-black">
+            <div className="mm:max-w-[550px] container right-0 flex w-full flex-col   items-start   justify-center  gap-8 py-24">
+              <h1 className=" mm:text-8xl  font-serif  text-8xl  tracking-tight text-black">
                 Stay curious
               </h1>
               {/* pill button sign up */}
@@ -171,8 +171,8 @@ export default function Home() {
                 <Link href="signup-flow">Get started</Link>
               </button>
             </div>
-            <div className="mm:relative hidden w-[585px]">
-              <SplashBackground className="mm:block absolute bottom-0  right-0 hidden" />
+            <div className="mm:block relative hidden w-[585px] overflow-hidden">
+              <SplashBackground className=" absolute bottom-0  right-0 min-h-[440px]" />
             </div>
             {/* get new blogpost */}
             {/* <button onClick */}
