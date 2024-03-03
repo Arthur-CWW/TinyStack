@@ -88,24 +88,25 @@ const MyEditor = () => {
     }
     const html = editor.getHTML();
     console.log(html);
+    // This works
     // You can further process the HTML or save it as needed
   };
   if (!editor) return null;
 
   return (
-    <div className="container flex flex-col items-center justify-center px-3">
-      <div ref={floatingMenuRef} className="flex ">
+    <div className=" flex flex-col items-center justify-center px-3">
+      {/* <div ref={floatingMenuRef} className="flex ">
         <button onClick={() => setShowTooltip(true)}>+</button>
         <button onClick={handleExport}>Export to HTML</button>
-      </div>
+      </div> */}
       <EditorContentWithDrop editor={editor} />
-      <div
+      {/* <div
         ref={bubbleMenuRef}
         className={`tooltip ${showTooltip ? "visible" : ""}`}
         // TODO tooltip class
       >
         <button onClick={() => setShowTooltip(false)}>Close</button>
-      </div>
+      </div> */}
     </div>
   );
 };
