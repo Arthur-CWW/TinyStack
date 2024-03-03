@@ -138,6 +138,9 @@ export const postRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return ctx.db.post.findFirst({
         where: { id: input.id },
+        include: {
+          author: true,
+        },
       });
     }),
 });
