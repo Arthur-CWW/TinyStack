@@ -2,10 +2,7 @@ import { User } from "next-auth";
 import Link from "next/link";
 import { ComponentProps } from "react";
 import { twMerge } from "tailwind-merge";
-type Undefinable<T> = {
-  [P in keyof T]: null extends T[P] ? T[P] | undefined : T[P];
-};
-
+import { Undefinable } from "~/utils/types";
 export function ProfilePic({
   author,
   className, // for tailwind classes but mainly for h and w

@@ -1,29 +1,23 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { IoIosNotificationsOutline as BellClose } from "react-icons/io";
-import { PiArticleThin as StoryIcon } from "react-icons/pi";
-import {
-  CiSearch as SearchIcon,
-  CiBookmark as LibraryIcon,
-} from "react-icons/ci";
+import { CiSearch as SearchIcon } from "react-icons/ci";
 import { PiNotePencilThin as WriteIcon } from "react-icons/pi";
 import { RxPerson as ProfileIcon } from "react-icons/rx";
-import { IoStatsChartOutline as StatsIcon } from "react-icons/io5";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Logo } from "../svgs/logo";
-import { ProfilePic } from "~/components/ui/profile-pic";
+import { ProfileDD } from "./ProfileDD";
 
 export function Navbar() {
   return (
-    <nav className="border-b-1 flex w-full items-baseline justify-between   border-slate-100 p-4 text-slate-500">
+    <nav className="flex w-full items-baseline justify-between border-b-1   border-slate-100 p-4 text-slate-500">
       <div className="flex  items-center gap-3">
         <Link href="/" className="h-7  w-11 overflow-hidden rounded-full">
           <Logo />
@@ -100,45 +94,7 @@ function NavRGroup() {
         <BellClose className="h-7 w-7" />
       </Link>
       {/* profile dropdown */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <div className=" h-8 w-8  overflow-hidden rounded-full">
-            {sessionData ? (
-              <ProfilePic author={sessionData?.user} className="h-8 w-8" />
-            ) : (
-              // TODO need fix this all to look at this page
-              <ProfileIcon className="h-8 w-8" />
-            )}
-          </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56  p-4 text-lg font-thin  text-gray-600 hover:text-gray-700">
-          <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <ProfileIcon className="mr-3 h-5 w-5" />
-              Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <LibraryIcon className="mr-3 h-5 w-5" />
-              <span>Library</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <StoryIcon className="mr-3 h-5 w-5" />
-              <span>Story</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <StatsIcon className="mr-3 h-5 w-5" />
-              <span>Stats</span>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => signOut()}>
-              Sign out
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <ProfileDD user={sessionData.user} />
     </div>
   );
 }
