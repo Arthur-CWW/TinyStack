@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
-import { Navbar } from "~/components/Navbar";
+import { Navbar } from "~/components/ui/Navbar";
 import { ProfilePic } from "~/components/ui/profile-pic";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 
