@@ -18,3 +18,19 @@ export const useBearStore = create<BearState>()(
     ),
   ),
 );
+interface EditorState {
+  html: string;
+  setHtml: (html: string) => void;
+}
+
+export const useEditorStore = create<EditorState>()(
+  devtools(
+    persist(
+      (set) => ({
+        html: "",
+        setHtml: (html) => set((state) => ({ html })),
+      }),
+      { name: "htmlStore" },
+    ),
+  ),
+);
