@@ -8,6 +8,9 @@ import { ComponentType } from "react";
 const Editor = dynamic(() => import("~/components/ui/Editor"), { ssr: false });
 
 import { useRouter } from "next/router";
+import { Link, SearchIcon } from "lucide-react";
+import { Logo } from "~/components/svgs/logo";
+import Header from "~/components/ui/writer-toolbar";
 // import Editor from "~/components/ui/Editor";
 
 export default function Home() {
@@ -31,6 +34,7 @@ export default function Home() {
   //     router.push("/login").catch(console.error);
   //   }
   // }, [sessionData]);
+
   return (
     <div>
       <Head>
@@ -41,3 +45,14 @@ export default function Home() {
     </div>
   );
 }
+
+function Layout({ children }: { children: ComponentType }) {
+  // I want to send the trpc from here
+  return (
+    <>
+      <Header />
+      {children}
+    </>
+  );
+}
+Home.Layout = Layout;
