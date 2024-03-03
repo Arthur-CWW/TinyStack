@@ -55,16 +55,16 @@ function NavRGroup() {
           <WriteIcon className="h-7 w-7" /> Write
         </Link>
         {/* pill button sign up and sign in*/}
-        <Link
-          href="/sign-up"
+        {/* TODO change this link when sign up is done */}
+        <button
           onClick={() => console.log("sign up TODO")}
           className="rounded-full  bg-gray-500 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white"
         >
           Sign up
-        </Link>
-        <Link href="" onClick={() => signIn()} className="">
+        </button>
+        <button onClick={() => signIn()} className="">
           Sign in
-        </Link>
+        </button>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
