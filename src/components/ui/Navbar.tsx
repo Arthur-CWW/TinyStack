@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { IoIosNotificationsOutline as BellClose } from "react-icons/io";
 import { PiArticleThin as StoryIcon } from "react-icons/pi";
@@ -14,6 +14,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
@@ -21,7 +22,6 @@ import { Logo } from "../svgs/logo";
 import { ProfilePic } from "~/components/ui/profile-pic";
 
 export function Navbar() {
-  const { data: sessionData } = useSession();
   return (
     <nav className="border-b-1 flex w-full items-baseline justify-between   border-slate-100 p-4 text-slate-500">
       <div className="flex  items-center gap-3">
@@ -39,51 +39,106 @@ export function Navbar() {
         </form>
       </div>
 
+      <NavRGroup />
+    </nav>
+  );
+}
+function NavRGroup() {
+  const { data: sessionData } = useSession();
+  if (!sessionData) {
+    return (
       <div className="flex items-center gap-5 pt-1 text-lg">
-        <Link href="/write" className="flex items-center justify-center gap-1 ">
+        <Link
+          href="/sign-in"
+          className="flex items-center justify-center gap-1 "
+        >
           <WriteIcon className="h-7 w-7" /> Write
         </Link>
-        <Link href="/me/notifications">
-          <BellClose className="h-7 w-7" />
+        {/* pill button sign up and sign in*/}
+        <Link
+          href="/sign-up"
+          onClick={() => console.log("sign up TODO")}
+          className="rounded-full  bg-gray-500 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white"
+        >
+          Sign up
         </Link>
-        {/* profile dropdown */}
+        <Link href="" onClick={() => signIn()} className="">
+          Sign in
+        </Link>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className=" h-8 w-8  overflow-hidden rounded-full">
-              {sessionData ? (
-                <ProfilePic author={sessionData?.user} className="h-8 w-8" />
-              ) : (
-                // TODO need fix this all to look at this page
-                <ProfileIcon className="h-8 w-8" />
-              )}
+            <div className=" flex h-8  w-8 items-center justify-center overflow-hidden rounded-full border-2 border-gray-400 text-gray-400">
+              <ProfileIcon className="h-8 w-8" />
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56  p-4 text-lg font-thin  text-gray-600 hover:text-gray-700">
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <ProfileIcon className="mr-3 h-5 w-5" />
-                Profile
+            <DropdownMenuGroup className="text-center">
+              {/* label */}
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => console.log("todo signup")}
+                className="  rounded-full bg-gray-500 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white"
+              >
+                Sign up
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <LibraryIcon className="mr-3 h-5 w-5" />
-                <span>Library</span>
+              <DropdownMenuItem onClick={() => signOut()}>
+                Sign out
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <StoryIcon className="mr-3 h-5 w-5" />
-                <span>Story</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <StatsIcon className="mr-3 h-5 w-5" />
-                <span>Stats</span>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </nav>
+    );
+  }
+  return (
+    <div className="flex items-center gap-5 pt-1 text-lg">
+      <Link href="/write" className="flex items-center justify-center gap-1 ">
+        <WriteIcon className="h-7 w-7" /> Write
+      </Link>
+      <Link href="/me/notifications">
+        <BellClose className="h-7 w-7" />
+      </Link>
+      {/* profile dropdown */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <div className=" h-8 w-8  overflow-hidden rounded-full">
+            {sessionData ? (
+              <ProfilePic author={sessionData?.user} className="h-8 w-8" />
+            ) : (
+              // TODO need fix this all to look at this page
+              <ProfileIcon className="h-8 w-8" />
+            )}
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56  p-4 text-lg font-thin  text-gray-600 hover:text-gray-700">
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <ProfileIcon className="mr-3 h-5 w-5" />
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <LibraryIcon className="mr-3 h-5 w-5" />
+              <span>Library</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <StoryIcon className="mr-3 h-5 w-5" />
+              <span>Story</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <StatsIcon className="mr-3 h-5 w-5" />
+              <span>Stats</span>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => signOut()}>
+              Sign out
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }
