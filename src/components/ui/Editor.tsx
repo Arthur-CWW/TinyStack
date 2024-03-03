@@ -6,7 +6,7 @@ import FloatingMenu from "@tiptap/extension-floating-menu";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "@tiptap/extension-image";
 import Dropcursor from "@tiptap/extension-dropcursor";
-import { Editor } from "@tiptap/core";
+import { Editor } from "@tiptap/react";
 
 const EditorContentWithDrop = ({ editor }: { editor: Editor }) => {
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -22,7 +22,10 @@ const EditorContentWithDrop = ({ editor }: { editor: Editor }) => {
       }
       const reader = new FileReader();
       reader.onload = (readerEvent) => {
-        editor.commands.setImage({ src: readerEvent?.target?.result });
+        const result = readerEvent?.target?.result;
+        if (typeof result === "string")
+          //TODO Need to figure out why I need this to be a string
+          editor.commands.setImage({ src: result });
       };
       if (files[0]) {
         reader.readAsDataURL(files[0]);
