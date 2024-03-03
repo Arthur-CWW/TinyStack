@@ -56,12 +56,13 @@ export default function Home() {
   );
 }
 
-import { useBearStore, useEditorStore } from "~/utils/stores";
+import { useBearStore, useEditorStore, useProfileStore } from "~/utils/stores";
 function Header() {
   const { data: sessionData } = useSession();
 
-  const { bears, increase } = useStore(useBearStore);
   const { html } = useStore(useEditorStore);
+  // send html and content to trpc backend on publish button
+  const { updating } = useStore(useProfileStore);
   console.log("html", html);
   if (!sessionData) {
     return null;
@@ -81,23 +82,14 @@ function Header() {
           </Link>
           <h1 className=" ">Draft by {sessionData?.user?.name}</h1>
           {/* saved or not  */}
-          <span className="text-xs text-gray-500">Saved</span>
+
+          {updating ? (
+            <span className="text-xs text-gray-500">Saving...</span>
+          ) : (
+            <span className="text-xs text-gray-500">Saved</span>
+          )}
         </div>
 
-        <div className="flex">
-          <button
-            onClick={() => {
-              if (increase) {
-                console.log("bear", bears);
-                increase(1);
-              }
-            }}
-            className="rounded-full  bg-green-600 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white"
-          >
-            increase
-          </button>
-          {bears}
-        </div>
         <div className="flex items-center gap-5 pt-1 text-lg">
           <button
             onClick={() => console.log("publish  TODO")}

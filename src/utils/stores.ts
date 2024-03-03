@@ -34,3 +34,13 @@ export const useEditorStore = create<EditorState>()(
     ),
   ),
 );
+
+interface ProfileState {
+  updating: boolean;
+  setUpdating: (val: boolean) => void;
+}
+
+export const useProfileStore = create<ProfileState>()((set) => ({
+  updating: false,
+  setUpdating: (val) => set(() => ({ updating: val })),
+}));

@@ -7,7 +7,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "@tiptap/extension-image";
 import Dropcursor from "@tiptap/extension-dropcursor";
 import { Editor } from "@tiptap/react";
+import { useDebounce, useDebouncedCallback } from "use-debounce";
 
+import { useEditorStore } from "~/utils/stores";
 const EditorContentWithDrop = ({ editor }: { editor: Editor }) => {
   const contentRef = useRef<HTMLDivElement | null>(null);
 
@@ -23,9 +25,12 @@ const EditorContentWithDrop = ({ editor }: { editor: Editor }) => {
       const reader = new FileReader();
       reader.onload = (readerEvent) => {
         const result = readerEvent?.target?.result;
-        if (typeof result === "string")
+        if (typeof result === "string") {
           //TODO Need to figure out why I need this to be a string
           editor.commands.setImage({ src: result });
+        } else if (result instanceof ArrayBuffer) {
+          console.log("ArrayBuffer", result);
+        }
       };
       if (files[0]) {
         reader.readAsDataURL(files[0]);
@@ -42,9 +47,12 @@ const EditorContentWithDrop = ({ editor }: { editor: Editor }) => {
 
   return <EditorContent editor={editor} ref={contentRef} />;
 };
+
+import { useProfileStore } from "~/utils/stores";
 const MyEditor = () => {
   const bubbleMenuRef = useRef<HTMLDivElement>(null);
   const floatingMenuRef = useRef<HTMLDivElement>(null);
+  const { setUpdating: notify } = useProfileStore();
 
   const editor = useEditor({
     extensions: [
@@ -59,6 +67,8 @@ const MyEditor = () => {
       Image,
       Dropcursor,
     ],
+    onUpdate: (editor) => notify(true),
+
     content: `
       <h2>Hi there,</h2>
       <p>This is a basic example of <em>tiptap</em> with <strong>Tailwind Typography</strong>.</p>
@@ -77,6 +87,7 @@ const MyEditor = () => {
 
   const [showTooltip, setShowTooltip] = useState(false);
   const addImage = useCallback(() => {
+    // TODO add toolbar
     if (!editor) return;
     const url = window.prompt("URL");
 
@@ -85,15 +96,16 @@ const MyEditor = () => {
     }
   }, [editor]);
 
-  const handleExport = () => {
-    if (!editor) {
-      return;
+  const { setHtml } = useEditorStore();
+
+  const [debouncedEditor] = useDebounce(editor?.getHTML(), 2000);
+
+  useEffect(() => {
+    if (debouncedEditor) {
+      setHtml(debouncedEditor);
+      notify(false);
     }
-    const html = editor.getHTML();
-    console.log(html);
-    // This works
-    // You can further process the HTML or save it as needed
-  };
+  }, [debouncedEditor]);
   if (!editor) return null;
 
   return (
@@ -102,6 +114,9 @@ const MyEditor = () => {
         <button onClick={() => setShowTooltip(true)}>+</button>
         <button onClick={handleExport}>Export to HTML</button>
       </div> */}
+      {/* on debounce saveHtml*/}
+      {/* <button onClick={saveHtml}>Save</button> */}
+
       <EditorContentWithDrop editor={editor} />
       {/* <div
         ref={bubbleMenuRef}
