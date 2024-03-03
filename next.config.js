@@ -8,6 +8,13 @@ await import("./src/env.js");
 const config = {
   reactStrictMode: true,
   transpilePackages: ["@mdxeditor/editor"],
+  webpack: (config) => {
+    // this will override the experiments
+    config.experiments = { ...config.experiments, topLevelAwait: true };
+    // this will just update topLevelAwait property of config.experiments
+    // config.experiments.topLevelAwait = true
+    return config;
+  },
 
   /**
    * If you are using `appDir` then you must comment the below `i18n` config out.
