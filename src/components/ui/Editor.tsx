@@ -3,9 +3,40 @@ import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import BubbleMenu from "@tiptap/extension-bubble-menu";
 import FloatingMenu from "@tiptap/extension-floating-menu";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "@tiptap/extension-image";
+import Dropcursor from "@tiptap/extension-dropcursor";
+import { Editor } from "@tiptap/core";
 
-const Editor = () => {
+const EditorContentWithDrop = ({ editor }: { editor: Editor }) => {
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    const handleDrop = (event: DragEvent) => {
+      event.preventDefault();
+      if (event.dataTransfer === null) return;
+
+      const files = event.dataTransfer.files;
+      if (files.length === 0) {
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (readerEvent) => {
+        editor.commands.setImage({ src: readerEvent.target.result });
+      };
+      reader.readAsDataURL(files[0]);
+    };
+
+    const contentElement = contentRef.current;
+    contentElement.addEventListener("drop", handleDrop);
+    return () => {
+      contentElement.removeEventListener("drop", handleDrop);
+    };
+  }, [editor]);
+
+  return <EditorContent editor={editor} ref={contentRef} />;
+};
+const MyEditor = () => {
   const bubbleMenuRef = useRef<HTMLDivElement>(null);
   const floatingMenuRef = useRef<HTMLDivElement>(null);
 
@@ -19,11 +50,16 @@ const Editor = () => {
       FloatingMenu.configure({
         element: floatingMenuRef.current,
       }),
+      Image,
+      Dropcursor,
     ],
     content: `
       <h2>Hi there,</h2>
       <p>This is a basic example of <em>tiptap</em> with <strong>Tailwind Typography</strong>.</p>
       <!-- Add more content as needed -->
+    <img src="https://source.unsplash.com/8xznAGy4HcY/800x400" />
+    <img src="https://source.unsplash.com/K9QHL52rE2k/800x400" />
+
     `,
     editorProps: {
       attributes: {
@@ -34,16 +70,28 @@ const Editor = () => {
   });
 
   const [showTooltip, setShowTooltip] = useState(false);
+  const addImage = useCallback(() => {
+    if (!editor) return;
+    const url = window.prompt("URL");
+
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run();
+    }
+  }, [editor]);
 
   const handleExport = () => {
+    if (!editor) {
+      return;
+    }
     const html = editor.getHTML();
     console.log(html);
     // You can further process the HTML or save it as needed
   };
+  if (!editor) return null;
 
   return (
-    <div className="editor-container">
-      <EditorContent editor={editor} />
+    <div className="px-3">
+      <EditorContentWithDrop editor={editor} />
       <div
         id="bubble-menu"
         ref={bubbleMenuRef}
@@ -59,4 +107,4 @@ const Editor = () => {
   );
 };
 
-export default Editor;
+export default MyEditor;
