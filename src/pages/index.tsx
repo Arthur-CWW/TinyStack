@@ -136,15 +136,15 @@ export default function Home() {
             </Link>
             <div className="flex items-baseline gap-4 pt-1 ">
               <div className=" mm:flex hidden gap-4">
-                <Link href="story">Our Story</Link>
+                <Link href="/story">Our Story</Link>
                 <Link onClick={() => signIn()} href="membership">
                   Membership
                 </Link>
-                <Link href="write">Write</Link>
+                <Link href="/write">Write</Link>
               </div>
               <Link
                 onClick={() => signIn()}
-                href="auth"
+                href="/sign-in"
                 className="hidden sm:flex"
               >
                 Sign in
