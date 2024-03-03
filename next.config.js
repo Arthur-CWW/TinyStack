@@ -5,7 +5,7 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {
+const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@mdxeditor/editor"],
   webpack: (config) => {
@@ -27,4 +27,5 @@ const config = {
   },
 };
 
-export default config;
+// export default nextConfig;
+export default nextConfig;
