@@ -4,7 +4,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { IoMdNotifications as BellOpen } from "react-icons/io";
 
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 
 import { api } from "~/utils/api";
 import { SplashBackground } from "../components/svgs/SplashBackground";
@@ -247,3 +247,8 @@ function AuthShowcase() {
     </div>
   );
 }
+
+Home.getLayout = (page: ReactElement) => <>{page}</>;
+// function getLayout(page: ReactElement) {
+//   return <>{page}</>;
+// };

@@ -94,3 +94,16 @@ export function Navbar() {
     </nav>
   );
 }
+
+export const DefaultNavLayout = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <>
+      <Navbar />
+      {children}
+    </>
+  );
+};

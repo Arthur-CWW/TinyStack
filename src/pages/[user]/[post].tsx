@@ -28,7 +28,6 @@ export default function Page() {
       <p>Post: {router.query.user}</p>
       <p>Post: {router.query.post}</p>
       <pre>{JSON.stringify(data, null, 4)}</pre>
-      <Navbar />
       <main className="container max-w-[80ch] py-8">
         <h1 className="py-4 text-5xl font-semibold leading-5">{data?.title}</h1>
         <div className="flex items-center justify-start py-4">
