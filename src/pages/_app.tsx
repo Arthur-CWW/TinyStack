@@ -7,7 +7,7 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import Head from "next/head";
 import { ReactElement } from "react";
-import { DefaultNavLayout, Navbar } from "~/components/layout";
+import { DefaultNavLayout } from "~/components/layout";
 // add Layout to the AppProps
 // declare module "next/app" {
 

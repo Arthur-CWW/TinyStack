@@ -1,8 +1,6 @@
-import { Category } from '@prisma/client';
-import { faker } from '@faker-js/faker';
-import Decimal from 'decimal.js';
-
-
+import { Category } from "@prisma/client";
+import { faker } from "@faker-js/faker";
+import Decimal from "decimal.js";
 
 export function fakeAccount() {
   return {
@@ -48,23 +46,6 @@ export function fakeSessionComplete() {
     expires: faker.date.anytime(),
   };
 }
-export function fakeUser() {
-  return {
-    name: undefined,
-    email: undefined,
-    emailVerified: undefined,
-    image: undefined,
-  };
-}
-export function fakeUserComplete() {
-  return {
-    id: faker.string.uuid(),
-    name: undefined,
-    email: undefined,
-    emailVerified: undefined,
-    image: undefined,
-  };
-}
 export function fakeVerificationToken() {
   return {
     identifier: faker.lorem.words(5),
@@ -103,14 +84,48 @@ export function fakeCommentComplete() {
     createdAt: new Date(),
     updatedAt: faker.date.anytime(),
     postId: faker.number.int(),
+    authorId: faker.string.uuid(),
+  };
+}
+export function fakeUser() {
+  return {
+    name: undefined,
+    email: undefined,
+    emailVerified: undefined,
+    image: undefined,
+  };
+}
+export function fakeUserComplete() {
+  return {
+    id: faker.string.uuid(),
+    name: undefined,
+    email: undefined,
+    emailVerified: undefined,
+    image: undefined,
   };
 }
 export function fakePost() {
   return {
     title: faker.lorem.words(5),
     content: faker.lorem.words(5),
-    updatedAt: faker.date.anytime(),
-    category: faker.helpers.arrayElement([Category.Technology, Category.HealthWellness, Category.PersonalFinance, Category.FoodCooking, Category.Travel, Category.FashionBeauty, Category.Lifestyle, Category.ParentingFamily, Category.BusinessEntrepreneurship, Category.DIYCrafts, Category.EducationLearning, Category.EntertainmentPopCulture, Category.SportsFitness, Category.PoliticsSocialIssues, Category.Gaming, Category.HomeGarden] as const),
+    category: faker.helpers.arrayElement([
+      Category.Technology,
+      Category.HealthWellness,
+      Category.PersonalFinance,
+      Category.FoodCooking,
+      Category.Travel,
+      Category.FashionBeauty,
+      Category.Lifestyle,
+      Category.ParentingFamily,
+      Category.BusinessEntrepreneurship,
+      Category.DIYCrafts,
+      Category.EducationLearning,
+      Category.EntertainmentPopCulture,
+      Category.SportsFitness,
+      Category.PoliticsSocialIssues,
+      Category.Gaming,
+      Category.HomeGarden,
+    ] as const),
   };
 }
 export function fakePostComplete() {
@@ -119,9 +134,26 @@ export function fakePostComplete() {
     title: faker.lorem.words(5),
     content: faker.lorem.words(5),
     createdAt: new Date(),
-    updatedAt: faker.date.anytime(),
+    updatedAt: new Date(),
     published: false,
     authorId: faker.string.uuid(),
-    category: faker.helpers.arrayElement([Category.Technology, Category.HealthWellness, Category.PersonalFinance, Category.FoodCooking, Category.Travel, Category.FashionBeauty, Category.Lifestyle, Category.ParentingFamily, Category.BusinessEntrepreneurship, Category.DIYCrafts, Category.EducationLearning, Category.EntertainmentPopCulture, Category.SportsFitness, Category.PoliticsSocialIssues, Category.Gaming, Category.HomeGarden] as const),
+    category: faker.helpers.arrayElement([
+      Category.Technology,
+      Category.HealthWellness,
+      Category.PersonalFinance,
+      Category.FoodCooking,
+      Category.Travel,
+      Category.FashionBeauty,
+      Category.Lifestyle,
+      Category.ParentingFamily,
+      Category.BusinessEntrepreneurship,
+      Category.DIYCrafts,
+      Category.EducationLearning,
+      Category.EntertainmentPopCulture,
+      Category.SportsFitness,
+      Category.PoliticsSocialIssues,
+      Category.Gaming,
+      Category.HomeGarden,
+    ] as const),
   };
 }

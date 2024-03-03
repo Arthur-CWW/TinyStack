@@ -9,7 +9,7 @@ import { ReactElement, useState } from "react";
 import { api } from "~/utils/api";
 import { SplashBackground } from "../components/svgs/SplashBackground";
 import { Logo } from "../components/svgs/logo";
-import { Navbar } from "~/components/layout";
+import { Navbar } from "~/components/ui/Navbar";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { ProfilePic } from "../components/ui/profile-pic";
 export default function Home() {

@@ -35,7 +35,7 @@ import "@mdxeditor/editor/style.css";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 
-export default function App() {
+export default function Home() {
   return (
     <div>
       <Head>
@@ -53,6 +53,8 @@ export default function App() {
     </div>
   );
 }
+
+// Home.Layout = Navbar;
 
 const defaultSnippetContent = `
 export default function App() {
