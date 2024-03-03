@@ -76,8 +76,8 @@ function NavRGroup() {
               >
                 Sign up
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => signOut()}>
-                Sign out
+              <DropdownMenuItem onClick={() => signIn()}>
+                Sign in
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

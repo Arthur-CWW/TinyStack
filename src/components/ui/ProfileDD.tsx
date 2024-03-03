@@ -23,6 +23,26 @@ export function ProfileDD({
   user: Undefinable<User>;
   before?: React.ReactNode;
 }) {
+  const menu = [
+    {
+      icons: ProfileIcon,
+      text: "Profile",
+    },
+
+    {
+      icons: LibraryIcon,
+      text: "Library",
+    },
+    {
+      icons: StoryIcon,
+      text: "Story",
+    },
+    {
+      icons: StatsIcon,
+      text: "Stats",
+    },
+  ];
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -40,22 +60,14 @@ export function ProfileDD({
           {before && (
             <DropdownMenuLabel className="p-6">{before}</DropdownMenuLabel>
           )}
-          <DropdownMenuItem className="p-6">
-            <ProfileIcon className=" h-5 w-5" />
-            Profile
-          </DropdownMenuItem>
-          <DropdownMenuItem className="p-6">
-            <LibraryIcon className=" h-5 w-5" />
-            <span>Library</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="p-6">
-            <StoryIcon className=" h-5 w-5" />
-            <span>Story</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="p-6">
-            <StatsIcon className=" h-5 w-5" />
-            <span>Stats</span>
-          </DropdownMenuItem>
+          {menu.map((item, index) => {
+            return (
+              <DropdownMenuItem key={index} className="px-6 py-2">
+                <item.icons className=" mr-3 h-5 w-5" />
+                <span>{item.text}</span>
+              </DropdownMenuItem>
+            );
+          })}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
