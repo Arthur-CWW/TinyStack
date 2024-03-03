@@ -24,18 +24,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import { ProfilePic } from "~/components/ui/ProfilePic";
+import { ProfilePic } from "~/components/ui/profile-pic";
 import { User } from "next-auth";
 
 export function Navbar() {
   const { data: sessionData } = useSession();
   return (
-    <nav
-      className="flex w-full items-baseline justify-between p-4   text-slate-500
-        "
-    >
+    <nav className="border-b-1 flex w-full items-baseline justify-between   border-slate-100 p-4 text-slate-500">
       <div className="flex  items-center gap-3">
-        <Link href="" className="h-7  w-11 overflow-hidden rounded-full">
+        <Link href="/" className="h-7  w-11 overflow-hidden rounded-full">
           <Logo />
           {/* search input */}
         </Link>
@@ -50,10 +47,10 @@ export function Navbar() {
       </div>
 
       <div className="flex items-center gap-5 pt-1 text-lg">
-        <Link href="write" className="flex items-center justify-center gap-1 ">
+        <Link href="/write" className="flex items-center justify-center gap-1 ">
           <WriteIcon className="h-7 w-7" /> Write
         </Link>
-        <Link href="me/notifications">
+        <Link href="/me/notifications">
           <BellClose className="h-7 w-7" />
         </Link>
         {/* profile dropdown */}
