@@ -130,17 +130,23 @@ export default function Home() {
         </>
       ) : (
         <>
-          <header className="flex w-full items-baseline justify-between bg-orange   p-4">
+          <header className="flex w-full items-baseline justify-between bg-orange   p-4 ">
             <Link href="">
               <Logo />
             </Link>
-            <div className="flex items-baseline gap-4 pt-1">
-              <Link href="story">Our Story</Link>
-              <Link onClick={() => signIn()} href="membership">
-                Membership
-              </Link>
-              <Link href="write">Write</Link>
-              <Link onClick={() => signIn()} href="auth">
+            <div className="flex items-baseline gap-4 pt-1 ">
+              <div className=" mm:flex hidden gap-4">
+                <Link href="story">Our Story</Link>
+                <Link onClick={() => signIn()} href="membership">
+                  Membership
+                </Link>
+                <Link href="write">Write</Link>
+              </div>
+              <Link
+                onClick={() => signIn()}
+                href="auth"
+                className="hidden sm:flex"
+              >
                 Sign in
               </Link>
               {/* pill button */}
@@ -151,16 +157,22 @@ export default function Home() {
             </div>
           </header>
           <main className="  flex justify-between border-y-[1px]  border-black bg-orange px-3">
-            <div className="container right-0 flex max-w-md flex-col items-center justify-center gap-12 px-4 py-24">
-              <h1 className="text-5xl font-extrabold tracking-tight text-black sm:text-[5rem]">
+            <div className="mm:max-w-lg container right-0 flex w-full flex-col   items-start   justify-center  gap-8 py-24">
+              <h1 className=" mm:text-[5rem] font-serif text-8xl  tracking-tight  text-black">
                 Stay curious
               </h1>
-              <div className="flex flex-col items-center gap-2">
-                <AuthShowcase />
-              </div>
+              {/* pill button sign up */}
+              <h2 className="text-2xl   text-black">
+                Discover stories, thinking, and expertise from writers on any
+                topic.
+              </h2>
+              <button className="w-48 rounded-full bg-black p-3  text-xl  text-white">
+                {/* todo signup flow */}
+                <Link href="signup-flow">Get started</Link>
+              </button>
             </div>
-            <div className="relative w-[585px]">
-              <SplashBackground className="absolute bottom-0 right-0 " />
+            <div className="mm:relative hidden w-[585px]">
+              <SplashBackground className="mm:block absolute bottom-0  right-0 hidden" />
             </div>
             {/* get new blogpost */}
             {/* <button onClick */}

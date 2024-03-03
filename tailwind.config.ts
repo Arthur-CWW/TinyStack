@@ -19,6 +19,10 @@ const config = {
       },
     },
     extend: {
+      screens: {
+        mm: "720px",
+        xs: "375px",
+      },
       fontFamily: {
         // sans: ["var(--font-sans)", ...fontFamily.sans],
         sans: [
