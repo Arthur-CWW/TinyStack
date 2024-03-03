@@ -1,28 +1,14 @@
 // import { MDXEditor, headingsPlugin } from "@mdxeditor/editor";
-import { forwardRef, use, useEffect } from "react";
-import {
-  headingsPlugin,
-  AdmonitionDirectiveDescriptor,
-  KitchenSinkToolbar,
-  codeBlockPlugin,
-  codeMirrorPlugin,
-  diffSourcePlugin,
-  directivesPlugin,
-  sandpackPlugin,
-} from "@mdxeditor/editor";
 import Head from "next/head";
 import { signIn, useSession } from "next-auth/react";
 
 import dynamic from "next/dynamic";
 import { ComponentType } from "react";
 
-// const EditorDynamic: ComponentType<{}> = dynamic(
-//   () => import("~/components/ui/Editor"),
-//   { ssr: false },
-// );
+const Editor = dynamic(() => import("~/components/ui/Editor"), { ssr: false });
 
 import { useRouter } from "next/router";
-import Editor from "~/components/ui/Editor";
+// import Editor from "~/components/ui/Editor";
 
 export default function Home() {
   // if not logged in, redirect to login
@@ -32,12 +18,12 @@ export default function Home() {
   //   // TODO  check if this  works
   //   use(async () => signIn());
   // }
-  useEffect(() => {
-    if (!sessionData || !sessionData.user) {
-      signIn().catch(console.error);
-      // router.push("/login").catch(console.error);
-    }
-  }, [sessionData]);
+  // useEffect(() => {
+  //   if (!sessionData || !sessionData.user) {
+  //     signIn().catch(console.error);
+  //     // router.push("/login").catch(console.error);
+  //   }
+  // }, [sessionData]);
 
   // redirect to login
   // useEffect(() => {
@@ -58,8 +44,8 @@ export default function Home() {
         editorRef={null}
         onChange={(md) => console.log("change", { md })}
       /> */}
-      <input type="file" />
-      TODO fix
+      {/* <input type="file" />
+      TODO fix */}
       {/* return <MDXEditor markdown={markdown} onChange={(md) => console.log('change', { md })} plugins={ALL_PLUGINS} /> */}
     </div>
   );

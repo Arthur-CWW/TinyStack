@@ -1,105 +1,62 @@
-import { type ForwardedRef } from "react";
-import {
-  headingsPlugin,
-  listsPlugin,
-  quotePlugin,
-  thematicBreakPlugin,
-  markdownShortcutPlugin,
-  MDXEditor,
-  type MDXEditorMethods,
-  type MDXEditorProps,
-  imagePlugin,
-  toolbarPlugin,
-  frontmatterPlugin,
-  linkDialogPlugin,
-  linkPlugin,
-  tablePlugin,
-  BoldItalicUnderlineToggles,
-  UndoRedo,
-  ListsToggle,
-  InsertImage,
-  CreateLink,
-  CodeToggle,
-  InsertTable,
-  InsertCodeBlock,
-} from "@mdxeditor/editor";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import BubbleMenu from "@tiptap/extension-bubble-menu";
+import FloatingMenu from "@tiptap/extension-floating-menu";
+import { useRef, useState } from "react";
 
-import "@mdxeditor/editor/style.css";
-// Home.Layout = Navbar;
-const defaultSnippetContent = `
-export default function App() {
+const Editor = () => {
+  const bubbleMenuRef = useRef<HTMLDivElement>(null);
+  const floatingMenuRef = useRef<HTMLDivElement>(null);
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Link,
+      BubbleMenu.configure({
+        element: bubbleMenuRef.current,
+      }),
+      FloatingMenu.configure({
+        element: floatingMenuRef.current,
+      }),
+    ],
+    content: `
+      <h2>Hi there,</h2>
+      <p>This is a basic example of <em>tiptap</em> with <strong>Tailwind Typography</strong>.</p>
+      <!-- Add more content as needed -->
+    `,
+    editorProps: {
+      attributes: {
+        class:
+          "prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none",
+      },
+    },
+  });
+
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const handleExport = () => {
+    const html = editor.getHTML();
+    console.log(html);
+    // You can further process the HTML or save it as needed
+  };
+
   return (
-    <div className="App">
-      <h1>Hello CodeSandbox</h1>
-      <h2>Start editing to see some magic happen!</h2>
+    <div className="editor-container">
+      <EditorContent editor={editor} />
+      <div
+        id="bubble-menu"
+        ref={bubbleMenuRef}
+        className={`tooltip ${showTooltip ? "visible" : ""}`}
+      >
+        <button onClick={() => setShowTooltip(false)}>Close</button>
+      </div>
+      <div ref={floatingMenuRef} className="floating-menu">
+        <button onClick={() => setShowTooltip(true)}>+</button>
+        <button onClick={handleExport}>Export to HTML</button>
+      </div>
     </div>
   );
-}
-`.trim();
+};
 
-export async function expressImageUploadHandler(image: File) {
-  const formData = new FormData();
-  formData.append("image", image);
-  const response = await fetch("/uploads/new", {
-    method: "POST",
-    body: formData,
-  });
-  const json = (await response.json()) as { url: string };
-  return json.url;
-}
-function MDEditor({
-  editorRef,
-  ...props
-}: { editorRef: ForwardedRef<MDXEditorMethods> | null } & MDXEditorProps) {
-  return (
-    <MDXEditor
-      plugins={[
-        // Example Plugin Usage
-        toolbarPlugin({
-          toolbarContents: () => (
-            <div className="flex gap-2">
-              <UndoRedo />
-              <BoldItalicUnderlineToggles />
-              <ListsToggle />
-              <InsertImage />
-              <CreateLink />
-              <InsertTable />
-              <CodeToggle />
-              <InsertCodeBlock />
-            </div>
-          ),
-        }),
-        listsPlugin(),
-        quotePlugin(),
-        headingsPlugin({ allowedHeadingLevels: [1, 2, 3] }),
-        linkPlugin(),
-        linkDialogPlugin(),
-        imagePlugin({
-          imageAutocompleteSuggestions: [
-            "https://via.placeholder.com/150",
-            "https://via.placeholder.com/150",
-          ],
-          imageUploadHandler: async () =>
-            // TOOO: Fix this
-            Promise.resolve("https://picsum.photos/200/300"),
-        }),
-        tablePlugin(),
-        thematicBreakPlugin(),
-        frontmatterPlugin(),
-        // codeBlockPlugin({ defaultCodeBlockLanguage: "" }),
-        // codeMirrorPlugin({
-        //   codeBlockLanguages: {
-        //     js: "JavaScript",
-        //     css: "CSS",
-        //     txt: "Plain Text",
-        //     tsx: "TypeScript",
-        //     "": "Unspecified",
-        //   },
-        // }),
-        markdownShortcutPlugin(),
-      ]}
-      {...props}
-      ref={editorRef}
-    />
-  );
-}
+export default Editor;
