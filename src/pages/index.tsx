@@ -248,7 +248,10 @@ function AuthShowcase() {
   );
 }
 
-Home.getLayout = (page: ReactElement) => <>{page}</>;
+const Layout = ({ children }: { children: ReactElement }) => {
+  return <>{children}</>;
+};
+Home.Layout = Layout;
 // function getLayout(page: ReactElement) {
 //   return <>{page}</>;
 // };

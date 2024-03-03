@@ -8,23 +8,31 @@ import "~/styles/globals.css";
 import Head from "next/head";
 import { ReactElement } from "react";
 import { DefaultNavLayout, Navbar } from "~/components/layout";
+// add Layout to the AppProps
+// declare module "next/app" {
 
 const MyApp = ({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session | null }> & {
-  Component: { getLayout?: (page: ReactElement) => ReactElement };
+  Component: {
+    Layout?: ({ children }: { children: ReactElement }) => ReactElement;
+  };
 }) => {
-  const getLayout =
-    Component.getLayout ??
-    ((page) => <DefaultNavLayout>{page}</DefaultNavLayout>);
+  const Layout =
+    Component.Layout ??
+    (({ children }: { children: ReactElement }) => (
+      <DefaultNavLayout>{children}</DefaultNavLayout>
+    ));
   return (
     <SessionProvider session={session}>
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* TODO fix into react jsx component*/}
-      {getLayout(<Component {...pageProps} />)}
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </SessionProvider>
   );
 };
