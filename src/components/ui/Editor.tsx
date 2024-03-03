@@ -9,7 +9,7 @@ import Dropcursor from "@tiptap/extension-dropcursor";
 import { Editor } from "@tiptap/core";
 
 const EditorContentWithDrop = ({ editor }: { editor: Editor }) => {
-  const contentRef = useRef(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleDrop = (event: DragEvent) => {
@@ -22,12 +22,15 @@ const EditorContentWithDrop = ({ editor }: { editor: Editor }) => {
       }
       const reader = new FileReader();
       reader.onload = (readerEvent) => {
-        editor.commands.setImage({ src: readerEvent.target.result });
+        editor.commands.setImage({ src: readerEvent?.target?.result });
       };
-      reader.readAsDataURL(files[0]);
+      if (files[0]) {
+        reader.readAsDataURL(files[0]);
+      }
     };
 
     const contentElement = contentRef.current;
+    if (!contentElement) return;
     contentElement.addEventListener("drop", handleDrop);
     return () => {
       contentElement.removeEventListener("drop", handleDrop);
@@ -90,18 +93,18 @@ const MyEditor = () => {
   if (!editor) return null;
 
   return (
-    <div className="px-3">
-      <EditorContentWithDrop editor={editor} />
-      <div
-        id="bubble-menu"
-        ref={bubbleMenuRef}
-        className={`tooltip ${showTooltip ? "visible" : ""}`}
-      >
-        <button onClick={() => setShowTooltip(false)}>Close</button>
-      </div>
-      <div ref={floatingMenuRef} className="floating-menu">
+    <div className="container flex flex-col items-center justify-center px-3">
+      <div ref={floatingMenuRef} className="flex ">
         <button onClick={() => setShowTooltip(true)}>+</button>
         <button onClick={handleExport}>Export to HTML</button>
+      </div>
+      <EditorContentWithDrop editor={editor} />
+      <div
+        ref={bubbleMenuRef}
+        className={`tooltip ${showTooltip ? "visible" : ""}`}
+        // TODO tooltip class
+      >
+        <button onClick={() => setShowTooltip(false)}>Close</button>
       </div>
     </div>
   );
