@@ -83,7 +83,7 @@ const MyEditor = () => {
 
     content: `
       <h1>Hi there,</h1>
-      <p>This is a basic example of <em>tiptap</em> with <strong>Tailwind Typography</strong>.</p>
+      <p>This is a basic example the editors features </p>
       <!-- Add more content as needed -->
     <img src="https://source.unsplash.com/8xznAGy4HcY/800x400" />
     <img src="https://source.unsplash.com/K9QHL52rE2k/800x400" />
