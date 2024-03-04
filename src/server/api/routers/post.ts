@@ -15,6 +15,7 @@ export const postRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       // simulate a slow db call
       // await new Promise((resolve) => setTimeout(resolve, 100));
+      // TOOD dom purify the content
       console.log("input", input);
 
       return ctx.db.post.create({
