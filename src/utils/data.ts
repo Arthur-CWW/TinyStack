@@ -109,6 +109,7 @@ export function fakeUserComplete() {
 export function fakePost() {
   return {
     title: faker.lorem.words(5),
+    subtitle: undefined,
     content: faker.lorem.words(5),
     category: faker.helpers.arrayElement([Category.Technology, Category.HealthWellness, Category.PersonalFinance, Category.FoodCooking, Category.Travel, Category.FashionBeauty, Category.Lifestyle, Category.ParentingFamily, Category.BusinessEntrepreneurship, Category.DIYCrafts, Category.EducationLearning, Category.EntertainmentPopCulture, Category.SportsFitness, Category.PoliticsSocialIssues, Category.Gaming, Category.HomeGarden, Category.None] as const),
   };
@@ -117,6 +118,7 @@ export function fakePostComplete() {
   return {
     id: faker.number.int(),
     title: faker.lorem.words(5),
+    subtitle: undefined,
     content: faker.lorem.words(5),
     createdAt: new Date(),
     updatedAt: new Date(),
