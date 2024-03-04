@@ -1,26 +1,52 @@
 // import { MDXEditor, headingsPlugin } from "~mdxeditor/editor";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { signIn, useSession } from "next-auth/react";
+import { CategorySchema } from "~/utils/types";
 
-import { useEditorStore, useProfileStore } from "~/utils/stores";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "~/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+
 import dynamic from "next/dynamic";
 import { ComponentType } from "react";
+import { useEditorStore, useProfileStore } from "~/utils/stores";
 
 const Editor = dynamic(() => import("~/components/ui/Editor"), { ssr: false });
 
 import { useRouter } from "next/router";
-import { SearchIcon } from "lucide-react";
 import { Logo } from "~/components/svgs/logo";
 // import Header from "./write";
 import Link from "next/link";
 import { IoIosNotificationsOutline as BellClose } from "react-icons/io";
 import { ProfileDD } from "~/components/ui/ProfileDD";
 import { ProfilePic } from "~/components/ui/profile-pic";
-import { IoIosNotificationsOutline } from "react-icons/io";
 // import Editor from "~/components/ui/Editor";
 // store.js
-import create from "zustand";
+import { Session } from "next-auth";
 import { useStore } from "zustand";
+import { api } from "~/utils/api";
+import { Undefinable } from "~/utils/types";
 
 export default function Home() {
   // if not logged in, redirect to login
@@ -57,9 +83,6 @@ export default function Home() {
     </div>
   );
 }
-import { api } from "~/utils/api";
-import { Session } from "next-auth";
-import { Undefinable } from "~/utils/types";
 function Header() {
   const { data: sessionData } = useSession();
 
@@ -96,33 +119,50 @@ function Header() {
         </div>
 
         <div className="flex items-center gap-5 pt-1 text-lg">
-          <button
-            onClick={async () => {
-              // const newPost = await api.post.createPost.useMutation({
-              // });
-              const dom = new DOMParser().parseFromString(html, "text/html");
-              const title = dom.querySelector("h1")?.textContent;
-              // remove h1 from the dom
-              dom.querySelector("h1")?.remove();
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                onClick={async () => {
+                  // const newPost = await api.post.createPost.useMutation({
+                  // });
+                  const dom = new DOMParser().parseFromString(
+                    html,
+                    "text/html",
+                  );
+                  const title = dom.querySelector("h1")?.textContent;
+                  // remove h1 from the dom
+                  dom.querySelector("h1")?.remove();
 
-              if (!title) {
-                console.error("no title");
-                return;
-              }
-              const newPost = createNewPost({
-                title,
-                category: "BusinessEntrepreneurship",
-                content: dom.body.innerHTML,
-                tags: ["test"],
-                published: true,
-              });
+                  if (!title) {
+                    console.error("no title");
+                    return;
+                  }
+                  const newPost = createNewPost({
+                    title,
+                    category: "BusinessEntrepreneurship",
+                    content: dom.body.innerHTML,
+                    tags: ["test"],
+                    published: true,
+                  });
 
-              console.log("sent", title);
-            }}
-            className="rounded-full  bg-green-600 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white"
-          >
-            Publish
-          </button>
+                  console.log("sent", title);
+                }}
+                className="rounded-full  bg-green-600 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white"
+              >
+                Publish
+              </button>
+            </DialogTrigger>
+            <DialogContent className="grid h-screen w-screen grid-cols-2">
+              <DialogHeader>
+                <DialogTitle>Edit profile</DialogTitle>
+                <DialogDescription>
+                  Make changes to your profile here. Click save when you're
+                  done.
+                </DialogDescription>
+              </DialogHeader>
+              <UploadPage user={sessionData?.user} />
+            </DialogContent>
+          </Dialog>
 
           <BellClose className="h-7 w-7" />
           <ProfileDD
@@ -157,23 +197,6 @@ function Layout({ children }: { children: ComponentType }) {
 
 Home.Layout = Layout;
 
-import { CategorySchema } from "~/utils/types";
-
-import { Button } from "~/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
 function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
   const { html } = useStore(useEditorStore);
 
@@ -184,12 +207,10 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
   console.log("data", data);
   console.log("html", html);
   const formSchema = z.object({
-    // name: z.string().min(6),
-    // category: z.string().min(1),
     title: z.string().min(6),
+    subtitle: z.optional(z.string()),
     category: CategorySchema,
     content: z.string().min(6),
-    tags: z.array(z.string()),
     published: z.boolean(),
   });
 
@@ -206,25 +227,76 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="">
+        {/* placeholder image drag and drop*/}
+        <img src="" alt="" className="" />
+
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input
+                  placeholder={`Write a preview ${field.name}...`}
+                  {...field}
+                />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-              <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <FormField
+          control={form.control}
+          name="subtitle"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  placeholder={`Write a preview ${field.name}...`}
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>
+                Note: Changes here will affect how your story appears in public
+                places like Medium’s homepage and in subscribers’ inboxes — not
+                the contents of the story itself.
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+        <h1>Publishing to {user?.name}</h1>
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Add or change topics (up to 5) so readers know what your story
+                is about
+              </FormLabel>
+              <FormControl>
+                <Input placeholder={`Add a topic...`} {...field} />
+              </FormControl>
+              <FormDescription>
+                Learn more about what happens to your post when you publish.
+              </FormDescription>
+            </FormItem>
+          )}
+        />
+
+        <DialogFooter>
+          <DialogTrigger>
+            <Button type="submit">Publish Now</Button>
+            <Button type="submit">Save changes</Button>
+          </DialogTrigger>
+        </DialogFooter>
       </form>
     </Form>
   );
 }
+
+// export function DialogDemo() {
+//   return (
+
+//   );
+// }
