@@ -1,4 +1,3 @@
-import { Category } from "@prisma/client";
 import { title } from "process";
 import { z } from "zod";
 
@@ -8,22 +7,11 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { fakePost } from "~/utils/data";
-
-const CategorySchema = z.nativeEnum(Category);
+import { postSchema } from "~/utils/types";
 
 export const postRouter = createTRPCRouter({
   createPost: protectedProcedure
-    .input(
-      z.object({
-        // name: z.string().min(6),
-        // category: z.string().min(1),
-        title: z.string().min(6),
-        category: CategorySchema,
-        content: z.string().min(6),
-        tags: z.array(z.string()),
-        published: z.boolean(),
-      }),
-    )
+    .input(postSchema)
     .mutation(async ({ ctx, input }) => {
       // simulate a slow db call
       // await new Promise((resolve) => setTimeout(resolve, 100));
