@@ -99,6 +99,7 @@ enum Category {
     PoliticsSocialIssues
     Gaming
     HomeGarden
+    None
 }
 
 // blog post model

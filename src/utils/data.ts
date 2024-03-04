@@ -1,6 +1,8 @@
-import { Category } from "@prisma/client";
-import { faker } from "@faker-js/faker";
-import Decimal from "decimal.js";
+import { Category } from '@prisma/client';
+import { faker } from '@faker-js/faker';
+import Decimal from 'decimal.js';
+
+
 
 export function fakeAccount() {
   return {
@@ -108,24 +110,7 @@ export function fakePost() {
   return {
     title: faker.lorem.words(5),
     content: faker.lorem.words(5),
-    category: faker.helpers.arrayElement([
-      Category.Technology,
-      Category.HealthWellness,
-      Category.PersonalFinance,
-      Category.FoodCooking,
-      Category.Travel,
-      Category.FashionBeauty,
-      Category.Lifestyle,
-      Category.ParentingFamily,
-      Category.BusinessEntrepreneurship,
-      Category.DIYCrafts,
-      Category.EducationLearning,
-      Category.EntertainmentPopCulture,
-      Category.SportsFitness,
-      Category.PoliticsSocialIssues,
-      Category.Gaming,
-      Category.HomeGarden,
-    ] as const),
+    category: faker.helpers.arrayElement([Category.Technology, Category.HealthWellness, Category.PersonalFinance, Category.FoodCooking, Category.Travel, Category.FashionBeauty, Category.Lifestyle, Category.ParentingFamily, Category.BusinessEntrepreneurship, Category.DIYCrafts, Category.EducationLearning, Category.EntertainmentPopCulture, Category.SportsFitness, Category.PoliticsSocialIssues, Category.Gaming, Category.HomeGarden, Category.None] as const),
   };
 }
 export function fakePostComplete() {
@@ -137,23 +122,6 @@ export function fakePostComplete() {
     updatedAt: new Date(),
     published: false,
     authorId: faker.string.uuid(),
-    category: faker.helpers.arrayElement([
-      Category.Technology,
-      Category.HealthWellness,
-      Category.PersonalFinance,
-      Category.FoodCooking,
-      Category.Travel,
-      Category.FashionBeauty,
-      Category.Lifestyle,
-      Category.ParentingFamily,
-      Category.BusinessEntrepreneurship,
-      Category.DIYCrafts,
-      Category.EducationLearning,
-      Category.EntertainmentPopCulture,
-      Category.SportsFitness,
-      Category.PoliticsSocialIssues,
-      Category.Gaming,
-      Category.HomeGarden,
-    ] as const),
+    category: faker.helpers.arrayElement([Category.Technology, Category.HealthWellness, Category.PersonalFinance, Category.FoodCooking, Category.Travel, Category.FashionBeauty, Category.Lifestyle, Category.ParentingFamily, Category.BusinessEntrepreneurship, Category.DIYCrafts, Category.EducationLearning, Category.EntertainmentPopCulture, Category.SportsFitness, Category.PoliticsSocialIssues, Category.Gaming, Category.HomeGarden, Category.None] as const),
   };
 }
