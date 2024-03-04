@@ -11,7 +11,27 @@ import { postSchema } from "~/utils/types";
 
 import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
+import { Category } from "@prisma/client";
 
+function addSubtitle(
+  data: {
+    subtitle: string | null;
+    content: string;
+    // rest
+  }[],
+) {
+  data.forEach((post) => {
+    if (!post?.subtitle) {
+      debugger;
+      post.subtitle =
+        new JSDOM(post.content).window.document.body.textContent?.slice(
+          0,
+          100,
+        ) ?? "";
+    }
+  });
+}
+const window = new JSDOM("").window;
 export const postRouter = createTRPCRouter({
   createPost: protectedProcedure
     .input(postSchema)
@@ -21,7 +41,6 @@ export const postRouter = createTRPCRouter({
       // TODO dom purify the content
 
       // Might want to hoist these objects to the server context
-      const window = new JSDOM("").window;
       const purify = DOMPurify(window);
       const clean = purify.sanitize(input.content);
       console.log("cleaned", clean);
@@ -45,12 +64,14 @@ export const postRouter = createTRPCRouter({
 
   getUserPosts: publicProcedure
     .input(z.object({ author: z.string() }))
-    .query(({ input, ctx }) => {
-      return ctx.db.post.findMany({
+    .query(async ({ input, ctx }) => {
+      const data = await ctx.db.post.findMany({
         where: { author: { name: input.author } },
       });
+      addSubtitle(data);
+      return data;
     }),
-
+  // if post does not have sub title, use the first 100 characters of the content
   // top blog posts
   getLatest: publicProcedure.query(({ ctx }) => {
     return ctx.db.post.findFirst({

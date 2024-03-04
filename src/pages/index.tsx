@@ -12,12 +12,17 @@ import { Logo } from "../components/svgs/logo";
 import { Navbar } from "~/components/ui/Navbar";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { ProfilePic } from "../components/ui/profile-pic";
+
+import { JSDOM } from "jsdom";
 export default function Home() {
   const blogs = api.post.prototype.useQuery();
   const [blogPost, setBlogPost] = useState<Post[]>([]);
 
   const { data: sessionData } = useSession();
-  const domParser = new DOMParser();
+  // const domParser = new DOMParser();
+  // const domParser = new JSDOM().window;
+  // need this to only run on the client
+  // const [domParser, setUseDomParser] = useState(() => new DOMParser());
 
   const { data: secretMessage } = api.post.checkSecret.useQuery(
     undefined, // no input
@@ -74,10 +79,7 @@ export default function Home() {
                       >
                         <h1 className="text-2xl font-semibold">{post.title}</h1>
                         <div className="line-clamp-4 ">
-                          {post.subtitle ??
-                            domParser
-                              .parseFromString(post.content, "text/html")
-                              .body.innerText.slice(0, 120)}
+                          {post.subtitle ?? ""}
                         </div>
                         <li className="flex py-8 ">
                           {/* this extra flex container needed otherwise it grows full width of the card */}
