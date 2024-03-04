@@ -137,8 +137,8 @@ function Header() {
                 <ProfilePic author={sessionData?.user} className="h-12 w-12" />
                 <Link href="/profile" className="flex flex-col">
                   <span className=" ">{sessionData?.user?.name}</span>
-                  <span className="hover:underlin text-gray-600">
-                    ~{sessionData?.user?.name}
+                  <span className="text-gray-600 hover:underline">
+                    @{sessionData?.user?.name}
                   </span>
                 </Link>
               </div>
@@ -238,6 +238,7 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
             )}
           />
           <FormField
+            rules={{ required: false }}
             control={form.control}
             name="subtitle"
             render={({ field }) => (
@@ -282,7 +283,9 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
             )}
           />
           <DialogFooter className=" gap-3 sm:justify-start">
-            <Button type="submit">Publish Now</Button>
+            <DialogTrigger>
+              <Button type="submit">Publish Now</Button>
+            </DialogTrigger>
             <DialogTrigger>
               <button className="text-gray-500" type="reset">
                 {/* TODO figure which type to use */}
