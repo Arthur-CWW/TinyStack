@@ -9,7 +9,8 @@ import Dropcursor from "@tiptap/extension-dropcursor";
 import { Editor } from "@tiptap/react";
 import { useDebounce, useDebouncedCallback } from "use-debounce";
 import styles from "./Editor.module.css";
-
+export const editorStyling =
+  "prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none [&>[data-placeholder='Title']]:text-4xl";
 import { useEditorStore } from "~/utils/stores";
 const EditorContentWithDrop = ({ editor }: { editor: Editor }) => {
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -91,8 +92,7 @@ const MyEditor = () => {
     `,
     editorProps: {
       attributes: {
-        class:
-          "prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none [&>[data-placeholder='Title']]:",
+        class: editorStyling,
         //                                    ^need to fix this class
       },
     },
