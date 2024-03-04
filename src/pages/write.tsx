@@ -88,9 +88,7 @@ function Header() {
 
   const { updating } = useStore(useProfileStore);
 
-  const { html } = useStore(useEditorStore);
   // send html and content to trpc backend on publish button
-  const { data, mutate: createNewPost } = api.post.createPost.useMutation();
 
   if (!sessionData || !sessionData.user) {
     return null;
@@ -121,45 +119,12 @@ function Header() {
         <div className="flex items-center gap-5 pt-1 text-lg">
           <Dialog>
             <DialogTrigger asChild>
-              <button
-                onClick={async () => {
-                  // const newPost = await api.post.createPost.useMutation({
-                  // });
-                  const dom = new DOMParser().parseFromString(
-                    html,
-                    "text/html",
-                  );
-                  const title = dom.querySelector("h1")?.textContent;
-                  // remove h1 from the dom
-                  dom.querySelector("h1")?.remove();
-
-                  if (!title) {
-                    console.error("no title");
-                    return;
-                  }
-                  const newPost = createNewPost({
-                    title,
-                    category: "BusinessEntrepreneurship",
-                    content: dom.body.innerHTML,
-                    tags: ["test"],
-                    published: true,
-                  });
-
-                  console.log("sent", title);
-                }}
-                className="rounded-full  bg-green-600 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white"
-              >
+              <button className="rounded-full  bg-green-600 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white">
                 Publish
               </button>
             </DialogTrigger>
-            <DialogContent className="grid h-screen w-screen grid-cols-2">
-              <DialogHeader>
-                <DialogTitle>Edit profile</DialogTitle>
-                <DialogDescription>
-                  Make changes to your profile here. Click save when you're
-                  done.
-                </DialogDescription>
-              </DialogHeader>
+
+            <DialogContent className="h-screen w-screen p-12 ">
               <UploadPage user={sessionData?.user} />
             </DialogContent>
           </Dialog>
@@ -202,16 +167,14 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
 
   const { data, mutate: createNewPost } = api.post.createPost.useMutation();
   // const user = sessionData.user;
-  console.log("user", user);
+  // console.log("user", user);
   // console.log("userPosts", userPosts);
-  console.log("data", data);
-  console.log("html", html);
+  // console.log("data", data);
+  // console.log("html", html);
   const formSchema = z.object({
     title: z.string().min(6),
     subtitle: z.optional(z.string()),
-    category: CategorySchema,
-    content: z.string().min(6),
-    published: z.boolean(),
+    category: z.optional(CategorySchema),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -221,75 +184,113 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    console.log("sent", values);
+
+    const dom = new DOMParser().parseFromString(html, "text/html");
+    const title = dom.querySelector("h1")?.textContent;
+    // remove h1 from the dom
+    dom.querySelector("h1")?.remove();
+
+    if (!title) {
+      console.error("no title");
+      return;
+    }
+    const newPost = createNewPost({
+      title: values.title,
+      category: values.category ?? "None",
+      content: dom.body.innerHTML,
+      tags: [],
+      published: true,
+    });
+
+    console.log("sent", title);
+    console.log("submitted kjfldsjlkfasjkdl", values);
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="container flex justify-center gap-10"
+      >
         {/* placeholder image drag and drop*/}
-        <img src="" alt="" className="" />
 
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder={`Write a preview ${field.name}...`}
-                  {...field}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="subtitle"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder={`Write a preview ${field.name}...`}
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                Note: Changes here will affect how your story appears in public
-                places like Medium’s homepage and in subscribers’ inboxes — not
-                the contents of the story itself.
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <h1>Publishing to {user?.name}</h1>
-        <FormField
-          control={form.control}
-          name="category"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Add or change topics (up to 5) so readers know what your story
-                is about
-              </FormLabel>
-              <FormControl>
-                <Input placeholder={`Add a topic...`} {...field} />
-              </FormControl>
-              <FormDescription>
-                Learn more about what happens to your post when you publish.
-              </FormDescription>
-            </FormItem>
-          )}
-        />
+        <DialogHeader className="max-w-md">
+          <DialogTitle>Story Preview</DialogTitle>
 
-        <DialogFooter>
-          <DialogTrigger>
+          <img
+            src="https://picsum.photos/200/300"
+            alt="fjdsklfjak"
+            className="aspect-video w-full"
+          />
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    placeholder={`Write a preview ${field.name}...`}
+                    {...field}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="subtitle"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    placeholder={`Write a preview ${field.name}...`}
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Note: Changes here will affect how your story appears in
+                  public places like Medium’s homepage and in subscribers’
+                  inboxes — not the contents of the story itself.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+        </DialogHeader>
+
+        <DialogHeader className="max-w-md">
+          <DialogTitle>Publishing to {user?.name}</DialogTitle>
+
+          <FormField
+            control={form.control}
+            rules={{ required: false }}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Add or change topics (up to 5) so readers know what your story
+                  is about
+                </FormLabel>
+                {/* make this optional */}
+                <FormControl>
+                  <Input placeholder={`Add a topic...`} {...field} />
+                </FormControl>
+                <FormDescription>
+                  Learn more about what happens to your post when you publish.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <DialogFooter className=" gap-3 sm:justify-start">
             <Button type="submit">Publish Now</Button>
-            <Button type="submit">Save changes</Button>
-          </DialogTrigger>
-        </DialogFooter>
+            <DialogTrigger>
+              <button className="text-gray-500" type="reset">
+                {/* TODO figure which type to use */}
+                Save Changes
+              </button>
+            </DialogTrigger>
+          </DialogFooter>
+        </DialogHeader>
       </form>
     </Form>
   );
