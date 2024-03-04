@@ -9,20 +9,28 @@ import {
 import { fakePost } from "~/utils/data";
 import { postSchema } from "~/utils/types";
 
+import { JSDOM } from "jsdom";
+import DOMPurify from "dompurify";
+
 export const postRouter = createTRPCRouter({
   createPost: protectedProcedure
     .input(postSchema)
     .mutation(async ({ ctx, input }) => {
       // simulate a slow db call
       // await new Promise((resolve) => setTimeout(resolve, 100));
-      // TOOD dom purify the content
-      console.log("input", input);
+      // TODO dom purify the content
+
+      // Might want to hoist these objects to the server context
+      const window = new JSDOM("").window;
+      const purify = DOMPurify(window);
+      const clean = purify.sanitize(input.content);
+      console.log("cleaned", clean);
 
       return ctx.db.post.create({
         data: {
           title: input.title,
           category: input.category,
-          content: input.content,
+          content: clean,
           tags: {
             connectOrCreate: input.tags.map((tag) => ({
               create: { name: tag },
