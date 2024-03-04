@@ -17,6 +17,7 @@ export default function Home() {
   const [blogPost, setBlogPost] = useState<Post[]>([]);
 
   const { data: sessionData } = useSession();
+  const domParser = new DOMParser();
 
   const { data: secretMessage } = api.post.checkSecret.useQuery(
     undefined, // no input
@@ -73,18 +74,10 @@ export default function Home() {
                       >
                         <h1 className="text-2xl font-semibold">{post.title}</h1>
                         <div className="line-clamp-4 ">
-                          Did you know you can create a video with AI? It can
-                          speak, present, and more. I used all these so you
-                          don’t have to! This is a comprehensive review of the
-                          best AI video tools. Here are the top picks for you
-                          Did you know you can create a video with AI? It can
-                          Did you know you can create a video with AI? It can
-                          speak, present, and more. I used all these so you
-                          don’t have to! This is a comprehensive review of the
-                          best AI video tools. Here are the top picks for you
-                          speak, present, and more. I used all these so you
-                          don’t have to! This is a comprehensive review of the
-                          best AI video tools. Here are the top picks for you
+                          {post.subtitle ??
+                            domParser
+                              .parseFromString(post.content, "text/html")
+                              .body.innerText.slice(0, 120)}
                         </div>
                         <li className="flex py-8 ">
                           {/* this extra flex container needed otherwise it grows full width of the card */}
@@ -135,7 +128,7 @@ export default function Home() {
               <Logo />
             </Link>
             <div className="flex items-baseline gap-4 pt-1 ">
-              <div className=" mm:flex hidden gap-4">
+              <div className=" hidden gap-4 mm:flex">
                 <Link href="/story">Our Story</Link>
                 <Link onClick={() => signIn()} href="membership">
                   Membership
@@ -157,8 +150,8 @@ export default function Home() {
             </div>
           </header>
           <main className="  flex justify-between border-y-[1px]  border-black bg-orange px-3">
-            <div className="mm:max-w-[550px] container right-0 flex w-full flex-col   items-start   justify-center  gap-8 py-24">
-              <h1 className=" mm:text-8xl  font-serif  text-8xl  tracking-tight text-black">
+            <div className="container right-0 flex w-full flex-col items-start   justify-center   gap-8  py-24 mm:max-w-[550px]">
+              <h1 className=" font-serif  text-8xl  tracking-tight  text-black mm:text-8xl">
                 Stay curious
               </h1>
               {/* pill button sign up */}
@@ -171,7 +164,7 @@ export default function Home() {
                 <Link href="signup-flow">Get started</Link>
               </button>
             </div>
-            <div className="mm:block relative hidden w-[585px] overflow-hidden">
+            <div className="relative hidden w-[585px] overflow-hidden mm:block">
               <SplashBackground className=" absolute bottom-0  right-0 min-h-[440px]" />
             </div>
             {/* get new blogpost */}

@@ -107,6 +107,7 @@ enum Category {
 model Post {
     id        Int       @id @default(autoincrement())
     title     String
+    subtitle  String?
     content   String    @db.Text //64 KB limit
     createdAt DateTime  @default(now())
     updatedAt DateTime  @default(now()) @updatedAt
