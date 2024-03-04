@@ -8,6 +8,7 @@ import Image from "@tiptap/extension-image";
 import Dropcursor from "@tiptap/extension-dropcursor";
 import { Editor } from "@tiptap/react";
 import { useDebounce, useDebouncedCallback } from "use-debounce";
+import styles from "./Editor.module.css";
 
 import { useEditorStore } from "~/utils/stores";
 const EditorContentWithDrop = ({ editor }: { editor: Editor }) => {
@@ -49,6 +50,7 @@ const EditorContentWithDrop = ({ editor }: { editor: Editor }) => {
 };
 
 import { useProfileStore } from "~/utils/stores";
+import Placeholder from "@tiptap/extension-placeholder";
 const MyEditor = () => {
   const bubbleMenuRef = useRef<HTMLDivElement>(null);
   const floatingMenuRef = useRef<HTMLDivElement>(null);
@@ -56,7 +58,9 @@ const MyEditor = () => {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        // options
+      }),
       Link,
       BubbleMenu.configure({
         element: bubbleMenuRef.current,
@@ -66,11 +70,19 @@ const MyEditor = () => {
       }),
       Image,
       Dropcursor,
+      Placeholder.configure({
+        placeholder: ({ node }) => {
+          if (node.type.name === "heading") {
+            return "Title";
+          }
+          return "Tell your ";
+        },
+      }),
     ],
     onUpdate: (editor) => notify(true),
 
     content: `
-      <h2>Hi there,</h2>
+      <h1>Hi there,</h1>
       <p>This is a basic example of <em>tiptap</em> with <strong>Tailwind Typography</strong>.</p>
       <!-- Add more content as needed -->
     <img src="https://source.unsplash.com/8xznAGy4HcY/800x400" />
@@ -80,7 +92,8 @@ const MyEditor = () => {
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none",
+          "prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none [&>[data-placeholder='Title']]:",
+        //                                    ^need to fix this class
       },
     },
   });
@@ -109,7 +122,7 @@ const MyEditor = () => {
   if (!editor) return null;
 
   return (
-    <div className=" flex flex-col items-center justify-center px-3">
+    <div className=" flex flex-col items-center justify-center px-3 ">
       {/* <div ref={floatingMenuRef} className="flex ">
         <button onClick={() => setShowTooltip(true)}>+</button>
         <button onClick={handleExport}>Export to HTML</button>

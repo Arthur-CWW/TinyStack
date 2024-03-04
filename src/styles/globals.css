@@ -73,4 +73,20 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* .is-empty ::before {
+    display: block;
+  } */
+
+  [data-placeholder]:before {
+    content: attr(data-placeholder);
+    /* color: gray; */
+    visibility: visible;
+    display: absolute;
+    /* reduce saturation   */
+    /* filter: saturate(0); */
+    /* @app   */
+    /* make sure the cursor is at the beginning */
+    /* z-index: -1; */
+    @apply text-muted;
+  }
 }
