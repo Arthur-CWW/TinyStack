@@ -5,6 +5,7 @@ import { Navbar } from "~/components/ui/Navbar";
 import { ProfilePic } from "~/components/ui/profile-pic";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { editorStyling } from "~/components/ui/Editor";
+import { twMerge } from "tailwind-merge";
 
 export default function Page() {
   // TODO layouts
@@ -46,7 +47,7 @@ export default function Page() {
           </div>
         </div>
         <div
-          className={editorStyling}
+          className={twMerge(editorStyling, "break-words")}
           dangerouslySetInnerHTML={{ __html: data.content }}
         />
       </main>
