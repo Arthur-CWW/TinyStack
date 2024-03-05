@@ -1,3 +1,4 @@
+import { getProviders } from "next-auth/react";
 import { z } from "zod";
 
 import {
@@ -26,4 +27,9 @@ export const userRouter = createTRPCRouter({
       });
       return user;
     }),
+  getProviders: publicProcedure.query(async ({ ctx }) => {
+    // get next auth providers
+    const providers = await getProviders();
+    return providers;
+  }),
 });
