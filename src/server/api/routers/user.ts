@@ -29,7 +29,21 @@ export const userRouter = createTRPCRouter({
     }),
   getProviders: publicProcedure.query(async ({ ctx }) => {
     // get next auth providers
+    // const logoBac
     const providers = await getProviders();
-    return providers;
+    if (!providers) return [];
+    providers.gitlab;
+
+    // const providerLogoPath = "https://authjs.dev/img/providers"
+    // const providerLogo = `${providerLogoPath}/${provider.id}.svg`;
+    const providersWithLogo = Object.entries(providers).map(
+      ([id, provider]) => {
+        return {
+          ...provider,
+          logoUrl: `https://authjs.dev/img/providers/${id}.svg`,
+        };
+      },
+    );
+    return providersWithLogo;
   }),
 });

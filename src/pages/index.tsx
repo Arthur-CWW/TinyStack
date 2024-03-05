@@ -144,11 +144,7 @@ export default function Home() {
                 </Link>
                 <Link href="/write">Write</Link>
               </div>
-              <Link
-                // onClick={() => signIn()}
-                href="/auth/signin"
-                className="hidden sm:flex"
-              >
+              <Link href="/auth/signin" className="hidden sm:flex">
                 Sign in
               </Link>
               {/* pill button */}
