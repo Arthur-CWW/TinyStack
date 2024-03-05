@@ -68,3 +68,23 @@ export default function AuthForm({
     </main>
   );
 }
+export function SignIn({
+  className,
+  children,
+}: React.ComponentPropsWithoutRef<"a">) {
+  return (
+    <Link href="/auth/signup" className={className}>
+      {children ?? "Sign In"}
+    </Link>
+  );
+}
+export function SignUp({
+  className,
+  children,
+}: React.ComponentPropsWithoutRef<"a">) {
+  return (
+    <Link href="/auth/signup" className={className}>
+      {children ?? "Sign Up"}
+    </Link>
+  );
+}

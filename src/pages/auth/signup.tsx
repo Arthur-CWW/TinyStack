@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import AuthForm from "~/components/ui/AuthForm";
+import AuthForm from "~/components/ui/AuthComp";
 function Page() {
   return <AuthForm mode="signup" />;
 }
