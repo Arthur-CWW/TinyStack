@@ -12,7 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Logo } from "../svgs/logo";
+import { Icons } from "../icons";
 import { ProfileDD } from "./ProfileDD";
 
 export function Navbar() {
@@ -20,7 +20,7 @@ export function Navbar() {
     <nav className="flex w-full items-baseline justify-between border-b-1   border-slate-100 p-4 text-slate-500">
       <div className="flex  items-center gap-3">
         <Link href="/" className="h-7  w-11 overflow-hidden rounded-full">
-          <Logo />
+          <Icons.logo />
           {/* search input */}
         </Link>
         <form className="flex gap-2 rounded-full bg-gray-100 p-3">

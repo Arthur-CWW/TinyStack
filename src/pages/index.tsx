@@ -7,8 +7,8 @@ import { IoMdNotifications as BellOpen } from "react-icons/io";
 import { ReactElement, useState } from "react";
 
 import { api } from "~/utils/api";
-import { SplashBackground } from "../components/svgs/SplashBackground";
-import { Logo } from "../components/svgs/logo";
+// import { SplashBackground } from "../components/svgs/SplashBackground";
+import { Icons } from "~/components/icons";
 import { Navbar } from "~/components/ui/Navbar";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { ProfilePic } from "../components/ui/profile-pic";
@@ -134,7 +134,7 @@ export default function Home() {
         <>
           <header className="flex w-full items-baseline justify-between bg-orange   p-4 ">
             <Link href="">
-              <Logo />
+              <Icons.logo />
             </Link>
             <div className="flex items-baseline gap-4 pt-1 ">
               <div className=" hidden gap-4 mm:flex">
@@ -174,7 +174,7 @@ export default function Home() {
               </button>
             </div>
             <div className="relative hidden w-[585px] overflow-hidden mm:block">
-              <SplashBackground className=" absolute bottom-0  right-0 min-h-[440px]" />
+              <Icons.splash className=" absolute bottom-0  right-0 min-h-[440px]" />
             </div>
             {/* get new blogpost */}
             {/* <button onClick */}

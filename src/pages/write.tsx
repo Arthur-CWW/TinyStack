@@ -35,7 +35,7 @@ import { useEditorStore, useProfileStore } from "~/utils/stores";
 const Editor = dynamic(() => import("~/components/ui/Editor"), { ssr: false });
 
 import { useRouter } from "next/router";
-import { Logo } from "~/components/svgs/logo";
+import { Icons } from "~/components/Icons";
 // import Header from "./write";
 import Link from "next/link";
 import { IoIosNotificationsOutline as BellClose } from "react-icons/io";
@@ -103,7 +103,7 @@ function Header() {
       <nav className="container flex w-full items-baseline justify-between p-4">
         <div className="flex  items-center gap-3">
           <Link href="/" className="h-7  w-11 overflow-hidden rounded-full">
-            <Logo />
+            <Icons.logo />
             {/* search input */}
           </Link>
           <h1 className=" ">Draft by {sessionData?.user?.name}</h1>
