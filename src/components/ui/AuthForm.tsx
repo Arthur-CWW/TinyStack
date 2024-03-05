@@ -58,7 +58,7 @@ export default function AuthForm({
         <span>
           No account yet?{" "}
           <Link
-            href={`/auth/${mode}`}
+            href={`/auth/${mode === "signin" ? "signup" : "signin"}`}
             className=" font-semibold text-green-700"
           >
             Create One
