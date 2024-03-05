@@ -70,7 +70,7 @@ export default function Home() {
                       </span>
                     </div>
 
-                    <div className="flex h-[208px]">
+                    <div className="flex h-[208px] justify-between ">
                       <Link
                         href={`/${post.author.name}/${post.id}`}
                         // TODO figure out whether I can use title and
@@ -78,16 +78,23 @@ export default function Home() {
                         className=""
                       >
                         <h1 className="text-2xl font-semibold">{post.title}</h1>
-                        <div className="line-clamp-4 ">
-                          {post.subtitle ?? ""}
-                        </div>
-                        <li className="flex py-8 ">
+                        <div className="line-clamp-4 ">{post.subtitle}</div>
+                        <li className="flex gap-3  py-8 ">
                           {/* this extra flex container needed otherwise it grows full width of the card */}
                           <Link
                             href={`/category/${post.category}`}
                             className=" flex-shrink-0 rounded-full bg-gray-100 px-2 py-1 text-sm"
                           >
                             {post.category.replace(/([a-z])([A-Z])/g, "$1 $2")}
+                          </Link>
+                          <Link href={`/${post.author.name}/${post.id}`}>
+                            {/* TODO figure out why this is wrong  */}
+                            {Math.ceil(post?.nwords ?? 0 / 200)} min read
+                          </Link>
+                          <Link href={`/${post.author.name}/${post.id}`}>
+                            {Math.random() > 0.3 ? (
+                              <span>Selected for you</span>
+                            ) : null}
                           </Link>
                         </li>
                       </Link>

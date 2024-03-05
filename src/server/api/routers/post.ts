@@ -13,23 +13,30 @@ import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
 import { Category } from "@prisma/client";
 
-function addSubtitle(
-  data: {
+function addSubtitle<
+  T extends {
     subtitle: string | null;
     content: string;
-    // rest
-  }[],
-) {
-  data.forEach((post) => {
+  },
+>(data: T[]) {
+  const post = data.map((post) => {
+    const sub = new JSDOM(post.content).window.document.body.textContent;
+
+    const nwords = sub?.split(" ").length;
     if (!post?.subtitle) {
-      debugger;
-      post.subtitle =
-        new JSDOM(post.content).window.document.body.textContent?.slice(
-          0,
-          100,
-        ) ?? "";
+      console.log("sub", sub);
+      return {
+        ...post,
+        subtitle: sub?.slice(0, 400) ?? "",
+        nwords,
+      };
     }
+    return {
+      ...post,
+      nwords,
+    };
   });
+  return post;
 }
 const window = new JSDOM("").window;
 export const postRouter = createTRPCRouter({
@@ -108,7 +115,9 @@ export const postRouter = createTRPCRouter({
         author: true,
       },
     });
-    return posts;
+
+    const rv = addSubtitle(posts);
+    return rv;
 
     // return [
     //   {
