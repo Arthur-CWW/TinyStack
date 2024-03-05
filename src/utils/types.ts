@@ -8,8 +8,6 @@ export type Undefinable<T> = {
 export const CategorySchema = z.nativeEnum(Category);
 
 export const postSchema = z.object({
-  // name: z.string().min(6),
-  // category: z.string().min(1),
   title: z.string().min(6),
   category: CategorySchema,
   content: z.string().min(6),

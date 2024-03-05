@@ -24,7 +24,6 @@ function addSubtitle<
 
     const nwords = sub?.split(" ").length;
     if (!post?.subtitle) {
-      // console.log("sub", sub);
       return {
         ...post,
         subtitle: sub?.slice(0, 400) ?? "",

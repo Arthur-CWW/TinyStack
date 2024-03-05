@@ -44,8 +44,6 @@ export const Icons = {
     </svg>
   ),
 
-  // export function SplashBackground({ className }: { className?: string }) {
-  //   return (
   splash: (props: IconProps) => (
     <svg
       className={props.className}

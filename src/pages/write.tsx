@@ -303,8 +303,6 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
   );
 }
 
-// Use getServersideProps to redirect to login if not logged in
-
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const session = await getSession(ctx);
 

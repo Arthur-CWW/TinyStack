@@ -54,9 +54,7 @@ function NavRGroup() {
         <SignUp className="rounded-full  bg-gray-500 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white">
           Sign up
         </SignUp>
-        <button onClick={() => signIn()} className="">
-          Sign in
-        </button>
+        <SignIn />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

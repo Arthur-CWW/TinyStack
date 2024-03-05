@@ -17,16 +17,11 @@ import { twMerge } from "tailwind-merge";
 import Image from "next/image";
 export default function Home() {
   const { data: sessionData } = useSession();
-  // const domParser = new DOMParser();
-  // const domParser = new JSDOM().window;
-  // need this to only run on the client
-  // const [domParser, setUseDomParser] = useState(() => new DOMParser());
 
   return (
     <>
       <Head>
         <title>Medium.com</title>
-        {/* <meta name="description" content="" /> */}
       </Head>
 
       {sessionData ? (
@@ -88,16 +83,9 @@ function Main() {
   const blogs = api.post.prototype.useQuery();
   const [blogPost, setBlogPost] = useState<Post[]>([]);
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
-  // const { data: secretMessage } = api.post.checkSecret.useQuery(
-  //   undefined, // no input
-  //   { enabled: sessionData?.user !== undefined },
-  // );
-  // useEffect to detect Esc key press to clear filter categories
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      // console.log("kd", event.key);
       if (event.key === "Escape") {
-        // console.log("esc");
         setFilteredCategories([]);
       }
     }
@@ -277,17 +265,9 @@ function TestPost() {
         e.preventDefault();
       }}
     >
-      {/* {user.id}
-      <input
-        type="text"
-        placeholder="input"
-        className="border-none bg-transparent placeholder-slate-500 outline-none"
-      /> */}
       <button
         className="rounded-full  p-2 font-semibold"
         onClick={async () => {
-          // const newPost = await api.post.createPost.useMutation({
-          // });
           const newPost = createNewPost({
             title: "This week glob",
             category: "BusinessEntrepreneurship",
@@ -295,7 +275,6 @@ function TestPost() {
             tags: ["test"],
             published: true,
           });
-          // console.log("newPost", newPost);
         }}
       >
         send post
@@ -332,6 +311,3 @@ const Layout = ({ children }: { children: ReactElement }) => {
   return <>{children}</>;
 };
 Home.Layout = Layout;
-// function getLayout(page: ReactElement) {
-//   return <>{page}</>;
-// };

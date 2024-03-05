@@ -28,8 +28,6 @@ export const userRouter = createTRPCRouter({
       return user;
     }),
   getProviders: publicProcedure.query(async ({ ctx }) => {
-    // get next auth providers
-    // const logoBac
     const providers = await getProviders();
     if (!providers) return [];
     // const providerLogoPath = "https://authjs.dev/img/providers"
