@@ -146,7 +146,7 @@ export default function Home() {
               </div>
               <Link
                 onClick={() => signIn()}
-                href="/auth"
+                href="/auth/signin"
                 className="hidden sm:flex"
               >
                 Sign in
@@ -154,7 +154,7 @@ export default function Home() {
               {/* pill button */}
               <button className="rounded-full bg-black p-2  text-white">
                 {/* todo signup flow */}
-                <Link href="/auth">Get started</Link>
+                <Link href="/auth/signin">Get started</Link>
               </button>
             </div>
           </header>
@@ -170,7 +170,7 @@ export default function Home() {
               </h2>
               <button className="w-48 rounded-full bg-black p-3  text-xl  text-white">
                 {/* todo signup flow */}
-                <Link href="/auth">Get started</Link>
+                <Link href="/auth/signin">Get started</Link>
               </button>
             </div>
             <div className="relative hidden w-[585px] overflow-hidden mm:block">

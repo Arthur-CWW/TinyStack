@@ -16,7 +16,7 @@ import type {
 
 import { getProviders, signIn } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "~/server/auth";
+import { authOptions, getServerAuthSession } from "~/server/auth";
 
 function AuthForm({
   className,
@@ -62,15 +62,54 @@ function AuthForm({
   );
 }
 
-export default function Home() {
+// export default function Home() {
+//   return (
+//     <div className="flex h-screen w-screen items-center justify-center">
+//       {/* <h1>Home</h1> */}
+//       <AuthForm />
+//     </div>
+//   );
+// }
+
+export default function SignIn({
+  providers,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(providers);
   return (
-    <div className="flex h-screen w-screen items-center justify-center">
-      {/* <h1>Home</h1> */}
-      <AuthForm />
-    </div>
+    <>
+      {providers &&
+        Object.values(providers).map((provider) => (
+          <div key={provider.name}>
+            <button onClick={() => signIn(provider.id)}>
+              Sign in with {provider.name}
+            </button>
+          </div>
+        ))}
+    </>
   );
 }
-Home.Layout = function Layout({ children }: { children: React.ReactNode }) {
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  // const session = await getServerSession(context.req, context.res, authOptions);
+  const session = await getServerAuthSession(context);
+
+  // If the user is already logged in, redirect.
+  // Note: Make sure not to redirect to the same page
+  // To avoid an infinite loop!
+  if (session) {
+    return { redirect: { destination: "/" } };
+  }
+
+  console.log("session", session);
+  const providers = await getProviders();
+  console.log("providers", providers);
+
+  return {
+    props: { providers: providers ?? [] },
+  };
+}
+
+SignIn.Layout = function Layout({ children }: { children: React.ReactNode }) {
   // remove the layout
   return (
     <>
