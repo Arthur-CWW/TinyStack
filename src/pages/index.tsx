@@ -145,7 +145,7 @@ export default function Home() {
                 <Link href="/write">Write</Link>
               </div>
               <Link
-                onClick={() => signIn()}
+                // onClick={() => signIn()}
                 href="/auth/signin"
                 className="hidden sm:flex"
               >

@@ -71,7 +71,7 @@ function AuthForm({
 //   );
 // }
 
-export default function SignIn({
+export default function Home({
   providers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   console.log(providers);
@@ -109,7 +109,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   };
 }
 
-SignIn.Layout = function Layout({ children }: { children: React.ReactNode }) {
+Home.Layout = function Layout({ children }: { children: React.ReactNode }) {
   // remove the layout
   return (
     <>

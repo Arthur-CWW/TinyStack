@@ -24,7 +24,7 @@ function addSubtitle<
 
     const nwords = sub?.split(" ").length;
     if (!post?.subtitle) {
-      console.log("sub", sub);
+      // console.log("sub", sub);
       return {
         ...post,
         subtitle: sub?.slice(0, 400) ?? "",
@@ -50,7 +50,7 @@ export const postRouter = createTRPCRouter({
       // Might want to hoist these objects to the server context
       const purify = DOMPurify(window);
       const clean = purify.sanitize(input.content);
-      console.log("cleaned", clean);
+      // console.log("cleaned", clean);
 
       return ctx.db.post.create({
         data: {
