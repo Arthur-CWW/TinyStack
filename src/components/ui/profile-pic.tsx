@@ -12,7 +12,14 @@ export function ProfilePic({
     <Image
       src={author.image} //?? "https://via.placeholder.com/150"}
       alt="profile picture"
-      className={twMerge("mr-2  overflow-hidden rounded-full", className)}
+      // layout="fill"
+      // objectFit="cover"
+      width={24}
+      height={24}
+      className={twMerge(
+        "mr-2  h-6 w-6 overflow-hidden rounded-full ",
+        className,
+      )}
     />
   ) : (
     <div

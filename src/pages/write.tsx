@@ -223,6 +223,8 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
             src="https://picsum.photos/200/300"
             alt="Cover image"
             className="aspect-video w-full"
+            width={200}
+            height={300}
           />
           <FormField
             control={form.control}

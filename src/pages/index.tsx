@@ -186,6 +186,8 @@ function Main() {
                   <Image
                     src="https://picsum.photos/id/237/110/110"
                     alt=""
+                    width={110}
+                    height={110}
                     className="ml-16 h-28 w-28"
                   />
                 </div>
