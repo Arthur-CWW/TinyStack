@@ -14,6 +14,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Icons } from "../icons";
 import { ProfileDD } from "./ProfileDD";
+import { SignIn, SignUp } from "~/components/ui/AuthComp";
 
 export function Navbar() {
   return (
@@ -50,12 +51,9 @@ function NavRGroup() {
         </Link>
         {/* pill button sign up and sign in*/}
         {/* TODO change this link when sign up is done */}
-        <button
-          onClick={() => console.log("sign up TODO")}
-          className="rounded-full  bg-gray-500 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white"
-        >
+        <SignUp className="rounded-full  bg-gray-500 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white">
           Sign up
-        </button>
+        </SignUp>
         <button onClick={() => signIn()} className="">
           Sign in
         </button>
@@ -71,10 +69,10 @@ function NavRGroup() {
               {/* label */}
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuItem className="  rounded-full bg-gray-500 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white">
-                <Link href="/auth/signin">Sign up</Link>
+                <SignUp />
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => signIn()}>
-                Sign in
+              <DropdownMenuItem>
+                <SignIn />
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -87,7 +85,7 @@ function NavRGroup() {
       <Link href="/write" className="flex items-center justify-center gap-1 ">
         <WriteIcon className="h-7 w-7" /> Write
       </Link>
-      <Link href="/me/notifications">
+      <Link href="">
         <BellClose className="h-7 w-7" />
       </Link>
       {/* profile dropdown */}
