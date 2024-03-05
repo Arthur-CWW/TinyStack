@@ -14,6 +14,7 @@ import { Separator } from "@radix-ui/react-dropdown-menu";
 import { ProfilePic } from "../components/ui/profile-pic";
 
 import { twMerge } from "tailwind-merge";
+import Image from "next/image";
 export default function Home() {
   const { data: sessionData } = useSession();
   // const domParser = new DOMParser();
@@ -50,9 +51,7 @@ export default function Home() {
               <Link href="/auth/signin" className="hidden sm:flex">
                 Sign in
               </Link>
-              {/* pill button */}
               <button className="rounded-full bg-black p-2  text-white">
-                {/* todo signup flow */}
                 <Link href="/auth/signin">Get started</Link>
               </button>
             </div>
@@ -184,7 +183,7 @@ function Main() {
                     </li>
                   </Link>
                   {/* lorem picsum  110*110*/}
-                  <img
+                  <Image
                     src="https://picsum.photos/id/237/110/110"
                     alt=""
                     className="ml-16 h-28 w-28"
@@ -198,14 +197,16 @@ function Main() {
           <div className="flex flex-col gap-5 p-4">
             <h3 className="text-2xl font-semibold">Reccomended topics</h3>
             <ul className="flex  flex-wrap gap-6">
-              {categories.splice(0, 10).map((category) => (
-                <CategoryFilterPill
-                  key={category}
-                  setFilteredCategories={setFilteredCategories}
-                  filteredCategories={filteredCategories}
-                  category={category}
-                />
-              ))}
+              {categories
+                /*.splice(0, 10)*/
+                .map((category) => (
+                  <CategoryFilterPill
+                    key={category}
+                    setFilteredCategories={setFilteredCategories}
+                    filteredCategories={filteredCategories}
+                    category={category}
+                  />
+                ))}
             </ul>
           </div>
         </aside>

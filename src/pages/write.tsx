@@ -47,6 +47,7 @@ import { Session } from "next-auth";
 import { useStore } from "zustand";
 import { api } from "~/utils/api";
 import { Undefinable } from "~/utils/types";
+import Image from "next/image";
 
 export default function Home() {
   // if not logged in, redirect to login
@@ -218,9 +219,9 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
         <DialogHeader className="max-w-md">
           <DialogTitle>Story Preview</DialogTitle>
 
-          <img
+          <Image
             src="https://picsum.photos/200/300"
-            alt="fjdsklfjak"
+            alt="Cover image"
             className="aspect-video w-full"
           />
           <FormField

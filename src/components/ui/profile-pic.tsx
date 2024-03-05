@@ -1,4 +1,5 @@
 import { User } from "next-auth";
+import Image from "next/image";
 import Link from "next/link";
 import { ComponentProps } from "react";
 import { twMerge } from "tailwind-merge";
@@ -8,7 +9,7 @@ export function ProfilePic({
   className, // for tailwind classes but mainly for h and w
 }: { author: Undefinable<User> } & ComponentProps<"img">) {
   return author.image ? (
-    <img
+    <Image
       src={author.image} //?? "https://via.placeholder.com/150"}
       alt="profile picture"
       className={twMerge("mr-2  overflow-hidden rounded-full", className)}
