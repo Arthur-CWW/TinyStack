@@ -25,6 +25,19 @@ const nextConfig = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  // add hostname
+  images: {
+    domains: [
+      "localhost",
+      "lh3.googleusercontent.com",
+      "picsum.photos",
+      "unsplash.com",
+      "images.unsplash.com",
+      "images.pexels.com",
+      "cdn.pixabay.com",
+      "cdn.discordapp.com",
+    ],
+  },
 };
 
 // export default nextConfig;
