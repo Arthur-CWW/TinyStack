@@ -1,5 +1,5 @@
 // import { MDXEditor, headingsPlugin } from "~mdxeditor/editor";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import Head from "next/head";
 import { CategorySchema } from "~/utils/types";
 
@@ -48,6 +48,7 @@ import { useStore } from "zustand";
 import { api } from "~/utils/api";
 import { Undefinable } from "~/utils/types";
 import Image from "next/image";
+import { GetServerSidePropsContext } from "next/types";
 
 export default function Home() {
   // if not logged in, redirect to login
@@ -302,8 +303,19 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
   );
 }
 
-// export function DialogDemo() {
-//   return (
+// Use getServersideProps to redirect to login if not logged in
 
-//   );
-// }
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const session = await getSession(ctx);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/auth/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {};
+}
