@@ -5,7 +5,7 @@ import Link from "next/link";
 import { cn } from "~/lib/utils";
 
 import * as React from "react";
-import { Icons } from "~/components/icons";
+import { IconKey, Icons } from "~/components/icons";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -26,7 +26,12 @@ export default function AuthForm({
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
   }
+  const { data: providers } = api.user.getProviders.useQuery();
+  const classOveride: Record<string, string> = {
+    discord: "bg-[#5865F2] text-white",
+  } as const;
 
+  console.log(providers);
   return (
     <div className={cn("container grid max-w-md gap-6", className)} {...props}>
       {/* <form onSubmit={onSubmit}>
@@ -53,34 +58,47 @@ export default function AuthForm({
           </Button>
         </div>
       </form> */}
+
       <h1 className="text-center font-serif text-3xl">Welcome Back </h1>
-      <Button variant="outline" className="justify-between" type="button">
-        <Icons.gitHub className="mr-2 h-4 w-4" />
-        Sign in with GitHub
-        <span></span>
-      </Button>
+      {providers &&
+        Object.values(providers).map((provider) => (
+          <Button
+            variant="outline"
+            //if id in backgroundOveride then use it
+            className={"justify-between " + classOveride[provider.id]}
+            type="button"
+            key={provider.name}
+            onClick={() => signIn(provider.id, { callbackUrl: "/" })}
+          >
+            {/* <Icons className="mr-2 h-4 w-4" /> */}
+            {/* {Icons[provider.id as IconKey]
+              ? Icons[provider.id as IconKey]({ className: "mr-2 h-4 w-4" })
+              : null} */}
+            {
+              <Image
+                src={provider.logoUrl}
+                alt={provider.name}
+                width={24}
+                height={24}
+              />
+            }
+            Sign in with {provider.name}
+            <span></span>
+          </Button>
+        ))}
     </div>
   );
 }
 
-function Signup() {
-  const { data: providers } = api.user.getProviders.useQuery();
+// function Signup() {
 
-  return (
-    <>
-      {providers &&
-        Object.values(providers).map((provider) => (
-          <div key={provider.name}>
-            <button onClick={() => signIn(provider.id)}>
-              Sign in with {provider.name}
-            </button>
-          </div>
-        ))}
-    </>
-  );
-}
+//   return (
+//     <>
+//     </>
+//   );
+// }
 
-Signup.Layout = function Layout({ children }: { children: React.ReactNode }) {
+AuthForm.Layout = function Layout({ children }: { children: React.ReactNode }) {
   // remove the layout
   return (
     <>
