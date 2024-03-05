@@ -43,7 +43,7 @@ function NavRGroup() {
     return (
       <div className="flex items-center gap-5 pt-1 text-lg">
         <Link
-          href="/sign-in"
+          href="/auth"
           className="flex items-center justify-center gap-1 "
         >
           <WriteIcon className="h-7 w-7" /> Write
@@ -70,11 +70,8 @@ function NavRGroup() {
             <DropdownMenuGroup className="text-center">
               {/* label */}
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => console.log("todo signup")}
-                className="  rounded-full bg-gray-500 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white"
-              >
-                Sign up
+              <DropdownMenuItem className="  rounded-full bg-gray-500 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white">
+                <Link href="/auth">Sign up</Link>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => signIn()}>
                 Sign in

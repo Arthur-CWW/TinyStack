@@ -9,25 +9,26 @@ import { Icons } from "~/components/icons";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next";
 
-export function UserAuthForm({
+import { getProviders, signIn } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "~/server/auth";
+
+function AuthForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
   }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={onSubmit}>
+    <div className={cn("container grid max-w-md gap-6", className)} {...props}>
+      {/* <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -35,7 +36,7 @@ export function UserAuthForm({
             </Label>
             <Input
               id="email"
-              placeholder="namel@~example.com"
+              placeholder="name@example.com"
               type="email"
               autoCapitalize="none"
               autoComplete="email"
@@ -50,25 +51,30 @@ export function UserAuthForm({
             Sign In with Email
           </Button>
         </div>
-      </form>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
-      </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "}
-        GitHub
+      </form> */}
+      <h1 className="text-center font-serif text-3xl">Welcome Back </h1>
+      <Button variant="outline" className="justify-between" type="button">
+        <Icons.gitHub className="mr-2 h-4 w-4" />
+        Sign in with GitHub
+        <span></span>
       </Button>
     </div>
   );
 }
+
+export default function Home() {
+  return (
+    <div className="flex h-screen w-screen items-center justify-center">
+      {/* <h1>Home</h1> */}
+      <AuthForm />
+    </div>
+  );
+}
+Home.Layout = function Layout({ children }: { children: React.ReactNode }) {
+  // remove the layout
+  return (
+    <>
+      <main>{children}</main>
+    </>
+  );
+};
