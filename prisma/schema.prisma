@@ -65,6 +65,22 @@ model Comment {
     postId    Int
     author    User     @relation(fields: [authorId], references: [id])
     authorId  String
+    likes     Like[]
+    // TODO: understand and fix this
+    // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/self-relations
+    // reply     Comment?  @relation("CommentToComment", fields: [replyId], references: [id])
+    // replyId   Int?
+    // Comment   Comment[] @relation("CommentToComment")
+}
+
+model Like {
+    id        Int     @id @default(autoincrement())
+    comment   Comment @relation(fields: [commentId], references: [id])
+    commentId Int
+    user      User    @relation(fields: [userId], references: [id])
+    userId    String
+
+    @@unique([commentId, userId])
 }
 
 model User {
@@ -77,6 +93,9 @@ model User {
     sessions      Session[]
     posts         Post[]
     comments      Comment[]
+    // follows       User[]    @relation("UserFollows", references: [id])
+    // followers     User[]    @relation("UserFollows", references: [id])
+    Like          Like[]
 
     // maybe add saved post later
     @@fulltext([name])

@@ -89,6 +89,13 @@ export function fakeCommentComplete() {
     authorId: faker.string.uuid(),
   };
 }
+export function fakeLikeComplete() {
+  return {
+    id: faker.number.int(),
+    commentId: faker.number.int(),
+    userId: faker.string.uuid(),
+  };
+}
 export function fakeUser() {
   return {
     name: undefined,
