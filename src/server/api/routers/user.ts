@@ -32,8 +32,6 @@ export const userRouter = createTRPCRouter({
     // const logoBac
     const providers = await getProviders();
     if (!providers) return [];
-    providers.gitlab;
-
     // const providerLogoPath = "https://authjs.dev/img/providers"
     // const providerLogo = `${providerLogoPath}/${provider.id}.svg`;
     const providersWithLogo = Object.entries(providers).map(

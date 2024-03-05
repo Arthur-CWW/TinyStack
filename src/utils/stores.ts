@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 interface EditorState {
