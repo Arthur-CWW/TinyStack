@@ -35,7 +35,7 @@ import { useEditorStore, useProfileStore } from "~/utils/stores";
 const Editor = dynamic(() => import("~/components/ui/Editor"), { ssr: false });
 
 import { useRouter } from "next/router";
-import { Icons } from "~/components/Icons";
+import { Icons } from "~/components/icons";
 // import Header from "./write";
 import Link from "next/link";
 import { IoIosNotificationsOutline as BellClose } from "react-icons/io";
