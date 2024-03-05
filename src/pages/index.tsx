@@ -83,7 +83,7 @@ export default function Home() {
                           {/* this extra flex container needed otherwise it grows full width of the card */}
                           <Link
                             href={`/category/${post.category}`}
-                            className=" flex-shrink-0 rounded-full bg-gray-100 px-2 py-1 text-sm"
+                            className=" flex-shrink-0 items-center justify-center rounded-full bg-gray-100 px-2 py-1 text-sm"
                           >
                             {post.category.replace(/([a-z])([A-Z])/g, "$1 $2")}
                           </Link>
@@ -138,8 +138,8 @@ export default function Home() {
             </Link>
             <div className="flex items-baseline gap-4 pt-1 ">
               <div className=" hidden gap-4 mm:flex">
-                <Link href="/story">Our Story</Link>
-                <Link onClick={() => signIn()} href="membership">
+                <Link href="#">Our Story</Link>
+                <Link onClick={() => signIn()} href="#">
                   Membership
                 </Link>
                 <Link href="/write">Write</Link>
