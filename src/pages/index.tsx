@@ -158,10 +158,9 @@ function Main() {
                           {/* TODO figure out why this is wrong  */}
                           {Math.ceil(post?.nwords ?? 0 / 200)} min read
                         </Link>
-                        ·
                         <Link href={`/${post.author.name}/${post.id}`}>
                           {Math.random() > 0.1 ? (
-                            <span>Selected for you</span>
+                            <span>· Selected for you</span>
                           ) : null}
                         </Link>
                       </div>
