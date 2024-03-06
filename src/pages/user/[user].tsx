@@ -8,6 +8,17 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { BsThreeDots as Dots } from "react-icons/bs";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "~/components/ui/dropdown-menu";
+import { before } from "node:test";
+import { ProfilePic } from "~/components/ui/profile-pic";
 
 export default function Page() {
   // TODO layouts
@@ -28,20 +39,53 @@ export default function Page() {
   // const { user, error } = router.query;
   // console.log(sessionData);
   // console.log(router.query);
+
+  const menu = [
+    {
+      text: "Copy link to profile",
+    },
+
+    {
+      text: "Mute author",
+    },
+    {
+      text: "Block this author",
+    },
+    {
+      text: "Report this author",
+    },
+  ];
   return (
     <Main blogs={data?.posts ?? []} className="container max-w-[80ch] py-8">
-      <header className="flex justify-between p-3 ">
+      <header className="flex items-center justify-between  p-3">
         <h1 className="py-8 text-5xl font-semibold capitalize">
           {data?.user?.name ?? "Loading..."}
         </h1>
-      </header>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div>
+              {/* this div is neccesary for some reason */}
+              <Dots className="size-8" />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="      font-thin text-gray-600  hover:text-gray-700">
+            <DropdownMenuGroup className="*:px-6 *:py-2">
+              <DropdownMenuItem className="">
+                Copy link to profile
+              </DropdownMenuItem>
+              <DropdownMenuItem className="">Mute author</DropdownMenuItem>
 
-      <Popover>
-        <PopoverTrigger>
-          <Dots className="size-8" />
-        </PopoverTrigger>
-        <PopoverContent>Place content for the popover here.</PopoverContent>
-      </Popover>
+              <DropdownMenuItem className="">
+                Block this author
+              </DropdownMenuItem>
+
+              <DropdownMenuItem className="">
+                Report this author
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </header>
     </Main>
   );
 }
