@@ -8,6 +8,10 @@ export function ProfilePic({
   author,
   className, // for tailwind classes but mainly for h and w
 }: { author: Undefinable<User> } & ComponentProps<"img">) {
+  if (!author) {
+    return null;
+  }
+
   return author.image ? (
     <Image
       src={author.image} //?? "https://via.placeholder.com/150"}

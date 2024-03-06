@@ -2,9 +2,11 @@ import { z } from "zod";
 
 import { Category } from "@prisma/client";
 
-export type Undefinable<T> = {
-  [P in keyof T]: null extends T[P] ? T[P] | undefined : T[P];
-};
+export type Undefinable<T> =
+  | {
+      [P in keyof T]: null extends T[P] ? T[P] | undefined : T[P];
+    }
+  | undefined;
 export const CategorySchema = z.nativeEnum(Category);
 export const newPostSchema = z.object({
   title: z.string().min(6),
