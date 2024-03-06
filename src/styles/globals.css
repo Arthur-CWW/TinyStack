@@ -79,17 +79,17 @@
     display: block;
   } */
 
-  [data-placeholder]:before {
+  /* [data-placeholder]:before {
     content: attr(data-placeholder);
     /* color: gray; */
-    visibility: visible;
-    display: absolute;
-    /* reduce saturation   */
-    /* filter: saturate(0); */
-    /* @app   */
-    /* make sure the cursor is at the beginning */
-    /* z-index: -1; */
+  /* visibility: visible;
+  display: absolute; */
+  /* reduce saturation   */
+  /* filter: saturate(0); */
+  /* @app   */
+  /* make sure the cursor is at the beginning */
+  /* z-index: -1; */
 
-    @apply text-muted;
-  }
+  /* @apply text-muted; */
+  /* } */
 }

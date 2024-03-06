@@ -21,3 +21,8 @@ export const postSchema = newPostSchema.extend({
   tags: z.array(z.string()),
   published: z.boolean(),
 });
+
+// infer typeof getUserPosts.output
+import type { inferRouterOutputs } from "@trpc/server";
+import { AppRouter } from "~/server/api/root";
+export type postOutput = inferRouterOutputs<AppRouter>["post"];
