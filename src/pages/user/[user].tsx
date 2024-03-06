@@ -12,7 +12,9 @@ export default function Page() {
   const { data } = api.post.getUserPost.useQuery({
     id: userid,
   });
+  console.log(userid);
   // const {posts?gh, name} = data;
+
   // const posts = data?.posts;
   // check if user is the one signed in
   // const { data: sessionData } = useSession();

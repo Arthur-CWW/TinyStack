@@ -67,10 +67,7 @@ export function Main({
                 <div className="flex items-center gap-2  ">
                   {" "}
                   {/* profile pic */}
-                  <Link
-                    href={`/user/${post.author.name}`}
-                    className="flex gap-1"
-                  >
+                  <Link href={`/user/${post.author.id}`} className="flex gap-1">
                     <ProfilePic author={post.author} className="h-6 w-6" />
                     <p className="">{post.author.name}</p>
                   </Link>
