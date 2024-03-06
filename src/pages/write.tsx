@@ -74,6 +74,7 @@ function Header() {
   useEffect(() => {
     if (!sessionData?.user) {
       //TODO fix remove the last page from the history, so the user goes back to '/'
+      router.push("/").catch(console.error);
 
       signIn().catch(console.error);
     }
