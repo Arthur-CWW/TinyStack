@@ -155,14 +155,22 @@ export const postRouter = createTRPCRouter({
     //   },
     // ];
   }),
-  getPost: publicProcedure
-    .input(z.object({ id: z.number() }))
+  getUserPost: publicProcedure
+    .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      return ctx.db.post.findFirst({
-        where: { id: input.id },
+      // const authorId = await ctx.db.user.findUnique({
+      //   fa
+      const posts = await ctx.db.post.findMany({
+        where: { authorId: input.id },
+        orderBy: {
+          createdAt: "desc",
+        },
         include: {
           author: true,
         },
       });
+      const hydratedPosts = addSubtitle(posts);
+
+      return { posts: hydratedPosts, user: hydratedPosts[0]?.author };
     }),
 });
