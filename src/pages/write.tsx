@@ -1,5 +1,5 @@
 // import { MDXEditor, headingsPlugin } from "~mdxeditor/editor";
-import { getSession, useSession } from "next-auth/react";
+import { getSession, signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import { CategorySchema } from "~/utils/types";
 
@@ -29,7 +29,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
 import dynamic from "next/dynamic";
-import { ComponentType } from "react";
+import { ComponentType, useEffect } from "react";
 import { useEditorStore, useProfileStore } from "~/utils/stores";
 
 const Editor = dynamic(() => import("~/components/ui/Editor"), { ssr: false });
@@ -53,7 +53,6 @@ import { GetServerSidePropsContext } from "next/types";
 export default function Home() {
   // if not logged in, redirect to login
   const { data: sessionData } = useSession();
-  const router = useRouter();
 
   return (
     <div>
@@ -69,10 +68,17 @@ export default function Home() {
 function Header() {
   const { data: sessionData } = useSession();
 
+  const router = useRouter();
   const { updating } = useStore(useProfileStore);
 
-  // send html and content to trpc backend on publish button
+  useEffect(() => {
+    if (!sessionData?.user) {
+      //TODO fix remove the last page from the history, so the user goes back to '/'
 
+      signIn().catch(console.error);
+    }
+  }, [sessionData]);
+  // redirect unauthenticated users
   if (!sessionData || !sessionData.user) {
     return null;
   }
@@ -280,17 +286,17 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
   );
 }
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  const session = await getSession(ctx);
+// export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+//   const session = await getSession(ctx);
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/auth/signin",
-        permanent: false,
-      },
-    };
-  }
+//   if (!session) {
+//     return {
+//       redirect: {
+//         destination: "/auth/signin",
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  return {};
-}
+//   return {};
+// }
