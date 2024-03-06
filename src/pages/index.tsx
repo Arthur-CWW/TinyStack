@@ -15,9 +15,12 @@ import { ProfilePic } from "../components/ui/profile-pic";
 
 import { twMerge } from "tailwind-merge";
 import Image from "next/image";
+import { Button } from "~/components/ui/button";
+import { postOutput } from "~/utils/types";
 export default function Home() {
   const { data: sessionData } = useSession();
 
+  const { data: blogs } = api.post.prototype.useQuery();
   return (
     <>
       <Head>
@@ -27,7 +30,7 @@ export default function Home() {
       {sessionData ? (
         <>
           <Navbar />
-          <Main />
+          {blogs && <Main blogs={blogs} />}
         </>
       ) : (
         <>
@@ -41,7 +44,7 @@ export default function Home() {
                 <Link onClick={() => signIn()} href="#">
                   Membership
                 </Link>
-                <Link href="/write">Write</Link>
+                <Link href="/auth/signin">Write</Link>
               </div>
               <Link href="/auth/signin" className="hidden sm:flex">
                 Sign in
@@ -72,17 +75,23 @@ export default function Home() {
             {/* get new blogpost */}
             {/* <button onClick */}
           </main>
-          <Main />
+          {blogs && <Main blogs={blogs} />}
         </>
       )}
     </>
   );
 }
 
-function Main() {
-  const blogs = api.post.prototype.useQuery();
+function Main({
+  blogs,
+  className,
+  children, // children act as header
+}: { blogs: postOutput["prototype"] } & React.PropsWithoutRef<
+  JSX.IntrinsicElements["main"]
+>) {
   const [blogPost, setBlogPost] = useState<Post[]>([]);
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
+
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -95,12 +104,15 @@ function Main() {
     };
   }, []);
 
+  if (!blogs) {
+    return null;
+  }
   const categories = Object.values(Category);
   return (
     <main className="container border-t-[1px] border-gray-200 ">
       <div className="grid min-h-screen lg:grid-cols-[1fr_368px]">
         <main className="px-14">
-          {blogs.data
+          {blogs
             ?.filter((post) => {
               if (filteredCategories.length === 0) {
                 return true;
@@ -214,8 +226,10 @@ function CategoryFilterPill({
   return (
     <button
       className={twMerge(
-        ` flex-shrink-0 items-center justify-center rounded-full  px-2 py-1 text-sm ${
-          filteredCategories.includes(category) ? "bg-gray-400" : "bg-gray-100"
+        ` flex-shrink-0 items-center justify-center rounded-full  border-none px-2 py-1 text-sm ${
+          filteredCategories.includes(category)
+            ? "bg-gray-400 text-white"
+            : "bg-gray-100"
         } `,
         className,
       )}
