@@ -9,7 +9,7 @@ export default function Page() {
   // rout
   // k
   const userid = router.query.user as string;
-  const { data } = api.post.getUserPost.useQuery({
+  const { data } = api.post.getUserPosts.useQuery({
     id: userid,
   });
   console.log(userid);

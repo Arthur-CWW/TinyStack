@@ -64,15 +64,6 @@ export const postRouter = createTRPCRouter({
       });
     }),
 
-  getUserPosts: publicProcedure
-    .input(z.object({ author: z.string() }))
-    .query(async ({ input, ctx }) => {
-      const data = await ctx.db.post.findMany({
-        where: { author: { name: input.author } },
-      });
-      addSubtitle(data);
-      return data;
-    }),
   // if post does not have sub title, use the first 100 characters of the content
   // top blog posts
   getLatest: publicProcedure.query(({ ctx }) => {
@@ -82,11 +73,11 @@ export const postRouter = createTRPCRouter({
     });
   }),
 
-  getblogPost: publicProcedure
-    .input(z.object({ nPosts: z.number() }))
-    .query(({ input }) => {
-      return Array.from({ length: input.nPosts }, () => fakePost());
-    }),
+  // getblogPost: publicProcedure
+  //   .input(z.object({ nPosts: z.number() }))
+  //   .query(({ input }) => {
+  //     return Array.from({ length: input.nPosts }, () => fakePost());
+  //   }),
 
   check: publicProcedure
     .input(z.object({ text: z.string() }))
@@ -155,7 +146,7 @@ export const postRouter = createTRPCRouter({
     //   },
     // ];
   }),
-  getUserPost: publicProcedure
+  getUserPosts: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       // const authorId = await ctx.db.user.findUnique({
@@ -172,5 +163,16 @@ export const postRouter = createTRPCRouter({
       const hydratedPosts = addSubtitle(posts);
 
       return { posts: hydratedPosts, user: hydratedPosts[0]?.author };
+    }),
+
+  getPost: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.post.findFirst({
+        where: { id: input.id },
+        include: {
+          author: true,
+        },
+      });
     }),
 });

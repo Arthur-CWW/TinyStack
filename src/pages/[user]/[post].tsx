@@ -14,7 +14,7 @@ export default function Page() {
   const { data: sessionData } = useSession();
   // console.log(sessionData);
   // console.log(router.query);
-  const { data } = api.post.getUserPost.useQuery({
+  const { data } = api.post.getPost.useQuery({
     id: parseInt(router.query.post as string),
   });
   if (!data || !data.author) {

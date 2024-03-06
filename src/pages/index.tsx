@@ -130,10 +130,10 @@ function TestPost() {
     return undefined;
   }
 
-  const userPosts = api.post.getUserPosts.useQuery({ author: name });
+  // const userPosts = api.post.getUserPosts.useQuery({ id: name });
   const { data, mutate: createNewPost } = api.post.createPost.useMutation();
   console.log("user", user);
-  console.log("userPosts", userPosts);
+  // console.log("userPosts", userPosts);
   console.log("data", data);
   return (
     <form
