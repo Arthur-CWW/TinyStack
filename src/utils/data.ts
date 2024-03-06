@@ -98,6 +98,7 @@ export function fakeLikeComplete() {
 }
 export function fakeUser() {
   return {
+    coverImage: undefined,
     name: undefined,
     email: undefined,
     emailVerified: undefined,
@@ -107,6 +108,7 @@ export function fakeUser() {
 export function fakeUserComplete() {
   return {
     id: faker.string.uuid(),
+    coverImage: undefined,
     name: undefined,
     email: undefined,
     emailVerified: undefined,

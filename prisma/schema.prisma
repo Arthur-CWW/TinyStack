@@ -85,6 +85,7 @@ model Like {
 
 model User {
     id            String    @id @default(cuid())
+    coverImage    String?
     name          String?
     email         String?   @unique
     emailVerified DateTime?
