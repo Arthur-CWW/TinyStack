@@ -35,6 +35,13 @@ export default function Page() {
           {data?.user?.name ?? "Loading..."}
         </h1>
       </header>
+
+      <Popover>
+        <PopoverTrigger>
+          <Dots className="size-8" />
+        </PopoverTrigger>
+        <PopoverContent>Place content for the popover here.</PopoverContent>
+      </Popover>
     </Main>
   );
 }
