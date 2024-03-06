@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 interface EditorState {
   html: string;
+
   setHtml: (html: string) => void;
 }
 

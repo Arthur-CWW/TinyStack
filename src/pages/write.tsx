@@ -55,25 +55,6 @@ export default function Home() {
   const { data: sessionData } = useSession();
   const router = useRouter();
 
-  // const increase = useStore(useBearStore, (state) => state.increase);
-  // if (!sessionData || !sessionData.user) {
-  //   // TODO  check if this  works
-  //   use(async () => signIn());
-  // }
-  // useEffect(() => {
-  //   if (!sessionData || !sessionData.user) {
-  //     signIn().catch(console.error);
-  //     // router.push("/login").catch(console.error);
-  //   }
-  // }, [sessionData]);
-
-  // redirect to login
-  // useEffect(() => {
-  //   if (!sessionData || !sessionData.user) {
-  //     router.push("/login").catch(console.error);
-  //   }
-  // }, [sessionData]);
-
   return (
     <div>
       <Head>
@@ -119,17 +100,7 @@ function Header() {
         </div>
 
         <div className="flex items-center gap-5 pt-1 text-lg">
-          <Dialog>
-            <DialogTrigger asChild>
-              <button className="rounded-full  bg-green-600 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white">
-                Publish
-              </button>
-            </DialogTrigger>
-
-            <DialogContent className="h-screen w-screen p-12 ">
-              <UploadPage user={sessionData?.user} />
-            </DialogContent>
-          </Dialog>
+          {Publish(sessionData)}
 
           <BellClose className="h-7 w-7" />
           <ProfileDD
@@ -152,6 +123,22 @@ function Header() {
   );
 }
 
+function Publish(sessionData: Session) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button className="rounded-full  bg-green-600 px-3 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:text-white">
+          Publish
+        </button>
+      </DialogTrigger>
+
+      <DialogContent className="h-screen w-screen p-12 ">
+        <UploadPage user={sessionData?.user} />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function Layout({ children }: { children: ComponentType }) {
   // I want to send the trpc from here
   return (
@@ -163,30 +150,19 @@ function Layout({ children }: { children: ComponentType }) {
 }
 
 Home.Layout = Layout;
-
+import { newPostSchema } from "~/utils/types";
 function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
   const { html } = useStore(useEditorStore);
 
   const { data, mutate: createNewPost } = api.post.createPost.useMutation();
-  // const user = sessionData.user;
-  // console.log("user", user);
-  // console.log("userPosts", userPosts);
-  // console.log("data", data);
-  // console.log("html", html);
-  const formSchema = z.object({
-    title: z.string().min(6),
-    subtitle: z.optional(z.string()),
-    category: z.optional(CategorySchema),
-  });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof newPostSchema>>({
+    resolver: zodResolver(newPostSchema),
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof newPostSchema>) {
     // Do something with the form values.
-    console.log("sent", values);
 
     const dom = new DOMParser().parseFromString(html, "text/html");
     const title = dom.querySelector("h1")?.textContent;
@@ -199,14 +175,15 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
     }
     const newPost = createNewPost({
       title: values.title,
-      category: values.category ?? "None",
+      category: values.category,
+      subtitle: values.subtitle,
       content: dom.body.innerHTML,
       tags: [],
       published: true,
     });
 
     console.log("sent", title);
-    console.log("submitted kjfldsjlkfasjkdl", values);
+    console.log("submitted ", values);
   }
 
   return (

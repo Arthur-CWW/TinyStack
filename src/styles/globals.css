@@ -70,9 +70,11 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   /* .is-empty ::before {
     display: block;
   } */
@@ -87,6 +89,7 @@
     /* @app   */
     /* make sure the cursor is at the beginning */
     /* z-index: -1; */
+
     @apply text-muted;
   }
 }

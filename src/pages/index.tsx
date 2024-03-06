@@ -100,9 +100,6 @@ function Main() {
     <main className="container border-t-[1px] border-gray-200 ">
       <div className="grid min-h-screen lg:grid-cols-[1fr_368px]">
         <main className="px-14">
-          {/* <TestPost /> */}
-          {/* <p>{secretMessage}</p> */}
-          {/* <Separator /> */}
           {blogs.data
             ?.filter((post) => {
               if (filteredCategories.length === 0) {

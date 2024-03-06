@@ -47,12 +47,7 @@ export function ProfileDD({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className=" h-8 w-8  overflow-hidden rounded-full">
-          {/* {sessionData ? ( */}
           <ProfilePic author={user} className="h-8 w-8" />
-          {/* ) : (
-              // TODO need fix this all to look at this page
-              <ProfileIcon className="h-8 w-8" />
-            )} */}
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56   text-lg font-thin  text-gray-600 hover:text-gray-700">
