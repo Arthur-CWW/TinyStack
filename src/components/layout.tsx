@@ -51,6 +51,7 @@ export function Main({
     <main className="container border-t-[1px] border-gray-200 ">
       <div className="grid min-h-screen lg:grid-cols-[1fr_368px]">
         <main className="px-14">
+          {children}
           {blogs
             ?.filter((post) => {
               if (filteredCategories.length === 0) {
@@ -88,7 +89,7 @@ export function Main({
                     // whether it will automatically be slugified
                     className=""
                   >
-                    <h1 className="text-2xl font-semibold">{post.title}</h1>
+                    <h2 className="text-2xl font-semibold">{post.title}</h2>
                     <div className="line-clamp-4 ">{post.subtitle}</div>
                     <li className="flex items-center   gap-3 py-8 text-sm">
                       {/* this extra flex container needed otherwise it grows full width of the card */}

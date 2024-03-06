@@ -2,6 +2,12 @@ import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import { Main } from "~/components/layout";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
+import { BsThreeDots as Dots } from "react-icons/bs";
 
 export default function Page() {
   // TODO layouts
@@ -24,9 +30,11 @@ export default function Page() {
   // console.log(router.query);
   return (
     <Main blogs={data?.posts ?? []} className="container max-w-[80ch] py-8">
-      <h1 className="py-4 text-5xl font-semibold capitalize">
-        {data?.user?.name ?? "Loading..."}
-      </h1>
+      <header className="flex justify-between p-3 ">
+        <h1 className="py-8 text-5xl font-semibold capitalize">
+          {data?.user?.name ?? "Loading..."}
+        </h1>
+      </header>
     </Main>
   );
 }
