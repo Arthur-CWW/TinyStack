@@ -101,7 +101,7 @@ export function CategoryFilterPill({
         className,
       )}
       // className={className}
-      // variant="secondary"
+      // variant=""
       onClick={() => {
         if (filteredCategories.includes(category)) {
           setFilteredCategories(

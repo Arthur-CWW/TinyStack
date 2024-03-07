@@ -52,6 +52,7 @@ export function Main({
       <div className="grid min-h-screen lg:grid-cols-[1fr_368px]">
         <main className="px-14">
           {children}
+
           {blogs
             ?.filter((post) => {
               if (filteredCategories.length === 0) {
@@ -82,36 +83,32 @@ export function Main({
                   </span>
                 </div>
 
-                <div className="flex h-[208px] justify-between ">
+                <Link
+                  href={`/${post.author.name}/${post.id}`}
+                  className="flex h-[208px] justify-between "
+                >
                   <div
-                    // href={`/${post.author.name}/${post.id}`}
                     // TODO figure out whether I can use title and
                     // whether it will automatically be slugified
-                    className="flex flex-col "
+                    className=""
                   >
                     <h2 className="text-2xl font-semibold">{post.title}</h2>
                     <div className="line-clamp-4 ">{post.subtitle}</div>
                     <li className="flex items-center   gap-3 py-8 text-sm">
                       {/* this extra flex container needed otherwise it grows full width of the card */}
-                      <CategoryFilterPill
-                        setFilteredCategories={setFilteredCategories}
-                        filteredCategories={filteredCategories}
-                        category={post.category}
-                        className=" flex-shrink-0 items-center justify-center   px-2 py-0.5 text-sm"
-                      />
-                      <Link
-                        href={`/${post.author.name}/${post.id}`}
-                        className="flex gap-2 text-gray-500"
-                      >
+                      <button className=" flex-shrink-0 items-center justify-center rounded-full  bg-gray-100 px-2 py-1 text-sm">
+                        {post.category.replace(/([a-z])([A-Z])/g, "$1 $2")}
+                      </button>
+
+                      <span className="flex gap-2 text-gray-500">
+                        {/* TODO figure out why this is wrong  */}
                         {Math.ceil(post?.nwords ?? 0 / 200)} min read
                         {Math.random() > 0.1 ? (
                           <span>· Selected for you</span>
                         ) : null}
-                      </Link>
+                      </span>
                     </li>
                   </div>
-                  {/* lorem picsum  110*110*/}
-                  {/* <Link href={`/${post.author.name}/${post.id}`}> */}
                   <Image
                     src="https://picsum.photos/id/237/110/110"
                     alt=""
@@ -119,8 +116,7 @@ export function Main({
                     height={110}
                     className="ml-16 h-28 w-28"
                   />
-                  {/* </Link> */}
-                </div>
+                </Link>
               </div>
             ))}
         </main>
