@@ -19,6 +19,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { before } from "node:test";
 import { ProfilePic } from "~/components/ui/profile-pic";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
 export default function Page() {
   // TODO layouts
@@ -40,27 +41,13 @@ export default function Page() {
   // console.log(sessionData);
   // console.log(router.query);
 
-  const menu = [
-    {
-      text: "Copy link to profile",
-    },
-
-    {
-      text: "Mute author",
-    },
-    {
-      text: "Block this author",
-    },
-    {
-      text: "Report this author",
-    },
-  ];
   return (
     <Main blogs={data?.posts ?? []} className="container max-w-[80ch] py-8">
       <header className="flex items-center justify-between  p-3">
         <h1 className="py-8 text-5xl font-semibold capitalize">
           {data?.user?.name ?? "Loading..."}
         </h1>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div>
@@ -86,6 +73,21 @@ export default function Page() {
           </DropdownMenuContent>
         </DropdownMenu>
       </header>
+      <nav>
+        <Tabs defaultValue="account" className="w-[400px]">
+          <TabsList>
+            <TabsTrigger value="home">Home</TabsTrigger>
+            <TabsTrigger value="lists">lists</TabsTrigger>
+            <TabsTrigger value="about">About</TabsTrigger>
+          </TabsList>
+          <TabsContent value="home">
+            {/* TODO */}
+            Home
+          </TabsContent>
+          <TabsContent value="lists">lists</TabsContent>
+          <TabsContent value="about">About</TabsContent>
+        </Tabs>
+      </nav>
     </Main>
   );
 }
