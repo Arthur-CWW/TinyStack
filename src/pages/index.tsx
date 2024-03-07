@@ -93,13 +93,15 @@ export function CategoryFilterPill({
   return (
     <button
       className={twMerge(
-        ` flex-shrink-0 items-center justify-center rounded-full  border-none px-2 py-1 text-sm ${
+        ` flex-shrink-0 items-center justify-center rounded-full  border-none p-3 text-sm ${
           filteredCategories.includes(category)
             ? "bg-gray-400 text-white"
             : "bg-gray-100"
         } `,
         className,
       )}
+      // className={className}
+      // variant="secondary"
       onClick={() => {
         if (filteredCategories.includes(category)) {
           setFilteredCategories(

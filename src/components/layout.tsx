@@ -83,39 +83,35 @@ export function Main({
                 </div>
 
                 <div className="flex h-[208px] justify-between ">
-                  <Link
-                    href={`/${post.author.name}/${post.id}`}
+                  <div
+                    // href={`/${post.author.name}/${post.id}`}
                     // TODO figure out whether I can use title and
                     // whether it will automatically be slugified
-                    className=""
+                    className="flex flex-col "
                   >
                     <h2 className="text-2xl font-semibold">{post.title}</h2>
                     <div className="line-clamp-4 ">{post.subtitle}</div>
                     <li className="flex items-center   gap-3 py-8 text-sm">
                       {/* this extra flex container needed otherwise it grows full width of the card */}
-                      {
-                        <CategoryFilterPill
-                          setFilteredCategories={setFilteredCategories}
-                          filteredCategories={filteredCategories}
-                          category={post.category}
-                          className=" items-centebg-gray-100r flex-shrink-0 justify-center rounded-full bg-gray-100 px-2 py-1 text-sm"
-                        />
-                      }
-
-                      <div className="flex gap-2 text-gray-500">
-                        <Link href={`/${post.author.name}/${post.id}`}>
-                          {/* TODO figure out why this is wrong  */}
-                          {Math.ceil(post?.nwords ?? 0 / 200)} min read
-                        </Link>
-                        <Link href={`/${post.author.name}/${post.id}`}>
-                          {Math.random() > 0.1 ? (
-                            <span>· Selected for you</span>
-                          ) : null}
-                        </Link>
-                      </div>
+                      <CategoryFilterPill
+                        setFilteredCategories={setFilteredCategories}
+                        filteredCategories={filteredCategories}
+                        category={post.category}
+                        className=" flex-shrink-0 items-center justify-center   px-2 py-0.5 text-sm"
+                      />
+                      <Link
+                        href={`/${post.author.name}/${post.id}`}
+                        className="flex gap-2 text-gray-500"
+                      >
+                        {Math.ceil(post?.nwords ?? 0 / 200)} min read
+                        {Math.random() > 0.1 ? (
+                          <span>· Selected for you</span>
+                        ) : null}
+                      </Link>
                     </li>
-                  </Link>
+                  </div>
                   {/* lorem picsum  110*110*/}
+                  {/* <Link href={`/${post.author.name}/${post.id}`}> */}
                   <Image
                     src="https://picsum.photos/id/237/110/110"
                     alt=""
@@ -123,6 +119,7 @@ export function Main({
                     height={110}
                     className="ml-16 h-28 w-28"
                   />
+                  {/* </Link> */}
                 </div>
               </div>
             ))}
