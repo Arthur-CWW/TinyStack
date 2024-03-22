@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { CategoryFilterPill } from "~/pages";
 import { postOutput } from "~/utils/types";
 import { ProfilePic } from "../components/ui/profile-pic";
+import { useRouter } from "next/router";
 
 export const DefaultNavLayout = ({
   children,
@@ -46,6 +47,27 @@ export function Main({
   if (!blogs) {
     return null;
   }
+  const router = useRouter();
+  const searchQuery = router.query.search;
+  // let filteredBlogs = [...blogs];
+  const [filteredBlogs, setFilteredBlogs] = useState<Post[]>(blogs);
+
+  useEffect(() => {
+    if (!searchQuery) {
+      setFilteredBlogs(blogs);
+      return;
+    }
+    console.log("searchQuery", searchQuery);
+    setFilteredBlogs(
+      blogs.filter((post) => {
+        return (
+          post.title.toLowerCase().includes(searchQuery as string) ||
+          post.subtitle.toLowerCase().includes(searchQuery as string) ||
+          post.author.name.toLowerCase().includes(searchQuery as string)
+        );
+      }),
+    );
+  }, [searchQuery]);
   const categories = Object.values(Category);
   return (
     <main className="container border-t-[1px] border-gray-200 ">
@@ -53,7 +75,7 @@ export function Main({
         <main className="px-14">
           {children}
 
-          {blogs
+          {filteredBlogs
             ?.filter((post) => {
               if (filteredCategories.length === 0) {
                 return true;

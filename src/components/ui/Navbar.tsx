@@ -15,8 +15,37 @@ import {
 import { Icons } from "../icons";
 import { ProfileDD } from "./ProfileDD";
 import { SignIn, SignUp } from "~/components/ui/AuthComp";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 export function Navbar() {
+  // lift the state to the url
+  const router = useRouter();
+  const [search, setSearchQuery] = useState("");
+  const handleSearchChange = (searchQuery: string) => {
+    // Update the URL search parameters
+    // TODO reset the search query when empty
+    // if (searchQuery === "") {
+    //   router.push(
+    //     {
+    //       pathname: router.pathname,
+    //       // query: { ...router.query },
+    //     },
+    //     undefined,
+    //     { shallow: true },
+    //   );
+    //   return;
+    // }
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, search: searchQuery },
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
   return (
     <nav className="flex w-full items-baseline justify-between border-b-1   border-slate-100 p-4 text-slate-500">
       <div className="flex  items-center gap-3">
@@ -24,9 +53,20 @@ export function Navbar() {
           <Icons.logo />
           {/* search input */}
         </Link>
-        <form className="flex gap-2 rounded-full bg-gray-100 p-3">
+        <form
+          className="flex gap-2 rounded-full bg-gray-100 p-3"
+          onSubmit={(e) => {
+            e.preventDefault();
+            // navigate to search page
+          }}
+        >
           <SearchIcon className="h-6 w-6" />
           <input
+            value={search}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              handleSearchChange(search);
+            }}
             type="text"
             placeholder="Search"
             className="border-none bg-transparent placeholder-slate-500 outline-none"
