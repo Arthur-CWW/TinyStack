@@ -30,9 +30,11 @@ import FloatingMenu from "@tiptap/extension-floating-menu";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Link from "@tiptap/extension-link";
+import { Link as TLink } from "@tiptap/extension-link";
 import { content } from "tailwindcss/defaultTheme";
 import { cn, timeAgo } from "~/lib/utils";
+import { ProfileDots } from "~/components/ui/ProfileDropDown";
+import Link from "next/link";
 function RichTextArea({
   author,
   blogId,
@@ -53,7 +55,7 @@ function RichTextArea({
       StarterKit.configure({
         // options
       }),
-      Link,
+      TLink,
       BubbleMenu.configure({
         element: bubbleMenuRef.current,
       }),
@@ -175,22 +177,35 @@ export default function Page() {
               </button>
             </DialogTrigger>
             <DialogContent className="absolute  right-0 top-0 min-h-screen w-[446px] bg-white p-4 shadow-2xl">
-              <DialogHeader className="flex flex-row justify-between">
+              <DialogHeader className="flex flex-row items-center justify-between">
                 <DialogTitle className="text-3xl font-bold">
                   Responses
                 </DialogTitle>
                 <div className="flex text-gray-700">
                   <LuShieldCheck size={24} strokeWidth={1} />
-                  <RxCross1 size={24} className="ml-2 " />
+                  <DialogTrigger>
+                    <RxCross1 size={24} className="ml-2 " />
+                  </DialogTrigger>
                 </div>
               </DialogHeader>
               <RichTextArea author={sessionData?.user} blogId={data.id} />
               {data.Comment.map((comment) => (
                 <div className="border-y border-border " key={comment.id}>
-                  <CardHeader className="flex-row items-center capitalize">
-                    <ProfilePic author={comment.author} className="h-10 w-10" />
-                    <h3>{comment.author.name}</h3>
-                    <span>{timeAgo(comment.createdAt)}</span>
+                  <CardHeader className="flex-row items-center justify-between capitalize">
+                    <Link
+                      className="flex gap-3 "
+                      href={`/user/${comment.authorId}`}
+                    >
+                      <ProfilePic
+                        author={comment.author}
+                        className="h-10 w-10"
+                      />
+                      <div className="text-gray-600">
+                        <h3 className=" text-black">{comment.author.name}</h3>
+                        <span>{timeAgo(comment.createdAt)}</span>
+                      </div>
+                    </Link>
+                    <ProfileDots className="size-6" />
                   </CardHeader>
                   <CardContent>
                     <div
