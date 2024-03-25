@@ -26,8 +26,26 @@ export function Navbar() {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const handleSearchChange = (searchQuery: string) => {
-    console.log("router", router);
-    console.log("nav searchQuery", searchQuery);
+    // console.log("router", router);
+    // console.log("nav searchQuery", searchQuery);
+    if (!searchQuery) {
+      console.log(router.query);
+      router.push(
+        {
+          pathname: router.pathname,
+          query: {
+            ...Object.fromEntries(
+              Object.entries(router.query).filter(
+                ([key, value]) => key !== "search",
+              ),
+            ),
+          },
+        },
+        undefined,
+        { shallow: true },
+      );
+      return;
+    }
     router.push(
       {
         pathname: router.pathname,
@@ -37,11 +55,12 @@ export function Navbar() {
       { shallow: true },
     );
   };
-  React.useEffect(() => {
-    if (search) {
-      inputRef.current?.focus();
-    }
-  }, [router.query.search]);
+
+  // React.useEffect(() => {
+  //   if (search) {
+  //     inputRef.current?.focus();
+  //   }
+  // }, [search]);
 
   return (
     <nav className="flex w-full items-baseline justify-between border-b-1   border-slate-100 p-4 text-slate-500">
@@ -54,6 +73,7 @@ export function Navbar() {
           className="flex gap-2 rounded-full bg-gray-100 p-3"
           onSubmit={(e) => {
             e.preventDefault();
+            handleSearchChange(search);
             // navigate to search page
           }}
         >
@@ -63,7 +83,6 @@ export function Navbar() {
             ref={inputRef}
             onInput={(e) => {
               setSearchQuery(e.currentTarget.value);
-              handleSearchChange(e.currentTarget.value);
               // Cannot focus input here need to do it in the useEffect
               // console.log("inputRef", inputRef.current);
               // inputRef.current?.focus();

@@ -49,6 +49,7 @@ export function Main({
   }
   const router = useRouter();
   const searchQuery = router.query.search;
+  // console.log("searchQuery", searchQuery);
   // let filteredBlogs = [...blogs];
   const [filteredBlogs, setFilteredBlogs] = useState<Post[]>(blogs);
 
@@ -57,13 +58,13 @@ export function Main({
       setFilteredBlogs(blogs);
       return;
     }
-    console.log("searchQuery", searchQuery);
+    // console.log("searchQuery", searchQuery);
     setFilteredBlogs(
       blogs.filter((post) => {
         return (
           post.title.toLowerCase().includes(searchQuery as string) ||
-          post.subtitle.toLowerCase().includes(searchQuery as string) ||
-          post.author.name.toLowerCase().includes(searchQuery as string)
+          post.subtitle?.toLowerCase().includes(searchQuery as string) ||
+          post.author?.name?.toLowerCase().includes(searchQuery as string)
         );
       }),
     );
