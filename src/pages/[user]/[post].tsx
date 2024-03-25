@@ -35,6 +35,15 @@ import { content } from "tailwindcss/defaultTheme";
 import { cn, timeAgo } from "~/lib/utils";
 import { ProfileDots } from "~/components/ui/ProfileDropDown";
 import Link from "next/link";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "~/components/ui/sheet";
+
 function RichTextArea({
   author,
   blogId,
@@ -150,6 +159,7 @@ export default function Page() {
   return (
     <>
       <main className="container max-w-[80ch] ">
+        {/* TODO cover image {data.} */}
         <h1 className="py-4 text-5xl font-semibold capitalize">
           {data?.title}
         </h1>
@@ -168,26 +178,26 @@ export default function Page() {
             </p>
           </div>
         </section>
-        <section className="flex gap-3 border-y-1 border-border fill-gray-400  py-3">
+        <section className="mb-2 flex gap-3 border-y-1 border-border  fill-gray-400 py-3">
           <Icons.clap className="fill-[rgb(117, 117, 117)]  stroke-0  " /> 3239
-          <Dialog>
-            <DialogTrigger asChild>
+          <Sheet>
+            <SheetTrigger asChild>
               <button className="flex ">
                 <Icons.comment className="stroke-gray-400" /> 11
               </button>
-            </DialogTrigger>
-            <DialogContent className="absolute  right-0 top-0 min-h-screen w-[446px] bg-white p-4 shadow-2xl">
-              <DialogHeader className="flex flex-row items-center justify-between">
-                <DialogTitle className="text-3xl font-bold">
+            </SheetTrigger>
+            <SheetContent className="fixed  right-0 top-0 min-h-screen w-[446px] bg-white p-4 shadow-2xl">
+              <SheetHeader className="flex flex-row items-center justify-between">
+                <SheetTitle className="text-3xl font-bold">
                   Responses
-                </DialogTitle>
+                </SheetTitle>
                 <div className="flex text-gray-700">
                   <LuShieldCheck size={24} strokeWidth={1} />
-                  <DialogTrigger>
+                  <SheetTrigger>
                     <RxCross1 size={24} className="ml-2 " />
-                  </DialogTrigger>
+                  </SheetTrigger>
                 </div>
-              </DialogHeader>
+              </SheetHeader>
               <RichTextArea author={sessionData?.user} blogId={data.id} />
               {data.Comment.map((comment) => (
                 <div className="border-y border-border " key={comment.id}>
@@ -214,7 +224,7 @@ export default function Page() {
                       dangerouslySetInnerHTML={{ __html: comment.content }}
                     />
                   </CardContent>
-                  <CardFooter className="justify-between text-gray-300 ">
+                  <CardFooter className="justify-between text-gray-300">
                     <Icons.clap />
                     <Button
                       variant="link"
@@ -238,8 +248,8 @@ export default function Page() {
                   )}
                 </div>
               ))}
-            </DialogContent>
-          </Dialog>
+            </SheetContent>
+          </Sheet>
         </section>
 
         <div
