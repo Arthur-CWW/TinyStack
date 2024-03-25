@@ -98,6 +98,10 @@ model User {
     // followers     User[]    @relation("UserFollows", references: [id])
     Like          Like[]
 
+    bio       String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
+
     // maybe add saved post later
     @@fulltext([name])
 }
@@ -137,6 +141,8 @@ model Post {
     tags      Tag[]
     category  Category
     Comment   Comment[]
+    // TODO should this be unique
+    // @@unique([title, authorId])
 
     // @@index([title])
     @@fulltext([title, content])
