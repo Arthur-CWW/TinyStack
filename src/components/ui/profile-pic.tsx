@@ -17,12 +17,16 @@ export function ProfilePic({
   if (!author) {
     return null;
   }
+  // generate hash from name, then modulo 360 to get a color
+  // const hash = author.name!;
+  // const color =
 
   return (
     <div
       style={{
         // actually can't be random need a deterministic way to generate colors from the name
-        background: `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`,
+        //TODO This might be expensive might want to cache the result onto the object later
+        background: `hsl(${(author.name?.split("").reduce((acc, char) => char.charCodeAt(0) + acc, 0) ?? 0) % 360}, 100%, 50%)`,
       }}
       className={twMerge(
         " mr-2 h-6 w-6  overflow-hidden rounded-full text-center font-bold text-white ",
