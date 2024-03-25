@@ -9,7 +9,7 @@ import Dropcursor from "@tiptap/extension-dropcursor";
 import { Editor } from "@tiptap/react";
 import { useDebounce, useDebouncedCallback } from "use-debounce";
 export const editorStyling =
-  "prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none [&>[data-placeholder='Title']]:text-4xl";
+  "prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl  focus:outline-none [&>[data-placeholder='Title']]:text-4xl";
 import { useEditorStore } from "~/utils/stores";
 const EditorContentWithDrop = ({ editor }: { editor: Editor }) => {
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -121,7 +121,7 @@ const MyEditor = () => {
   if (!editor) return null;
 
   return (
-    <div className=" flex flex-col items-center justify-center px-3 ">
+    <div className=" flex flex-col items-center justify-center px-5 ">
       {/* <div ref={floatingMenuRef} className="flex ">
         <button onClick={() => setShowTooltip(true)}>+</button>
         <button onClick={handleExport}>Export to HTML</button>
