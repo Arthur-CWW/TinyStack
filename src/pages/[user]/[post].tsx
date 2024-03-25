@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-
 import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
@@ -33,7 +32,15 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import { content } from "tailwindcss/defaultTheme";
-function RichTextArea({ author }: { author: Undefinable<User> }) {
+import { timeAgo } from "~/lib/utils";
+function RichTextArea({
+  author,
+  blogId,
+}: {
+  author: Undefinable<User>;
+  blogId: number;
+}) {
+  const { data, mutate: addComment } = api.post.addComment.useMutation();
   const bubbleMenuRef = useRef<HTMLDivElement>(null);
   const floatingMenuRef = useRef<HTMLDivElement>(null);
   const [content, setContent] = useState("");
@@ -106,6 +113,8 @@ function RichTextArea({ author }: { author: Undefinable<User> }) {
             className="bg-green-400"
             onClick={() => {
               console.log(content);
+              if (!author?.id) return;
+              addComment({ content, authorId: author?.id, postId: blogId });
             }}
           >
             Respond
@@ -165,7 +174,31 @@ export default function Page() {
                   <RxCross1 size={24} className="ml-2 " />
                 </div>
               </DialogHeader>
-              <RichTextArea author={sessionData?.user} />
+              <RichTextArea author={sessionData?.user} blogId={data.id} />
+              {data.Comment.map((comment) => (
+                <Card className="p-3">
+                  <CardHeader className="flex-row items-center capitalize">
+                    <ProfilePic author={comment.author} className="h-10 w-10" />
+                    <h3>{comment.author.name}</h3>
+                    <span>{timeAgo(comment.createdAt)}</span>
+                  </CardHeader>
+                  <CardContent>
+                    <div
+                      key={comment.id}
+                      className={editorStyling}
+                      dangerouslySetInnerHTML={{ __html: comment.content }}
+                    />
+                  </CardContent>
+                  {/* <CardFooter className="text-gray-300">
+                    Created at{" "}
+                    {comment.createdAt.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </CardFooter> */}
+                </Card>
+              ))}
             </DialogContent>
           </Dialog>
         </section>
