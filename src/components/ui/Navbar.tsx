@@ -17,11 +17,14 @@ import { ProfileDD } from "./ProfileDD";
 import { SignIn, SignUp } from "~/components/ui/AuthComp";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import React from "react";
 
 export function Navbar() {
   // lift the state to the url
   const router = useRouter();
   const [search, setSearchQuery] = useState(router.query.search as string);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
   const handleSearchChange = (searchQuery: string) => {
     console.log("router", router);
     console.log("nav searchQuery", searchQuery);
@@ -34,6 +37,11 @@ export function Navbar() {
       { shallow: true },
     );
   };
+  React.useEffect(() => {
+    if (search) {
+      inputRef.current?.focus();
+    }
+  }, [router.query.search]);
 
   return (
     <nav className="flex w-full items-baseline justify-between border-b-1   border-slate-100 p-4 text-slate-500">
@@ -52,9 +60,14 @@ export function Navbar() {
           <SearchIcon className="h-6 w-6" />
           <input
             value={search}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              handleSearchChange(e.target.value);
+            ref={inputRef}
+            onInput={(e) => {
+              setSearchQuery(e.currentTarget.value);
+              handleSearchChange(e.currentTarget.value);
+              // Cannot focus input here need to do it in the useEffect
+              // console.log("inputRef", inputRef.current);
+              // inputRef.current?.focus();
+              // e.currentTarget.focus();
             }}
             type="text"
             placeholder="Search"
