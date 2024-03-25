@@ -1,4 +1,4 @@
-import { User } from "next-auth";
+import { User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { ComponentProps } from "react";
@@ -17,15 +17,14 @@ export function ProfilePic({
   if (!author) {
     return null;
   }
-  // generate hash from name, then modulo 360 to get a color
-  // const hash = author.name!;
-  // const color =
+  const test = true;
+  console.log(author);
 
   return (
     <div
+      // actually can't be random need a deterministic way to generate colors from the name
+      //TODO This might be expensive might want to cache the result onto the object later
       style={{
-        // actually can't be random need a deterministic way to generate colors from the name
-        //TODO This might be expensive might want to cache the result onto the object later
         background: `hsl(${(author.name?.split("").reduce((acc, char) => char.charCodeAt(0) + acc, 0) ?? 0) % 360}, 100%, 50%)`,
       }}
       className={twMerge(
@@ -33,10 +32,9 @@ export function ProfilePic({
         className,
       )}
     >
-      {/*Placeholder same as youtube  */}
-      {author.image ? (
+      {author.image && test ? (
         <Image
-          src={author.image} //?? "https://via.placeholder.com/150"}
+          src={author.image}
           alt="profile picture"
           // layout="fill"
           // objectFit="cover"
@@ -45,9 +43,39 @@ export function ProfilePic({
           className={twMerge(className)}
         />
       ) : (
-        // get first alphabetcal letter
         author.name?.split("").find((char) => char?.match(/[a-zA-Z]/)) ?? ""
       )}
     </div>
+  );
+}
+
+export function ProfileHover({
+  author,
+  children,
+}: {
+  author: Undefinable<User>;
+  children: React.ReactNode;
+}) {
+  if (!author) return children;
+  return (
+    <HoverCard>
+      <HoverCardTrigger asChild>{children}</HoverCardTrigger>
+      <HoverCardContent className="w-80">
+        <div className="flex justify-between space-x-4">
+          <div className="space-y-1">
+            <h4 className="text-sm font-semibold">@{author.name}</h4>
+            <p className="text-sm">
+              {/* {author.name} is a software engineer at Google. He is a */}
+              {author.bio ?? "No bio provided"}
+            </p>
+            <div className="flex items-center pt-2">
+              <span className="text-xs text-muted-foreground">
+                Joined {new Date(author.createdAt).toDateString()}
+              </span>
+            </div>
+          </div>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
   );
 }

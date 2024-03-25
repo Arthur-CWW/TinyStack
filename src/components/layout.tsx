@@ -7,8 +7,10 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { CategoryFilterPill } from "~/pages";
 import { postOutput } from "~/utils/types";
-import { ProfilePic } from "../components/ui/profile-pic";
+import { ProfilePic } from "./ui/profile-pic";
 import { useRouter } from "next/router";
+import { ProfileDots } from "~/components/ui/ProfileDropDown";
+import { Icons } from "~/components/icons";
 
 export const DefaultNavLayout = ({
   children,
