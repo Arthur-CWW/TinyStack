@@ -185,6 +185,7 @@ export const postRouter = createTRPCRouter({
         postId: z.number(),
         content: z.string(),
         authorId: z.string(),
+        replyId: z.optional(z.number()),
       }),
     )
     .mutation(async ({ ctx, input }) => {

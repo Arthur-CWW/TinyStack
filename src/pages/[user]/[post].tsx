@@ -22,7 +22,7 @@ import { LuShieldCheck } from "react-icons/lu";
 import { RxCross1, RxCross2 } from "react-icons/rx";
 import { Button } from "~/components/ui/button";
 import { useRef, useState } from "react";
-import { Undefinable } from "~/utils/types";
+import { postOutput, Undefinable } from "~/utils/types";
 import { User } from "@prisma/client";
 import BubbleMenu from "@tiptap/extension-bubble-menu";
 import Dropcursor from "@tiptap/extension-dropcursor";
@@ -32,13 +32,17 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import { content } from "tailwindcss/defaultTheme";
-import { timeAgo } from "~/lib/utils";
+import { cn, timeAgo } from "~/lib/utils";
 function RichTextArea({
   author,
   blogId,
+  replyId,
+  className,
 }: {
   author: Undefinable<User>;
   blogId: number;
+  replyId?: number;
+  className: string;
 }) {
   const { data, mutate: addComment } = api.post.addComment.useMutation();
   const bubbleMenuRef = useRef<HTMLDivElement>(null);
@@ -76,52 +80,55 @@ function RichTextArea({
 
   const contentRef = useRef<HTMLDivElement | null>(null);
   return (
-    <div>
-      <Card>
-        <CardHeader className="flex-row items-center capitalize">
-          <ProfilePic author={author} className="h-10 w-10" />
-          {author?.name}
-        </CardHeader>
+    <Card className={cn("my-3 mb-3 shadow-md", className)}>
+      <CardHeader className="flex-row items-center capitalize">
+        <ProfilePic author={author} className="h-10 w-10" />
+        {author?.name}
+      </CardHeader>
 
-        <CardContent>
-          <EditorContent editor={editor} placeholder="" />
-        </CardContent>
-        <CardFooter className="gap-3">
-          <Button
-            variant="ghost"
-            className="font-serif text-2xl font-extrabold text-gray-400"
-            onClick={() => {
-              if (!editor) return;
-              editor.commands.toggleBold();
-            }}
-          >
-            B
-          </Button>
-          <Button
-            variant="ghost"
-            className="font-serif text-2xl font-extrabold text-gray-400"
-            onClick={() => {
-              if (!editor) return;
-              editor.commands.toggleItalic();
-            }}
-          >
-            i
-          </Button>
-          <Button variant="ghost">Cancel</Button>
-          <Button
-            variant="default"
-            className="bg-green-400"
-            onClick={() => {
-              console.log(content);
-              if (!author?.id) return;
-              addComment({ content, authorId: author?.id, postId: blogId });
-            }}
-          >
-            Respond
-          </Button>
-        </CardFooter>
-      </Card>
-    </div>
+      <CardContent>
+        <EditorContent editor={editor} placeholder="" />
+      </CardContent>
+      <CardFooter className="gap-3">
+        <Button
+          variant="ghost"
+          className="font-serif text-2xl font-extrabold text-gray-400"
+          onClick={() => {
+            if (!editor) return;
+            editor.commands.toggleBold();
+          }}
+        >
+          B
+        </Button>
+        <Button
+          variant="ghost"
+          className="font-serif text-2xl font-extrabold text-gray-400"
+          onClick={() => {
+            if (!editor) return;
+            editor.commands.toggleItalic();
+          }}
+        >
+          i
+        </Button>
+        <Button variant="ghost">Cancel</Button>
+        <Button
+          variant="default"
+          className="bg-green-400"
+          onClick={() => {
+            console.log(content);
+            if (!author?.id) return;
+            addComment({
+              content,
+              authorId: author?.id,
+              postId: blogId,
+              replyId,
+            });
+          }}
+        >
+          Respond
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }
 export default function Page() {
@@ -131,6 +138,9 @@ export default function Page() {
   const { data } = api.post.getPost.useQuery({
     id: parseInt(router.query.post as string),
   });
+
+  const [replyToId, setReplyToId] = useState(-1);
+
   if (!data || !data.author) {
     return <div>Loading...</div>;
   }
@@ -164,7 +174,7 @@ export default function Page() {
                 <Icons.comment className="stroke-gray-400" /> 11
               </button>
             </DialogTrigger>
-            <DialogContent className="absolute right-0 top-0 h-screen w-[446px] bg-white p-4 shadow-2xl">
+            <DialogContent className="absolute  right-0 top-0 min-h-screen w-[446px] bg-white p-4 shadow-2xl">
               <DialogHeader className="flex flex-row justify-between">
                 <DialogTitle className="text-3xl font-bold">
                   Responses
@@ -176,7 +186,7 @@ export default function Page() {
               </DialogHeader>
               <RichTextArea author={sessionData?.user} blogId={data.id} />
               {data.Comment.map((comment) => (
-                <Card className="p-3">
+                <div className="border-y border-border " key={comment.id}>
                   <CardHeader className="flex-row items-center capitalize">
                     <ProfilePic author={comment.author} className="h-10 w-10" />
                     <h3>{comment.author.name}</h3>
@@ -189,15 +199,29 @@ export default function Page() {
                       dangerouslySetInnerHTML={{ __html: comment.content }}
                     />
                   </CardContent>
-                  {/* <CardFooter className="text-gray-300">
-                    Created at{" "}
-                    {comment.createdAt.toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </CardFooter> */}
-                </Card>
+                  <CardFooter className="justify-between text-gray-300 ">
+                    <Icons.clap />
+                    <Button
+                      variant="link"
+                      onClick={() => {
+                        setReplyToId(comment.id);
+                      }}
+                    >
+                      Reply
+                    </Button>
+                  </CardFooter>
+
+                  {replyToId !== -1 && replyToId === comment.id && (
+                    <CardContent //className="border-l-2 border-border"
+                    >
+                      <RichTextArea
+                        replyId={replyToId}
+                        author={sessionData?.user}
+                        blogId={data.id}
+                      />
+                    </CardContent>
+                  )}
+                </div>
               ))}
             </DialogContent>
           </Dialog>
