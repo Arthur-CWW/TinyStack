@@ -103,47 +103,6 @@ export const postRouter = createTRPCRouter({
     });
     const rv = addSubtitle(posts);
     return rv;
-
-    // return [
-    //   {
-    //     id: 1,
-    //     author: "Austin Starks in DataDrivenInvestor",
-    //     title:
-    //       "My ChatGPT-Generated Trading Strategies are DEMOLISHING the Market.",
-    //     description: "How to create multiple income streams",
-    //     category: "Investing",
-    //     date: new Date("Nov 16, 2023"),
-    //     profileImage: "https://picsum.photos/id/237/200/300",
-    //   },
-    //   {
-    //     id: 3,
-    //     author: "Kevin Nokia",
-    //     title: "Reading Books Is Useless: Here’s a Better Way to Read",
-    //     description: "How to create multiple income streams",
-    //     category: "Reading",
-    //     date: new Date("Jan 28, 2024"),
-    //     profileImage: "https://picsum.photos/id/237/200/300",
-    //   },
-    //   {
-    //     id: 9,
-    //     author: "Joseph Mavericks in Entrepreneurship Handbook",
-    //     title:
-    //       "This Entrepreneur Made $10M in 4 Years — With 10 Income Streams",
-    //     description: "How to create multiple income streams",
-    //     category: "Entrepreneurship",
-    //     date: new Date("Sep 15, 2023"),
-    //     profileImage: "https://picsum.photos/id/237/200/300",
-    //   },
-    //   {
-    //     id: 10,
-    //     author: "Natassha Selvaraj in Towards AI",
-    //     title: "How I’m Using ChatGPT and AI to Make Money Online",
-    //     description: "How to create multiple income streams",
-    //     category: "Member-only",
-    //     date: new Date("Nov 9, 2023"),
-    //     profileImage: "https://picsum.photos/id/237/200/300",
-    //   },
-    // ];
   }),
   getUserPosts: publicProcedure
     .input(z.object({ id: z.string() }))
@@ -167,18 +126,37 @@ export const postRouter = createTRPCRouter({
   getPost: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ ctx, input }) => {
+      console.log(input.id);
       return ctx.db.post.findFirst({
         where: { id: input.id },
         include: {
           author: true,
-          Comment: {
+          comments: {
             include: {
               author: true,
+              // include reply count avoid selecting actual replies
+              replies: {
+                select: {
+                  id: true,
+                  _count: true,
+                },
+              },
             },
           },
         },
       });
     }),
+  getReplies: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.comment.findMany({
+        where: { replyId: input.id },
+        include: {
+          author: true,
+        },
+      });
+    }),
+
   addComment: protectedProcedure
     .input(
       z.object({
@@ -200,6 +178,10 @@ export const postRouter = createTRPCRouter({
           },
           post: {
             connect: { id: input.postId },
+          },
+          // replyId: input.replyId,
+          replyTo: {
+            connect: { id: input.replyId },
           },
         },
       });

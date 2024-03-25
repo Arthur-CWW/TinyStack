@@ -21,6 +21,7 @@ export default function Page() {
   const router = useRouter();
   // rout
   const userid = router.query.user as string;
+  console.log(userid);
   const { data } = api.post.getUserPosts.useQuery({
     id: userid,
   });

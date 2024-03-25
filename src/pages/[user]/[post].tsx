@@ -156,6 +156,7 @@ export default function Page() {
     return <div>Loading...</div>;
   }
 
+  console.log(data.comments.map((comment) => comment));
   return (
     <>
       <main className="container max-w-[80ch] ">
@@ -178,15 +179,15 @@ export default function Page() {
             </p>
           </div>
         </section>
-        <section className="mb-2 flex gap-3 border-y-1 border-border  fill-gray-400 py-3">
+        <section className="mb-2 flex gap-3 border-y-1 border-border  fill-gray-400 py-3 text-gray-700">
           <Icons.clap className="fill-[rgb(117, 117, 117)]  stroke-0  " /> 3239
           <Sheet>
             <SheetTrigger asChild>
               <button className="flex ">
-                <Icons.comment className="stroke-gray-400" /> 11
+                <Icons.comment className="" /> 11
               </button>
             </SheetTrigger>
-            <SheetContent className="fixed  right-0 top-0 min-h-screen w-[446px] bg-white p-4 shadow-2xl">
+            <SheetContent className="fixed right-0 top-0 min-h-screen w-[446px] overflow-y-auto bg-white p-4 shadow-2xl">
               <SheetHeader className="flex flex-row items-center justify-between">
                 <SheetTitle className="text-3xl font-bold">
                   Responses
@@ -199,7 +200,7 @@ export default function Page() {
                 </div>
               </SheetHeader>
               <RichTextArea author={sessionData?.user} blogId={data.id} />
-              {data.Comment.map((comment) => (
+              {data.comments.map((comment) => (
                 <div className="border-y border-border " key={comment.id}>
                   <CardHeader className="flex-row items-center justify-between capitalize">
                     <Link
@@ -234,6 +235,7 @@ export default function Page() {
                     >
                       Reply
                     </Button>
+                    {/* {JSON.stringify(comment.replies)} */}
                   </CardFooter>
 
                   {replyToId !== -1 && replyToId === comment.id && (
@@ -241,6 +243,7 @@ export default function Page() {
                     >
                       <RichTextArea
                         replyId={replyToId}
+                        // TODO fix types here
                         author={sessionData?.user}
                         blogId={data.id}
                       />

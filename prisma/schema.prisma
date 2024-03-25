@@ -70,14 +70,8 @@ model Comment {
     replyId   Int?
     replies   Comment[] @relation("CommentToComment")
 
-    // TODO: understand and fix this
-    // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/self-relations
-    // reply     Comment?  @relation("CommentToComment", fields: [replyId], references: [id])
-    // replyId   Int?
-    // Comment   Comment[] @relation("CommentToComment")
-    // @@unique([postId, authorId, content])
-
     @@index([postId])
+    @@index([replyId])
 }
 
 model Like {
@@ -136,18 +130,19 @@ enum Category {
 // blog post model
 // store content as markdown with image links to s3
 model Post {
-    id        Int       @id @default(autoincrement())
-    title     String
-    subtitle  String?
-    content   String    @db.Text //64 KB limit
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @default(now()) @updatedAt
-    published Boolean   @default(false)
-    author    User      @relation(fields: [authorId], references: [id])
-    authorId  String
-    tags      Tag[]
-    category  Category
-    comments  Comment[]
+    id         Int       @id @default(autoincrement())
+    title      String
+    subtitle   String?
+    content    String    @db.Text //64 KB limit
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @default(now()) @updatedAt
+    published  Boolean   @default(false)
+    author     User      @relation(fields: [authorId], references: [id])
+    authorId   String
+    tags       Tag[]
+    category   Category
+    comments   Comment[]
+    coverImage String?
     // TODO should this be unique
     // @@unique([title, authorId])
 

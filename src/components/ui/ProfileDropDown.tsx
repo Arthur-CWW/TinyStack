@@ -82,10 +82,10 @@ export function ProfileDots({ className }: { className?: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div>
+        <button>
           {/* this div is neccesary for some reason */}
           <Dots className={cn("size-8", className)} />
-        </div>
+        </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="font-thin text-gray-600  hover:text-gray-700">
         <DropdownMenuGroup className="*:px-6 *:py-2">

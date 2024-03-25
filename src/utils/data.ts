@@ -87,6 +87,7 @@ export function fakeCommentComplete() {
     updatedAt: faker.date.anytime(),
     postId: faker.number.int(),
     authorId: faker.string.uuid(),
+    replyId: undefined,
   };
 }
 export function fakeLikeComplete() {
@@ -125,6 +126,7 @@ export function fakePost() {
     subtitle: undefined,
     content: faker.lorem.words(5),
     category: faker.helpers.arrayElement([Category.Technology, Category.HealthWellness, Category.PersonalFinance, Category.FoodCooking, Category.Travel, Category.FashionBeauty, Category.Lifestyle, Category.ParentingFamily, Category.BusinessEntrepreneurship, Category.DIYCrafts, Category.EducationLearning, Category.EntertainmentPopCulture, Category.SportsFitness, Category.PoliticsSocialIssues, Category.Gaming, Category.HomeGarden, Category.None] as const),
+    coverImage: undefined,
   };
 }
 export function fakePostComplete() {
@@ -138,5 +140,6 @@ export function fakePostComplete() {
     published: false,
     authorId: faker.string.uuid(),
     category: faker.helpers.arrayElement([Category.Technology, Category.HealthWellness, Category.PersonalFinance, Category.FoodCooking, Category.Travel, Category.FashionBeauty, Category.Lifestyle, Category.ParentingFamily, Category.BusinessEntrepreneurship, Category.DIYCrafts, Category.EducationLearning, Category.EntertainmentPopCulture, Category.SportsFitness, Category.PoliticsSocialIssues, Category.Gaming, Category.HomeGarden, Category.None] as const),
+    coverImage: undefined,
   };
 }
