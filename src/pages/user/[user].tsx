@@ -20,7 +20,6 @@ export default function Page() {
   // TODO layouts
   const router = useRouter();
   // rout
-  // k
   const userid = router.query.user as string;
   const { data } = api.post.getUserPosts.useQuery({
     id: userid,
@@ -36,12 +35,14 @@ export default function Page() {
         <ProfileDots />
       </header>
       <nav>
-        <Tabs defaultValue="account" className="w-[400px]">
+        <Tabs defaultValue="account" className="relative w-full  ">
           <TabsList>
             <TabsTrigger value="home">Home</TabsTrigger>
             <TabsTrigger value="lists">lists</TabsTrigger>
             <TabsTrigger value="about">About</TabsTrigger>
           </TabsList>
+          <div className=" absolute bottom-1 w-full border-b-1 " />
+
           {/* <TabsContent value="home">Home</TabsContent>
           <TabsContent value="lists">lists</TabsContent>
           <TabsContent value="about">About</TabsContent> */}

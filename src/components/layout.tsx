@@ -86,7 +86,7 @@ export function Main({
             .map((post) => (
               <div
                 key={post.id}
-                className="   flex flex-col border-y-[1px] border-gray-100 pt-6"
+                className="   flex flex-col border-b-[1px] border-gray-100 "
               >
                 <div className="flex items-center gap-2  ">
                   {" "}
