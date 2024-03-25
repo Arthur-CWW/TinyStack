@@ -21,21 +21,10 @@ import { useRouter } from "next/router";
 export function Navbar() {
   // lift the state to the url
   const router = useRouter();
-  const [search, setSearchQuery] = useState("");
+  const [search, setSearchQuery] = useState(router.query.search as string);
   const handleSearchChange = (searchQuery: string) => {
-    // Update the URL search parameters
-    // TODO reset the search query when empty
-    // if (searchQuery === "") {
-    //   router.push(
-    //     {
-    //       pathname: router.pathname,
-    //       // query: { ...router.query },
-    //     },
-    //     undefined,
-    //     { shallow: true },
-    //   );
-    //   return;
-    // }
+    console.log("router", router);
+    console.log("nav searchQuery", searchQuery);
     router.push(
       {
         pathname: router.pathname,
@@ -65,7 +54,7 @@ export function Navbar() {
             value={search}
             onChange={(e) => {
               setSearchQuery(e.target.value);
-              handleSearchChange(search);
+              handleSearchChange(e.target.value);
             }}
             type="text"
             placeholder="Search"
