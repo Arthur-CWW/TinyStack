@@ -25,26 +25,49 @@ import { Button } from "~/components/ui/button";
 import { useRef, useState } from "react";
 import { Undefinable } from "~/utils/types";
 import { User } from "@prisma/client";
+import BubbleMenu from "@tiptap/extension-bubble-menu";
+import Dropcursor from "@tiptap/extension-dropcursor";
+import FloatingMenu from "@tiptap/extension-floating-menu";
+import Placeholder from "@tiptap/extension-placeholder";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import { content } from "tailwindcss/defaultTheme";
 function RichTextArea({ author }: { author: Undefinable<User> }) {
+  const bubbleMenuRef = useRef<HTMLDivElement>(null);
+  const floatingMenuRef = useRef<HTMLDivElement>(null);
   const [content, setContent] = useState("");
-  const editorRef = useRef(null);
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        // options
+      }),
+      Link,
+      BubbleMenu.configure({
+        element: bubbleMenuRef.current,
+      }),
+      FloatingMenu.configure({
+        element: floatingMenuRef.current,
+      }),
+      // Image,
+      // Dropcursor,
+      Placeholder.configure({
+        placeholder: ({ node }) => {
+          return "Share your thoughts here...";
+        },
+      }),
+    ],
+    onUpdate: (editor) => setContent(editor.editor.getHTML()),
+    // content: `Share your thoughts here...`,
+    editorProps: {
+      attributes: {
+        class: editorStyling,
+        //                                    ^need to fix this class
+      },
+    },
+  });
 
-  const handleInput = (e) => {
-    setContent(e.target.innerHTML);
-  };
-
-  const makeBold = () => {
-    // document.execCommand("bold");
-    // take selected text and wrap it in a bold tag
-  };
-
-  const makeItalic = () => {
-    document.execCommand("italic");
-  };
-  const handleChange = () => {
-    setContent(editorRef.current.innerHTML);
-  };
-
+  const contentRef = useRef<HTMLDivElement | null>(null);
   return (
     <div>
       <Card>
@@ -54,32 +77,37 @@ function RichTextArea({ author }: { author: Undefinable<User> }) {
         </CardHeader>
 
         <CardContent>
-          <div
-            contentEditable
-            onInput={handleChange}
-            dangerouslySetInnerHTML={{ __html: content }}
-            ref={editorRef}
-            className="h-32 w-full  p-2 outline-none"
-            // placeholder="What are your thoughts?"
-          />
+          <EditorContent editor={editor} placeholder="" />
         </CardContent>
         <CardFooter className="gap-3">
           <Button
             variant="ghost"
             className="font-serif text-2xl font-extrabold text-gray-400"
-            onClick={makeBold}
+            onClick={() => {
+              if (!editor) return;
+              editor.commands.toggleBold();
+            }}
           >
             B
           </Button>
           <Button
             variant="ghost"
             className="font-serif text-2xl font-extrabold text-gray-400"
-            onClick={makeItalic}
+            onClick={() => {
+              if (!editor) return;
+              editor.commands.toggleItalic();
+            }}
           >
             i
           </Button>
           <Button variant="ghost">Cancel</Button>
-          <Button variant="default" className="bg-green-400">
+          <Button
+            variant="default"
+            className="bg-green-400"
+            onClick={() => {
+              console.log(content);
+            }}
+          >
             Respond
           </Button>
         </CardFooter>

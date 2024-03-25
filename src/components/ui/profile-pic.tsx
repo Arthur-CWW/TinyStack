@@ -18,8 +18,8 @@ export function ProfilePic({
     return null;
   }
   const test = true;
-  console.log(author);
-
+  // console.log(author);
+  //
   return (
     <div
       // actually can't be random need a deterministic way to generate colors from the name
