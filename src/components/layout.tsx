@@ -51,16 +51,13 @@ export function Main({
   }
   const router = useRouter();
   const searchQuery = router.query.search;
-  // console.log("searchQuery", searchQuery);
-  // let filteredBlogs = [...blogs];
-  const [filteredBlogs, setFilteredBlogs] = useState<Post[]>(blogs);
+  const [filteredBlogs, setFilteredBlogs] = useState(blogs);
 
   useEffect(() => {
     if (!searchQuery) {
       setFilteredBlogs(blogs);
       return;
     }
-    // console.log("searchQuery", searchQuery);
     setFilteredBlogs(
       blogs.filter((post) => {
         return (
@@ -75,7 +72,7 @@ export function Main({
   return (
     <main className="container border-t-[1px] border-gray-200 ">
       <div className="grid min-h-screen lg:grid-cols-[1fr_368px]">
-        <main className="px-14">
+        <main className="*:px-6">
           {children}
 
           {filteredBlogs
@@ -115,23 +112,30 @@ export function Main({
                   <div
                     // TODO figure out whether I can use title and
                     // whether it will automatically be slugified
-                    className=""
+                    className="flex h-full w-full flex-col"
                   >
-                    <h2 className="text-2xl font-semibold">{post.title}</h2>
-                    <div className="line-clamp-4 ">{post.subtitle}</div>
-                    <li className="flex items-center   gap-3 py-8 text-sm">
+                    <h2 className="pb-2 text-2xl font-semibold ">
+                      {post.title}
+                    </h2>
+                    <div className="line-clamp-4 flex-1">{post.subtitle}</div>
+                    <li className="flex flex-1 items-center justify-between">
                       {/* this extra flex container needed otherwise it grows full width of the card */}
-                      <button className=" flex-shrink-0 items-center justify-center rounded-full  bg-gray-100 px-2 py-1 text-sm">
-                        {post.category.replace(/([a-z])([A-Z])/g, "$1 $2")}
-                      </button>
-
-                      <span className="flex gap-2 text-gray-500">
-                        {/* TODO figure out why this is wrong  */}
-                        {Math.ceil(post?.nwords ?? 0 / 200)} min read
-                        {Math.random() > 0.1 ? (
-                          <span>· Selected for you</span>
-                        ) : null}
-                      </span>
+                      <div className="flex  items-center  gap-3 py-8 text-sm">
+                        <button className=" flex   justify-center rounded-full  bg-gray-100 px-2 py-1 ">
+                          {post.category.replace(/([a-z])([A-Z])/g, "$1 $2")}
+                        </button>
+                        <span className="flex justify-between gap-2 text-xs text-gray-400 ">
+                          {/* TODO figure out why this is wrong  */}
+                          {Math.ceil(post?.nwords ?? 0 / 200)} min read
+                          {/* {Math.random() > 0.1 ? (
+                            <span>· Selected for you</span>
+                          ) : null} */}
+                        </span>
+                      </div>
+                      <div className="flex gap-3">
+                        <ProfileDots className="size-5 text-gray-400" />
+                        <Icons.bookmark className="fill-gray-400  stroke-0 " />
+                      </div>
                     </li>
                   </div>
                   <Image

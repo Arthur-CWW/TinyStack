@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Icons } from "../icons";
-import { ProfileDD } from "./ProfileDD";
+import { ProfileDD } from "./ProfileDropDown";
 import { SignIn, SignUp } from "~/components/ui/AuthComp";
 import { useState } from "react";
 import { useRouter } from "next/router";

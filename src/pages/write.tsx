@@ -39,8 +39,8 @@ import { Icons } from "~/components/icons";
 // import Header from "./write";
 import Link from "next/link";
 import { IoIosNotificationsOutline as BellClose } from "react-icons/io";
-import { ProfileDD } from "~/components/ui/ProfileDD";
-import { ProfilePic } from "~/components/ui/profile-pic";
+import { ProfileDD } from "~/components/ui/ProfileDropDown";
+import { ProfilePic } from "~/components/ui/ProfileDropDown";
 // import Editor from "~/components/ui/Editor";
 // store.js
 import { Session } from "next-auth";
