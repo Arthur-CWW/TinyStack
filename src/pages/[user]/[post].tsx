@@ -10,10 +10,7 @@ import { twMerge } from "tailwind-merge";
 export default function Page() {
   // TODO layouts
   const router = useRouter();
-  // check if user is the one signed in
   const { data: sessionData } = useSession();
-  // console.log(sessionData);
-  // console.log(router.query);
   const { data } = api.post.getPost.useQuery({
     id: parseInt(router.query.post as string),
   });

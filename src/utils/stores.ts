@@ -17,13 +17,3 @@ export const useEditorStore = create<EditorState>()(
     ),
   ),
 );
-
-interface SaveState {
-  updating: boolean;
-  setUpdating: (val: boolean) => void;
-}
-
-export const useProfileStore = create<SaveState>()((set) => ({
-  updating: false,
-  setUpdating: (val) => set(() => ({ updating: val })),
-}));

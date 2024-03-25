@@ -103,6 +103,7 @@ export function fakeUser() {
     email: undefined,
     emailVerified: undefined,
     image: undefined,
+    bio: undefined,
   };
 }
 export function fakeUserComplete() {
@@ -113,6 +114,9 @@ export function fakeUserComplete() {
     email: undefined,
     emailVerified: undefined,
     image: undefined,
+    bio: undefined,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 }
 export function fakePost() {
