@@ -101,7 +101,6 @@ export const postRouter = createTRPCRouter({
         author: true,
       },
     });
-
     const rv = addSubtitle(posts);
     return rv;
 
@@ -172,6 +171,35 @@ export const postRouter = createTRPCRouter({
         where: { id: input.id },
         include: {
           author: true,
+          Comment: {
+            include: {
+              author: true,
+            },
+          },
+        },
+      });
+    }),
+  addComment: protectedProcedure
+    .input(
+      z.object({
+        postId: z.number(),
+        content: z.string(),
+        authorId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      console.log("input", input);
+      return ctx.db.comment.create({
+        data: {
+          content: input.content,
+          // authorId: input.authorId,
+          // postId: input.postId,
+          author: {
+            connect: { id: input.authorId },
+          },
+          post: {
+            connect: { id: input.postId },
+          },
         },
       });
     }),

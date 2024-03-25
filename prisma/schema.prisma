@@ -57,20 +57,27 @@ model Tag {
 }
 
 model Comment {
-    id        Int      @id @default(autoincrement())
+    id        Int       @id @default(autoincrement())
     content   String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    post      Post     @relation(fields: [postId], references: [id])
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    post      Post      @relation(fields: [postId], references: [id])
     postId    Int
-    author    User     @relation(fields: [authorId], references: [id])
+    author    User      @relation(fields: [authorId], references: [id])
     authorId  String
     likes     Like[]
+    replyTo   Comment?  @relation("CommentToComment", fields: [replyId], references: [id])
+    replyId   Int?
+    replies   Comment[] @relation("CommentToComment")
+
     // TODO: understand and fix this
     // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/self-relations
     // reply     Comment?  @relation("CommentToComment", fields: [replyId], references: [id])
     // replyId   Int?
     // Comment   Comment[] @relation("CommentToComment")
+    // @@unique([postId, authorId, content])
+
+    @@index([postId])
 }
 
 model Like {
@@ -140,7 +147,7 @@ model Post {
     authorId  String
     tags      Tag[]
     category  Category
-    Comment   Comment[]
+    comments  Comment[]
     // TODO should this be unique
     // @@unique([title, authorId])
 
