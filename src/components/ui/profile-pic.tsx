@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { User } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import { ComponentProps } from "react";
@@ -49,11 +49,12 @@ export function ProfilePic({
   );
 }
 
+import { User as DbUser } from "@prisma/client";
 export function ProfileHover({
   author,
   children,
 }: {
-  author: Undefinable<User>;
+  author: Undefinable<DbUser>;
   children: React.ReactNode;
 }) {
   if (!author) return children;

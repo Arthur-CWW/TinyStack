@@ -11,7 +11,8 @@ import { newPostSchema, postSchema } from "~/utils/types";
 
 import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
-import { Category } from "@prisma/client";
+import { Category, Prisma } from "@prisma/client";
+// import { CommentCreateManyArgs } from "@prisma/client";
 
 function addSubtitle<
   T extends {
@@ -173,8 +174,7 @@ export const postRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      // console.log("input", input);
-      const commentData = {
+      let commentData: Prisma.CommentCreateInput = {
         content: input.content,
         author: {
           connect: { id: input.authorId },
@@ -195,3 +195,8 @@ export const postRouter = createTRPCRouter({
       });
     }),
 });
+// type Parameters<T extends (...args: any[]) => any> = T extends (
+//   ...args: infer P
+// ) => any
+//   ? P
+//   : never;
