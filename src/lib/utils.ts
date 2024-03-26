@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 export function timeAgo(date: Date) {
   const now = new Date();
-  const diffInSeconds = Math.floor((now - date) / 1000);
+  const diffInSeconds = Math.floor((+now - +date) / 1000);
   const diffInMinutes = Math.floor(diffInSeconds / 60);
   const diffInHours = Math.floor(diffInMinutes / 60);
   const diffInDays = Math.floor(diffInHours / 24);
