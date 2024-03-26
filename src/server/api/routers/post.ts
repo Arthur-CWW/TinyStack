@@ -138,6 +138,7 @@ export const postRouter = createTRPCRouter({
               replies: {
                 select: {
                   id: true,
+                  // _count: true,
                   _count: true,
                 },
               },
@@ -179,7 +180,7 @@ export const postRouter = createTRPCRouter({
           post: {
             connect: { id: input.postId },
           },
-          // replyId: input.replyId,
+          replyId: input.replyId,
           replyTo: {
             connect: { id: input.replyId },
           },

@@ -49,11 +49,13 @@ function RichTextArea({
   blogId,
   replyId,
   className,
+  close,
 }: {
   author: Undefinable<User>;
   blogId: number;
   replyId?: number;
   className: string;
+  close: () => void;
 }) {
   const { data, mutate: addComment } = api.post.addComment.useMutation();
   const bubbleMenuRef = useRef<HTMLDivElement>(null);
@@ -100,7 +102,7 @@ function RichTextArea({
       <CardContent>
         <EditorContent editor={editor} placeholder="" />
       </CardContent>
-      <CardFooter className="gap-3">
+      <CardFooter className="">
         <Button
           variant="ghost"
           className="font-serif text-2xl font-extrabold text-gray-400"
@@ -134,6 +136,7 @@ function RichTextArea({
               postId: blogId,
               replyId,
             });
+            close();
           }}
         >
           Respond
@@ -199,7 +202,14 @@ export default function Page() {
                   </SheetTrigger>
                 </div>
               </SheetHeader>
-              <RichTextArea author={sessionData?.user} blogId={data.id} />
+              <RichTextArea
+                author={sessionData?.user}
+                blogId={data.id}
+                // TODO
+                close={() => {
+                  setReplyToId(-1);
+                }}
+              />
               {data.comments.map((comment) => (
                 <div className="border-y border-border " key={comment.id}>
                   <CardHeader className="flex-row items-center justify-between capitalize">
