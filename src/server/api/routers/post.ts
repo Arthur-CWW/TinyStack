@@ -73,12 +73,6 @@ export const postRouter = createTRPCRouter({
     });
   }),
 
-  // getblogPost: publicProcedure
-  //   .input(z.object({ nPosts: z.number() }))
-  //   .query(({ input }) => {
-  //     return Array.from({ length: input.nPosts }, () => fakePost());
-  //   }),
-
   check: publicProcedure
     .input(z.object({ text: z.string() }))
     .query(({ input }) => {
@@ -140,17 +134,6 @@ export const postRouter = createTRPCRouter({
               // include reply count avoid selecting actual replies
               _count: true,
             },
-
-            // replies: {
-            //   select: {
-            //     id: true,
-            //     // _count: true,
-            //     _count: true,
-            //   },
-            //   orderBy: {
-            //     createdAt: "desc",
-            //   },
-            // },
           },
         },
       });
@@ -162,6 +145,20 @@ export const postRouter = createTRPCRouter({
         where: { replyId: input.id },
         include: {
           author: true,
+
+          _count: true,
+        },
+      });
+    }),
+
+  getComments: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.comment.findMany({
+        where: { postId: input.id, AND: { replyId: null } },
+        include: {
+          author: true,
+          _count: true,
         },
       });
     }),
