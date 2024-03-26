@@ -132,17 +132,25 @@ export const postRouter = createTRPCRouter({
         include: {
           author: true,
           comments: {
+            // select where replyTo is null
+            where: { replyTo: null },
+
             include: {
               author: true,
               // include reply count avoid selecting actual replies
-              replies: {
-                select: {
-                  id: true,
-                  // _count: true,
-                  _count: true,
-                },
-              },
+              _count: true,
             },
+
+            // replies: {
+            //   select: {
+            //     id: true,
+            //     // _count: true,
+            //     _count: true,
+            //   },
+            //   orderBy: {
+            //     createdAt: "desc",
+            //   },
+            // },
           },
         },
       });
@@ -168,23 +176,25 @@ export const postRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      console.log("input", input);
-      return ctx.db.comment.create({
-        data: {
-          content: input.content,
-          // authorId: input.authorId,
-          // postId: input.postId,
-          author: {
-            connect: { id: input.authorId },
-          },
-          post: {
-            connect: { id: input.postId },
-          },
-          replyId: input.replyId,
-          replyTo: {
-            connect: { id: input.replyId },
-          },
+      // console.log("input", input);
+      const commentData = {
+        content: input.content,
+        author: {
+          connect: { id: input.authorId },
         },
+        post: {
+          connect: { id: input.postId },
+        },
+      };
+
+      if (input.replyId) {
+        commentData.replyTo = {
+          connect: { id: input.replyId },
+        };
+      }
+
+      return ctx.db.comment.create({
+        data: commentData,
       });
     }),
 });

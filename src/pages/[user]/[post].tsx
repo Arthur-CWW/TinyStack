@@ -23,7 +23,7 @@ import { RxCross1, RxCross2 } from "react-icons/rx";
 import { Button } from "~/components/ui/button";
 import { useRef, useState } from "react";
 import { postOutput, Undefinable } from "~/utils/types";
-import { User } from "@prisma/client";
+import { User } from "next-auth";
 import BubbleMenu from "@tiptap/extension-bubble-menu";
 import Dropcursor from "@tiptap/extension-dropcursor";
 import FloatingMenu from "@tiptap/extension-floating-menu";
@@ -54,7 +54,7 @@ function RichTextArea({
   author: Undefinable<User>;
   blogId: number;
   replyId?: number;
-  className: string;
+  className?: string;
   close: () => void;
 }) {
   const { data, mutate: addComment } = api.post.addComment.useMutation();
@@ -123,7 +123,15 @@ function RichTextArea({
         >
           i
         </Button>
-        <Button variant="ghost">Cancel</Button>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            close();
+            console.log("close");
+          }}
+        >
+          Cancel
+        </Button>
         <Button
           variant="default"
           className="bg-green-400"
@@ -154,12 +162,15 @@ export default function Page() {
   });
 
   const [replyToId, setReplyToId] = useState(-1);
+  const [replyPost, setReplyPost] = useState(() => true);
 
   if (!data || !data.author) {
     return <div>Loading...</div>;
   }
 
-  console.log(data.comments.map((comment) => comment));
+  // console.log(data.comments.map((comment) => comment));
+  console.log(data.comments.map((comment) => comment._count));
+  // console.log(replyPost);
   return (
     <>
       <main className="container max-w-[80ch] ">
@@ -202,14 +213,27 @@ export default function Page() {
                   </SheetTrigger>
                 </div>
               </SheetHeader>
-              <RichTextArea
-                author={sessionData?.user}
-                blogId={data.id}
-                // TODO
-                close={() => {
-                  setReplyToId(-1);
-                }}
-              />
+              {replyPost ? (
+                <RichTextArea
+                  author={sessionData?.user}
+                  blogId={data.id}
+                  // TODO
+                  close={() => {
+                    setReplyPost(false);
+                  }}
+                />
+              ) : (
+                <Button
+                  // TODO fix this styling
+                  variant="link"
+                  className="p-3 "
+                  onClick={() => {
+                    setReplyPost(true);
+                  }}
+                >
+                  Share your thoughts here...
+                </Button>
+              )}
               {data.comments.map((comment) => (
                 <div className="border-y border-border " key={comment.id}>
                   <CardHeader className="flex-row items-center justify-between capitalize">
@@ -256,6 +280,9 @@ export default function Page() {
                         // TODO fix types here
                         author={sessionData?.user}
                         blogId={data.id}
+                        close={() => {
+                          setResorplyToId(-1);
+                        }}
                       />
                     </CardContent>
                   )}
