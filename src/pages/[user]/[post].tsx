@@ -23,7 +23,7 @@ import { RxCross1, RxCross2 } from "react-icons/rx";
 import { Button } from "~/components/ui/button";
 import { useRef, useState } from "react";
 import { postOutput, Undefinable } from "~/utils/types";
-import { User } from "next-auth";
+import { Session, User } from "next-auth";
 import BubbleMenu from "@tiptap/extension-bubble-menu";
 import Dropcursor from "@tiptap/extension-dropcursor";
 import FloatingMenu from "@tiptap/extension-floating-menu";
@@ -136,7 +136,7 @@ function RichTextArea({
           variant="default"
           className="bg-green-400"
           onClick={() => {
-            console.log(content);
+            // console.log(content);
             if (!author?.id) return;
             addComment({
               content,
@@ -144,6 +144,7 @@ function RichTextArea({
               postId: blogId,
               replyId,
             });
+            // invalidateQueries(["getComments", blogId]);
             close();
           }}
         >
@@ -161,16 +162,12 @@ export default function Page() {
     id: parseInt(router.query.post as string),
   });
 
-  const [replyToId, setReplyToId] = useState(-1);
-  const [replyPost, setReplyPost] = useState(() => true);
+  // TODO need to move showComments to a new component, and have a separate trpc query for comments
 
   if (!data || !data.author) {
     return <div>Loading...</div>;
   }
 
-  // console.log(data.comments.map((comment) => comment));
-  console.log(data.comments.map((comment) => comment._count));
-  // console.log(replyPost);
   return (
     <>
       <main className="container max-w-[80ch] ">
@@ -201,94 +198,7 @@ export default function Page() {
                 <Icons.comment className="" /> 11
               </button>
             </SheetTrigger>
-            <SheetContent className="fixed right-0 top-0 min-h-screen w-[446px] overflow-y-auto bg-white p-4 shadow-2xl">
-              <SheetHeader className="flex flex-row items-center justify-between">
-                <SheetTitle className="text-3xl font-bold">
-                  Responses
-                </SheetTitle>
-                <div className="flex text-gray-700">
-                  <LuShieldCheck size={24} strokeWidth={1} />
-                  <SheetTrigger>
-                    <RxCross1 size={24} className="ml-2 " />
-                  </SheetTrigger>
-                </div>
-              </SheetHeader>
-              {replyPost ? (
-                <RichTextArea
-                  author={sessionData?.user}
-                  blogId={data.id}
-                  // TODO
-                  close={() => {
-                    setReplyPost(false);
-                  }}
-                />
-              ) : (
-                <Button
-                  // TODO fix this styling
-                  variant="link"
-                  className="p-3 "
-                  onClick={() => {
-                    setReplyPost(true);
-                  }}
-                >
-                  Share your thoughts here...
-                </Button>
-              )}
-              {data.comments.map((comment) => (
-                <div className="border-y border-border " key={comment.id}>
-                  <CardHeader className="flex-row items-center justify-between capitalize">
-                    <Link
-                      className="flex gap-3 "
-                      href={`/user/${comment.authorId}`}
-                    >
-                      <ProfilePic
-                        author={comment.author}
-                        className="h-10 w-10"
-                      />
-                      <div className="text-gray-600">
-                        <h3 className=" text-black">{comment.author.name}</h3>
-                        <span>{timeAgo(comment.createdAt)}</span>
-                      </div>
-                    </Link>
-                    <ProfileDots className="size-6" />
-                  </CardHeader>
-                  <CardContent>
-                    <div
-                      key={comment.id}
-                      className={editorStyling}
-                      dangerouslySetInnerHTML={{ __html: comment.content }}
-                    />
-                  </CardContent>
-                  <CardFooter className="justify-between text-gray-300">
-                    <Icons.clap />
-                    <Button
-                      variant="link"
-                      onClick={() => {
-                        setReplyToId(comment.id);
-                      }}
-                    >
-                      Reply
-                    </Button>
-                    {/* {JSON.stringify(comment.replies)} */}
-                  </CardFooter>
-
-                  {replyToId !== -1 && replyToId === comment.id && (
-                    <CardContent //className="border-l-2 border-border"
-                    >
-                      <RichTextArea
-                        replyId={replyToId}
-                        // TODO fix types here
-                        author={sessionData?.user}
-                        blogId={data.id}
-                        close={() => {
-                          setResorplyToId(-1);
-                        }}
-                      />
-                    </CardContent>
-                  )}
-                </div>
-              ))}
-            </SheetContent>
+            {<SideBar sessionData={sessionData} postId={data.id} />}
           </Sheet>
         </section>
 
@@ -298,5 +208,196 @@ export default function Page() {
         />
       </main>
     </>
+  );
+}
+function SideBar({
+  sessionData,
+  postId,
+}: {
+  sessionData: Session | null;
+  postId: number;
+}) {
+  const [replyToId, setReplyToId] = useState(-1);
+  const [replyPost, setReplyPost] = useState(() => true);
+  const { data: comments, refetch } = api.post.getComments.useQuery({
+    id: postId,
+  });
+  return (
+    <SheetContent className="fixed right-0 top-0 min-h-screen w-[446px] overflow-y-auto bg-white p-4 shadow-2xl">
+      <SheetHeader className="flex flex-row items-center justify-between">
+        <SheetTitle className="text-3xl font-bold">Responses</SheetTitle>
+        <div className="flex text-gray-700">
+          <LuShieldCheck size={24} strokeWidth={1} />
+          <SheetTrigger>
+            <RxCross1 size={24} className="ml-2 " />
+          </SheetTrigger>
+        </div>
+      </SheetHeader>
+      {replyPost ? (
+        <RichTextArea
+          author={sessionData?.user}
+          blogId={postId}
+          // TODO
+          close={() => {
+            refetch();
+            setReplyPost(false);
+          }}
+        />
+      ) : (
+        <Button
+          // TODO fix this styling
+          variant="link"
+          className="p-3 "
+          onClick={() => {
+            setReplyPost(true);
+          }}
+        >
+          Share your thoughts here...
+        </Button>
+      )}
+      <div className="flex flex-col divide-y">
+        {comments?.map((comment) => (
+          <Comment
+            key={comment.id}
+            comment={comment}
+            replyToId={replyToId}
+            setReplyToId={setReplyToId}
+            sessionData={sessionData}
+            postId={postId}
+          />
+        ))}
+      </div>
+    </SheetContent>
+  );
+}
+function Comment(
+  {
+    comment,
+    replyToId,
+    setReplyToId,
+    sessionData,
+    postId,
+  }: {
+    comment: {
+      author: {
+        id: string;
+        coverImage: string | null;
+        name: string | null;
+        email: string | null;
+        emailVerified: Date | null;
+        image: string | null;
+        bio: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+      };
+      _count: {
+        post: number;
+        author: number;
+        likes: number;
+        replyTo: number;
+        replies: number;
+      };
+    } & {
+      id: number;
+      content: string;
+      createdAt: Date;
+      updatedAt: Date;
+      postId: number;
+      authorId: string;
+      replyId: number | null;
+    };
+    replyToId: number;
+    setReplyToId: (arg0: number) => void;
+    sessionData: Session | null;
+    postId: number;
+  },
+  // showComments: number[],
+) {
+  const [showComments, setShowComments] = useState(false);
+  // get replies function
+  const { data: replies, refetch: refetchReplies } =
+    api.post.getReplies.useQuery({
+      id: comment.id,
+    });
+  const [nreplies, setNreplies] = useState(() => comment._count.replies);
+  console.log(replies);
+
+  return (
+    <div className="" key={comment.id}>
+      <CardHeader className="flex-row items-center justify-between capitalize">
+        <Link className="flex gap-3 " href={`/user/${comment.authorId}`}>
+          <ProfilePic author={comment.author} className="h-10 w-10" />
+          <div className="text-gray-600">
+            <h3 className=" text-black">{comment.author.name}</h3>
+            <span>{timeAgo(comment.createdAt)}</span>
+          </div>
+        </Link>
+        <ProfileDots className="size-6" />
+      </CardHeader>
+      <CardContent>
+        <div
+          key={comment.id}
+          className={editorStyling}
+          dangerouslySetInnerHTML={{ __html: comment.content }}
+        />
+      </CardContent>
+      <CardFooter className="items-center justify-between text-gray-600">
+        <div className="flex items-center">
+          <Icons.clap /> {comment._count?.likes}
+          {comment._count?.replies > 0 && (
+            <Button
+              variant="link"
+              onClick={() => setShowComments(!showComments)}
+            >
+              <Icons.comment className="" /> {nreplies} reply
+            </Button>
+          )}
+        </div>
+        <Button
+          variant="link"
+          onClick={() => {
+            if (replyToId === comment.id) {
+              setReplyToId(-1);
+              return;
+            }
+            setReplyToId(comment.id);
+          }}
+        >
+          Reply
+        </Button>
+        {/* {JSON.stringify(comment.replies)} */}
+      </CardFooter>
+      {replyToId !== -1 && replyToId === comment.id && (
+        <CardContent //className="border-l-2 border-border"
+        >
+          <RichTextArea
+            replyId={replyToId}
+            // TODO fix types here
+            author={sessionData?.user}
+            blogId={postId}
+            close={() => {
+              setReplyToId(-1);
+              setNreplies(nreplies + 1);
+              // This refetch is not optimistic so it looks slow
+              refetchReplies();
+            }}
+          />
+        </CardContent>
+      )}
+      {showComments && nreplies > 0 && (
+        <div className="flex flex-col divide-y border-l border-border pl-6">
+          {replies?.map((reply) => (
+            <Comment
+              key={reply.id}
+              comment={reply}
+              replyToId={replyToId}
+              setReplyToId={setReplyToId}
+              sessionData={sessionData}
+              postId={postId}
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
