@@ -20,13 +20,18 @@ export default function Page() {
   // TODO layouts
   const router = useRouter();
   // rout
+  // user undefined
+  // why is user undefiend
+  console.log("router query", router.query);
+  // TODO figure out why user is undefined sometimes
   const userid = router.query.user as string;
-  console.log(userid);
+  console.log("userid", userid);
   const { data } = api.post.getUserPosts.useQuery({
     id: userid,
   });
-  console.log(userid);
-  console.log(data);
+  // console.log(userid);
+  // console.log(data);
+  if (!data) return null;
   return (
     <Main blogs={data?.posts ?? []} className="container max-w-[80ch] py-8">
       <header className="flex items-center justify-between  p-3">

@@ -57,6 +57,7 @@ function RichTextArea({
   className?: string;
   close: () => void;
 }) {
+  // protected by auth
   const { data, mutate: addComment } = api.post.addComment.useMutation();
   const bubbleMenuRef = useRef<HTMLDivElement>(null);
   const floatingMenuRef = useRef<HTMLDivElement>(null);
@@ -90,6 +91,8 @@ function RichTextArea({
       },
     },
   });
+  const session = useSession();
+  if (!session.data) return null;
 
   const contentRef = useRef<HTMLDivElement | null>(null);
   return (
@@ -127,7 +130,7 @@ function RichTextArea({
           variant="ghost"
           onClick={() => {
             close();
-            console.log("close");
+            // console.log("close");
           }}
         >
           Cancel
@@ -320,7 +323,8 @@ function Comment(
       id: comment.id,
     });
   const [nreplies, setNreplies] = useState(() => comment._count.replies);
-  console.log(replies);
+  // console.log(replies);
+  const isAuth = useSession().data !== null;
 
   return (
     <div className="" key={comment.id}>
@@ -353,18 +357,20 @@ function Comment(
             </Button>
           )}
         </div>
-        <Button
-          variant="link"
-          onClick={() => {
-            if (replyToId === comment.id) {
-              setReplyToId(-1);
-              return;
-            }
-            setReplyToId(comment.id);
-          }}
-        >
-          Reply
-        </Button>
+        {isAuth && (
+          <Button
+            variant="link"
+            onClick={() => {
+              if (replyToId === comment.id) {
+                setReplyToId(-1);
+                return;
+              }
+              setReplyToId(comment.id);
+            }}
+          >
+            Reply
+          </Button>
+        )}
         {/* {JSON.stringify(comment.replies)} */}
       </CardFooter>
       {replyToId !== -1 && replyToId === comment.id && (

@@ -89,7 +89,6 @@ export function Main({
                 className="   flex flex-col border-b-[1px] border-gray-100 "
               >
                 <div className="flex items-center gap-2  ">
-                  {" "}
                   {/* profile pic */}
                   <Link href={`/user/${post.author.id}`} className="flex gap-1">
                     <ProfilePic author={post.author} className="h-6 w-6" />
