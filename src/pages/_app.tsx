@@ -8,6 +8,7 @@ import "~/styles/globals.css";
 import Head from "next/head";
 import { ReactElement } from "react";
 import { DefaultNavLayout } from "~/components/layout";
+import { Toaster } from "~/components/ui/toaster";
 // add Layout to the AppProps
 // declare module "next/app" {
 
@@ -33,6 +34,7 @@ const MyApp = ({
       <Layout>
         <Component {...pageProps} />
       </Layout>
+      <Toaster />
     </SessionProvider>
   );
 };

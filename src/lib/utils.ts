@@ -30,50 +30,48 @@ export function timeAgo(date: Date) {
   }
 }
 import { useMutation } from "@tanstack/react-query";
+import { useToast } from "~/components/ui/use-toast";
 export function useUpload() {
+  const { toast } = useToast();
   const {
     data: signedUrl,
     isLoading,
     mutate: addImage,
-  } = api.post.addImage.useMutation();
+  } = api.post.addImage.useMutation({
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Signing failed",
+        description: error.message,
+      });
+    },
+  });
   const [file, setFile] = useState<File | null>(null);
-  const {
-    mutate: uploadImage,
-    isSuccess,
-    data,
-  } = useMutation(
-    async () => {
-      if (!signedUrl || !file) {
-        console.error("no signed url or file");
-        return;
-      }
-      const { url, fields } = signedUrl;
-      const formData = new FormData();
-      Object.entries(fields).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-      formData.append("file", file);
+  async function uploadImage() {
+    // Needs to be wrapped in  useMutation, after using the hook
+    if (!signedUrl || !file) {
+      console.error("no signed url or file");
+      return;
+    }
+    const { url, fields } = signedUrl;
+    const formData = new FormData();
+    Object.entries(fields).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    formData.append("file", file);
 
-      const response = await fetch(url, {
-        method: "POST",
-        body: formData,
-      });
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return fields.key;
-    },
-    {
-      onSuccess: (imageId) => {
-        // The 'data' variable will contain the 'key' from the fields which is the S3 object key
-        console.log("Upload successful, image ID:", imageId);
-      },
-      onError: (error) => {
-        console.error("Upload error:", error);
-      },
-    },
-  );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    // console.log("response", response);
+    // console.log("key", fields.key);
+    return fields.key;
+  }
 
   return {
     uploadImage,
@@ -85,8 +83,6 @@ export function useUpload() {
         contentTypeId: image.type,
       });
     },
-    isSuccess,
-    imageId: data,
     disabled: isLoading,
   };
 }

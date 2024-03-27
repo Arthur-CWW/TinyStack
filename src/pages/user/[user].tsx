@@ -25,10 +25,8 @@ export default function Page() {
   // rout
   // user undefined
   // why is user undefiend
-  console.log("router query", router.query);
   // TODO figure out why user is undefined sometimes
   const userid = router.query.user as string;
-  console.log("userid", userid);
   const { data } = api.post.getUserPosts.useQuery({
     id: userid,
   });
