@@ -161,7 +161,8 @@ import { newPostSchema } from "~/utils/types";
 function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
   const { html } = useStore(useEditorStore);
 
-  const { data, mutate: createNewPost } = api.post.createPost.useMutation();
+  const { data: post, mutate: createNewPost } =
+    api.post.createPost.useMutation();
 
   const form = useForm<z.infer<typeof newPostSchema>>({
     resolver: zodResolver(newPostSchema),
@@ -170,7 +171,13 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof newPostSchema>) {
     // Do something with the form values.
-
+    // if (!file?.type || !file?.name) return;
+    // addImage({
+    //   filename: file.name,
+    //   contentTypeId: file.type,
+    // });
+    // console.log("submitted ", signedUrl);
+    return;
     const dom = new DOMParser().parseFromString(html, "text/html");
     const title = dom.querySelector("h1")?.textContent;
     // remove h1 from the dom
@@ -200,7 +207,6 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
         className="container flex justify-center gap-10"
       >
         {/* placeholder image drag and drop*/}
-
         <DialogHeader className="max-w-md">
           <DialogTitle>Story Preview</DialogTitle>
 
@@ -289,7 +295,6 @@ function UploadPage({ user }: { user: Undefinable<Session["user"]> }) {
 
 // export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 //   const session = await getSession(ctx);
-
 //   if (!session) {
 //     return {
 //       redirect: {

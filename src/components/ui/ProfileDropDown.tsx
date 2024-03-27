@@ -78,7 +78,19 @@ export function ProfileDD({
     </DropdownMenu>
   );
 }
-export function ProfileDots({ className }: { className?: string }) {
+export function ProfileDots({
+  className,
+  data,
+}: {
+  className?: string;
+  data?: Array<string>;
+}) {
+  const items = data ?? [
+    "Copy link to profile",
+    "Mute author",
+    "Block this author",
+    "Report this author",
+  ];
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -87,14 +99,20 @@ export function ProfileDots({ className }: { className?: string }) {
           <Dots className={cn("size-8", className)} />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="font-thin text-gray-600  hover:text-gray-700">
+      <DropdownMenuContent
+        className="font-thin text-gray-600  hover:text-gray-700"
+        onClick={(e) => {
+          e.stopPropagation(); // stop the redirects
+        }}
+      >
         <DropdownMenuGroup className="*:px-6 *:py-2">
-          <DropdownMenuItem className="">Copy link to profile</DropdownMenuItem>
-          <DropdownMenuItem className="">Mute author</DropdownMenuItem>
-
-          <DropdownMenuItem className="">Block this author</DropdownMenuItem>
-
-          <DropdownMenuItem className="">Report this author</DropdownMenuItem>
+          {items.map((item, index) => {
+            return (
+              <DropdownMenuItem key={item} className="*:px-6 *:py-2">
+                {item}
+              </DropdownMenuItem>
+            );
+          })}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

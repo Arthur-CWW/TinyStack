@@ -12,6 +12,7 @@ import { newPostSchema, postSchema } from "~/utils/types";
 import { JSDOM } from "jsdom";
 import DOMPurify from "dompurify";
 import { Category, Prisma } from "@prisma/client";
+import { upload } from "~/server/api/routers/aws";
 // import { CommentCreateManyArgs } from "@prisma/client";
 
 function addSubtitle<
@@ -193,6 +194,18 @@ export const postRouter = createTRPCRouter({
       return ctx.db.comment.create({
         data: commentData,
       });
+    }),
+
+  addImage: protectedProcedure
+    .input(
+      z.object({
+        // postId: z.number(),
+        filename: z.string(),
+        contentTypeId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return upload(input.filename, input.contentTypeId);
     }),
 });
 // type Parameters<T extends (...args: any[]) => any> = T extends (

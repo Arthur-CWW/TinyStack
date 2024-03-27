@@ -15,10 +15,13 @@ import { before } from "node:test";
 import { ProfilePic } from "~/components/ui/profile-pic";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { ProfileDots } from "~/components/ui/ProfileDropDown";
+import { useUpload } from "~/lib/utils";
+import { Button } from "~/components/ui/button";
 
 export default function Page() {
   // TODO layouts
   const router = useRouter();
+  const { uploadImage, signImage, disabled } = useUpload();
   // rout
   // user undefined
   // why is user undefiend
@@ -29,9 +32,8 @@ export default function Page() {
   const { data } = api.post.getUserPosts.useQuery({
     id: userid,
   });
-  // console.log(userid);
-  // console.log(data);
   if (!data) return null;
+
   return (
     <Main blogs={data?.posts ?? []} className="container max-w-[80ch] py-8">
       <header className="flex items-center justify-between  p-3">
@@ -48,12 +50,27 @@ export default function Page() {
             <TabsTrigger value="about">About</TabsTrigger>
           </TabsList>
           <div className=" absolute bottom-1 w-full border-b-1 " />
-
-          {/* <TabsContent value="home">Home</TabsContent>
-          <TabsContent value="lists">lists</TabsContent>
-          <TabsContent value="about">About</TabsContent> */}
         </Tabs>
       </nav>
+      <form
+        action=""
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const url = await uploadImage();
+        }}
+      >
+        <input
+          id="file"
+          type="file"
+          onChange={(e) => {
+            signImage(e?.target?.files?.item(0));
+          }}
+          accept="image/png, image/jpeg"
+        />
+        <Button variant="link" disabled={disabled}>
+          Submit
+        </Button>
+      </form>
     </Main>
   );
 }

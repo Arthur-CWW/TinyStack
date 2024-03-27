@@ -113,7 +113,7 @@ export function Main({
                     // whether it will automatically be slugified
                     className="flex h-full w-full flex-col"
                   >
-                    <h2 className="pb-2 text-2xl font-semibold ">
+                    <h2 className="pb-2 text-2xl font-semibold capitalize ">
                       {post.title}
                     </h2>
                     <div className="line-clamp-4 flex-1">{post.subtitle}</div>
@@ -132,8 +132,8 @@ export function Main({
                         </span>
                       </div>
                       <div className="flex gap-3">
-                        <ProfileDots className="size-5 text-gray-400" />
                         <Icons.bookmark className="fill-gray-400  stroke-0 " />
+                        <ProfileDots className="size-5 text-gray-400" />
                       </div>
                     </li>
                   </div>
