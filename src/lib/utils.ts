@@ -29,6 +29,7 @@ export function timeAgo(date: Date) {
     return "Just now";
   }
 }
+import { useMutation } from "@tanstack/react-query";
 export function useUpload() {
   const {
     data: signedUrl,
@@ -36,29 +37,43 @@ export function useUpload() {
     mutate: addImage,
   } = api.post.addImage.useMutation();
   const [file, setFile] = useState<File | null>(null);
-  async function uploadImage() {
-    if (!signedUrl || !file) {
-      console.error("no signed url or file");
-      return;
-    }
-    const { url, fields } = signedUrl;
-    const formData = new FormData();
-    Object.entries(fields).forEach(([key, value]) => {
-      formData.append(key, value as string);
-    });
-    formData.append("file", file);
-    console.log("uploading", formData);
+  const {
+    mutate: uploadImage,
+    isSuccess,
+    data,
+  } = useMutation(
+    async () => {
+      if (!signedUrl || !file) {
+        console.error("no signed url or file");
+        return;
+      }
+      const { url, fields } = signedUrl;
+      const formData = new FormData();
+      Object.entries(fields).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+      formData.append("file", file);
 
-    try {
-      const uploadResponse = await fetch(url, {
+      const response = await fetch(url, {
         method: "POST",
         body: formData,
       });
-      console.log(uploadResponse);
-    } catch (error) {
-      console.error("upload error", error);
-    }
-  }
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return fields.key;
+    },
+    {
+      onSuccess: (imageId) => {
+        // The 'data' variable will contain the 'key' from the fields which is the S3 object key
+        console.log("Upload successful, image ID:", imageId);
+      },
+      onError: (error) => {
+        console.error("Upload error:", error);
+      },
+    },
+  );
 
   return {
     uploadImage,
@@ -70,6 +85,8 @@ export function useUpload() {
         contentTypeId: image.type,
       });
     },
+    isSuccess,
+    imageId: data,
     disabled: isLoading,
   };
 }
